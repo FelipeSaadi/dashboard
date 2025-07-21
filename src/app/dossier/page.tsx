@@ -12,6 +12,7 @@ import video from '/videos/video.mp4'
 
 import EmailModal from '@/modules/dossier/components/email-modal'
 import PDFViewer from '@/modules/dossier/components/pdf-viewer'
+import { Wins } from '@/modules/dossier/components/wins'
 
 const Page = () => {
   const [showContent, setShowContent] = useState(false)
@@ -92,6 +93,7 @@ const Page = () => {
             </a>
           </div>
         </section>
+        <Wins />
         <section>
           <h2 className='text-xl md:text-2xl font-bold mb-6'>Fundraising pitch deck with round details</h2>
           <PDFViewer file="/dossier/Panorama-Block_CVC25.pdf" />
