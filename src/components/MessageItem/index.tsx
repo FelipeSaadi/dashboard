@@ -39,7 +39,7 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
         return <Tweet initialContent={content} />;
       }
       return (
-        <ReactMarkdown className={styles.messageText}>{content}</ReactMarkdown>
+        <ReactMarkdown className={`${styles.messageText} ${isUser ? styles.user : styles.assistant}`}>{content}</ReactMarkdown>
       );
     }
 
@@ -94,7 +94,7 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
     }
 
     return (
-      <Text className={styles.messageText}>{JSON.stringify(content)}</Text>
+      <Text className={`${styles.messageText} ${isUser ? styles.user : styles.assistant}`}>{JSON.stringify(content)}</Text>
     );
   };
 
@@ -104,18 +104,26 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
       templateColumns="0fr 3fr"
       className={styles.messageGrid}
     >
-      <GridItem area="avatar">
+      {/* <GridItem area="avatar">
         <Avatar
           isAgent={!isUser}
           agentName={getHumanReadableAgentName(message.agentName || "")}
         />
-      </GridItem>
-      <GridItem area="name">
+      </GridItem> */}
+      {/* <GridItem area="name">
         <Text className={styles.nameText}>
           {isUser ? "Me" : getHumanReadableAgentName(message.agentName || "")}
         </Text>
+      </GridItem> */}
+      <GridItem
+        area="message"
+        // max-width="80%"
+        width="fit-content"
+        ml={isUser ? "auto" : "0"}
+        // mr={!isUser ? "0" : "auto"}
+      >
+        {renderContent()}
       </GridItem>
-      <GridItem area="message">{renderContent()}</GridItem>
     </Grid>
   );
 };

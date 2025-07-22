@@ -9,6 +9,7 @@ import { ChatInput } from "@/components/ChatInput";
 import { LoadingIndicator } from "@/components/LoadingIndicator";
 import { Widgets, shouldOpenWidget } from "@/components/Widgets";
 import { ChatProps } from "@/components/Chat/types";
+import { useChatStore } from "@/store/chat";
 
 export const Chat: FC<ChatProps> = ({
   onSubmitMessage,
@@ -20,6 +21,11 @@ export const Chat: FC<ChatProps> = ({
   const [activeWidget, setActiveWidget] = useState<ChatMessage | null>(null);
   const [isWidgetOpen, setIsWidgetOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const messageToSend = useChatStore((state) => state.messageToSend)
+  const readyToSend = useChatStore((state) => state.readyToSend)
+  const setIsReadyToSend = useChatStore((state) => state.setIsReadyToSend)
+  const setMessageToSend = useChatStore((state) => state.setMessageToSend)
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -36,6 +42,17 @@ export const Chat: FC<ChatProps> = ({
     setMessagesData([...messages]);
   }, [messages, setIsSidebarOpen]);
 
+  useEffect(() => {
+    const sendNewMessage = async () => {
+      if (messageToSend && readyToSend) {
+        onSubmitMessage(messageToSend, null);
+        setMessageToSend(null);
+        setIsReadyToSend(false);
+      }
+    }
+    sendNewMessage();
+  }, [messageToSend, readyToSend]);
+
   const handleSubmit = async (message: string, file: File | null) => {
     setIsLoading(true);
     await onSubmitMessage(message, file);
@@ -47,15 +64,17 @@ export const Chat: FC<ChatProps> = ({
       <Flex
         direction="column"
         height="100%"
+        maxWidth="80%"
         width="100%"
         transition="all 0.3s ease-in-out"
         mt={4}
-        paddingLeft={isWidgetOpen ? "5%" : "20%"}
-        paddingRight={isWidgetOpen ? "35%" : "20%"}
+        // paddingLeft={isWidgetOpen ? "5%" : "20%"}
+        // paddingRight={isWidgetOpen ? "5%" : "20%"}
         ml="auto"
         mr="auto"
       >
         <MessageList messages={messagesData} />
+
         {isLoading && <LoadingIndicator />}
         <ChatInput
           onSubmit={handleSubmit}
