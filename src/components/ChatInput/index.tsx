@@ -16,6 +16,13 @@ import { SendIcon } from "../CustomIcon/SendIcon";
 import PrefilledOptions from "./PrefilledOptions";
 import styles from "./index.module.css";
 
+import { ArrowUp, WalletMinimal, X } from "lucide-react";
+import { FaWallet } from "react-icons/fa";
+import { FaXTwitter  } from "react-icons/fa6";
+import { MdOutlineSwapCalls } from "react-icons/md";
+
+import { Features } from "./features";
+
 type Command = {
   command: string;
   description: string;
@@ -30,6 +37,45 @@ type ChatInputProps = {
 };
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'localhost:8080'
+
+const features = [
+  {
+    title: "Wallet Tracking",
+    icon: <FaWallet width="24px" height="24px" />,
+    description: "Track your wallet",
+    url: "/wallet-tracking",
+  },
+  {
+    title: "AI Agents on X",
+    icon: <FaXTwitter  width="24px" height="24px" />,
+    description: "See what AI agents are saying on X",
+    url: "/x-ai-agents",
+  },
+  {
+    title: "Liquid Swap",
+    icon: <MdOutlineSwapCalls width="28px" height="28px" />,
+    description: "Swap your assets",
+    url: "/liquid-swap",
+  },
+  {
+    title: "DeFi Vista",
+    icon: <MdOutlineSwapCalls width="28px" height="28px" />,
+    description: "Swap your assets",
+    url: "/liquid-swap",
+  },
+  {
+    title: "Ai MarketPlace",
+    icon: <MdOutlineSwapCalls width="28px" height="28px" />,
+    description: "Swap your assets",
+    url: "/liquid-swap",
+  },
+  {
+    title: "Portfolio",
+    icon: <MdOutlineSwapCalls width="28px" height="28px" />,
+    description: "Swap your assets",
+    url: "/liquid-swap",
+  },
+]
 
 export const ChatInput: FC<ChatInputProps> = ({
   onSubmit,
@@ -201,10 +247,7 @@ export const ChatInput: FC<ChatInputProps> = ({
 
       <div className={styles.container}>
         {!hasMessages && (
-          <PrefilledOptions
-            onSelect={handlePrefilledSelect}
-            isSidebarOpen={isSidebarOpen}
-          />
+          <Features features={features} />
         )}
         <div className={styles.flexContainer}>
           <InputGroup ref={inputGroupRef} className={styles.inputGroup}>
@@ -247,7 +290,7 @@ export const ChatInput: FC<ChatInputProps> = ({
                 disabled={disabled}
                 aria-label="Send"
                 onClick={handleSubmit}
-                icon={<SendIcon width="24px" height="24px" />}
+                icon={<ArrowUp width="24px" height="24px" />}
               />
             </InputRightAddon>
           </InputGroup>

@@ -3,7 +3,7 @@
  * the sidebar and the toggle button
  *********************************/
 .sidebarContainer {
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
   bottom: 0;
@@ -14,6 +14,8 @@
 }
 
 .sidebarContainer.collapsed {
+  width: 0;
+  top: 0;
   transform: translateX(-300px);
 }
 
@@ -26,7 +28,7 @@
   left: 0;
   width: 300px;
   background: var(--background-primary);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
   height: 100%;
 }
@@ -53,6 +55,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: 32px;
 }
 
 /*********************************
@@ -60,18 +63,26 @@
  *********************************/
 .newChatButton {
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: var(--background-primary);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 12px 16px;
+  padding: 12px 4px;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+  border-radius: 41px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   margin-top: 16px;
   font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.newChatButtonText {
+  width: fit-content;
+  font-size: 16px;
 }
 
 .newChatButton:hover {
@@ -89,16 +100,22 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
   background: var(--background-primary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
 }
 
 .conversationItem:hover {
-  background: var(--background-secondary);
+  background: hsla(0, 0%, 100%, 0.1);
 }
 
 .conversationItem.active {
   background: var(--background-secondary);
   border-color: rgba(255, 255, 255, 0.2);
+}
+
+.conversationItemContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .conversationName {
@@ -163,8 +180,9 @@
  * Sits on the right edge of the sidebar
  *********************************/
 .toggleButton {
+  left: 0;
   position: absolute;
-  right: 0;
+  left: 300px;
   top: 50%;
   transform: translateY(-50%);
   width: 40px;

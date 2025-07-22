@@ -3,49 +3,71 @@
 import React, { FC, useState } from "react";
 import { useRouter } from 'next/navigation'
 import Image from "next/image";
-import { Box, HStack, Spacer, Button, ButtonGroup, Text } from "@chakra-ui/react";
+import { Box, HStack, Spacer, Button, ButtonGroup, Text, IconButton } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { CDPWallets } from "@/components/CDPWallets";
 import classes from "./index.module.css";
-import { Heading } from "lucide-react";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { IoHomeOutline } from "react-icons/io5";
+import { HiMiniBellAlert } from "react-icons/hi2";
 
 export const HeaderBar: FC = () => {
-  const [walletType, setWalletType] = useState<"cdp" | "metamask">("cdp");
+  const [walletType, setWalletType] = useState<"cdp" | "metamask">("metamask");
   const router = useRouter()
 
-  const handleBack = () => {
-    const referrer = document.referrer;
-    if (referrer && referrer.includes('panoramablock.com')) {
-      router.back();
-    } else {
-      window.location.href = 'https://www.panoramablock.com/pano-view/bitcoin';
-    }
+  const handleHome = () => {
+    router.push('/ai-agents')
   };
 
   return (
     <Box className={classes.headerBar}>
       <HStack spacing={4} width="100%" px={4}>
         <Box >
-          <ArrowBackIcon 
+          {/* <ArrowBackIcon 
             color="gray.200" 
             cursor="pointer" 
             onClick={handleBack}
-          />
+          /> */}
         </Box>
-        <Box className={classes.logo} flexShrink={0}>
-
+        <Box className={classes.logo} flexShrink={0} display="flex" alignItems="center">
           <a>
-            <Image src="/assets/logo.png" alt="logo" width={30} height={40} />
+            <Image src="/assets/logo.png" alt="logo" width={40} height={40} />
           </a>
-          <Text fontSize="md" color="white" marginLeft={5}> Zico Agent </Text>
+          <Image src="/assets/logo-text.jpg" alt="logo" width={100} height={40} />
         </Box>
         <Spacer />
         <HStack spacing={4} flexShrink={0}>
-          {walletType === "cdp" ? <CDPWallets /> : <ConnectButton />}
+          <IconButton
+            aria-label="Send"
+            onClick={handleHome}
+            variant="outline"
+            bgColor="transparent"
+            borderRadius="full"
+            color="white"
+            _hover={{
+              bgColor: "transparent",
+              color: "grey",
+            }}
+            border="1px solid grey"
+            icon={<IoHomeOutline width="24px" height="24px" />}
+          />
+          <IconButton
+            aria-label="Alert"
+            onClick={() => {}}
+            variant="outline"
+            bgColor="transparent"
+            borderRadius="full"
+            color="white"
+            _hover={{
+              bgColor: "transparent",
+              color: "grey",
+            }}
+            border="1px solid grey"
+            icon={<HiMiniBellAlert width="24px" height="24px" />}
+          />
+          {walletType === "cdp" ? <CDPWallets /> : <ConnectButton label="Connect Wallet" />}
 
           {/* Wallet Selection */}
-          <ButtonGroup isAttached>
+          {/* <ButtonGroup isAttached>
             <Button
               onClick={() => setWalletType("cdp")}
               bg={walletType === "cdp" ? "#56DBE0" : "ghost"}
@@ -77,7 +99,7 @@ export const HeaderBar: FC = () => {
             >
               Metamask
             </Button>
-          </ButtonGroup>
+          </ButtonGroup> */}
         </HStack>
       </HStack>
     </Box>
