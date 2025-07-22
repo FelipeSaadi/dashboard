@@ -117,6 +117,7 @@ const Home: NextPage = () => {
   const handleDeleteConversation = async (conversationId: string) => {
     try {
       await deleteConversation(getHttpClient(), conversationId)
+      // setChatHistory([])
       if (conversationId === currentConversationId) {
         setCurrentConversationId("default")
       }

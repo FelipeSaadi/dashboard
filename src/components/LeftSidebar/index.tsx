@@ -20,6 +20,10 @@ import styles from "./index.module.css";
 import { useRouter } from "next/navigation";
 import { ApiCredentialsButton } from "@/components/Credentials/Button";
 import { getUserId } from "@/lib/api/services/userHooks";
+import { MessageSquareText } from "lucide-react";
+import { TrendingPrompts } from "../TrendingPrompts";
+
+import { useChatStore } from "@/store/chat";
 
 export type LeftSidebarProps = {
   /** Whether the sidebar is currently open (expanded) or collapsed */
@@ -47,6 +51,10 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
   const [selectedModel, setSelectedModel] = useState("gemini-flash");
   const backendClient = getHttpClient();
   const toast = useToast();
+
+  const messageToSend = useChatStore((state) => state.messageToSend)
+  const readyToSend = useChatStore((state) => state.readyToSend)
+  const setIsReadyToSend = useChatStore((state) => state.setIsReadyToSend)
 
   const modelOptions = [{ value: "gemini-flash", label: "Gemini Flash 1.5" }];
 
@@ -165,23 +173,32 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
         setCurrentConversationId("default");
       }
     };
-    
+
     initializeChat();
   }, []);
 
+  useEffect(() => {
+    if (messageToSend && !readyToSend) {
+      handleCreateNewConversation()
+      setTimeout(() => {
+        setIsReadyToSend(true)
+      }, 1000);
+    }
+    setIsLoading(false);
+  }, [messageToSend, readyToSend]);
+
   // Simple function to give each conversation a friendly name
   const formatConversationName = (id: string) => {
-    if (id === "default") return "Default Chat";
+    if (id === "default") return "Main Chat";
     const parts = id.split("_");
     const number = parts.length > 1 ? parts[1] : id;
-    return `Chat ${number}`;
+    return `Past chat conversation ${number}`;
   };
 
   return (
     <div
-      className={`${styles.sidebarContainer} ${
-        isSidebarOpen ? "" : styles.collapsed
-      }`}
+      className={`${styles.sidebarContainer} ${isSidebarOpen ? "" : styles.collapsed
+        }`}
     >
       {/* Sidebar Content */}
       <div className={styles.sidebar}>
@@ -192,26 +209,28 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
               onClick={handleCreateNewConversation}
               disabled={isLoading}
             >
-              <IconPencilPlus size={16} />
+              {/* <IconPencilPlus size={16} /> */}
               <span>New chat</span>
             </button>
 
             {conversations.map((conversationId) => (
               <div
                 key={conversationId}
-                className={`${styles.conversationItem} ${
-                  currentConversationId === conversationId
-                    ? styles.conversationActive
-                    : ""
-                }`}
+                className={`${styles.conversationItem} ${currentConversationId === conversationId
+                  ? styles.conversationActive
+                  : ""
+                  }`}
                 onClick={() => {
                   onConversationSelect(conversationId);
                   setCurrentConversationId(conversationId);
                 }}
               >
-                <span className={styles.conversationName}>
-                  {formatConversationName(conversationId)}
-                </span>
+                <div className={styles.conversationItemContent}>
+                  <MessageSquareText size={20} />
+                  <span className={styles.conversationName}>
+                    {formatConversationName(conversationId)}
+                  </span>
+                </div>
                 <div className={styles.buttonGroup}>
                   <button
                     className={styles.resetButton}
@@ -240,7 +259,9 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
 
           <VStack spacing={4} className={styles.sidebarFooter} align="stretch">
             <Box display="flex" flexDirection="column" gap={2}>
-              <Box
+              <TrendingPrompts />
+
+              {/* <Box
                 display="flex"
                 alignItems="center"
                 justifyContent="space-between"
@@ -269,7 +290,7 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
                     </option>
                   ))}
                 </Select>
-              </Box>
+              </Box> */}
 
               {/* <Box
                 display="flex"
@@ -289,9 +310,9 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
               </Text> */}
             </Box>
 
-            <Workflows />
+            {/* <Workflows />
             <ApiCredentialsButton />
-            <SettingsButton />
+            <SettingsButton /> */}
           </VStack>
         </div>
       </div>

@@ -1,6 +1,6 @@
 .headerBar {
   background-color: var(--background-secondary);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding: 8px 0;
   width: 100%;
   z-index: 1401;
