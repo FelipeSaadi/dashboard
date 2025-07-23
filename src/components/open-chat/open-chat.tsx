@@ -106,6 +106,8 @@ const OpenChat = () => {
     }
   }, [])
 
+  return null
+
   return (
     <>
       {
