@@ -9,13 +9,18 @@ import { CDPWallets } from "@/components/CDPWallets";
 import classes from "./index.module.css";
 import { IoHomeOutline } from "react-icons/io5";
 import { HiMiniBellAlert } from "react-icons/hi2";
+import { SettingsButton } from "@/components/Settings";
+import { Workflows } from "@/components/Workflows";
+import { ApiCredentialsButton } from "@/components/Credentials/Button";
+import { useChatStore } from "@/store/chat";
 
 export const HeaderBar: FC = () => {
   const [walletType, setWalletType] = useState<"cdp" | "metamask">("metamask");
+  const resetChat = useChatStore((state) => state.setResetChat)
   const router = useRouter()
 
   const handleHome = () => {
-    router.push('/ai-agents')
+    resetChat(true)
   };
 
   return (
@@ -64,6 +69,9 @@ export const HeaderBar: FC = () => {
             border="1px solid grey"
             icon={<HiMiniBellAlert width="24px" height="24px" />}
           />
+          <Workflows />
+          <ApiCredentialsButton />
+          <SettingsButton />
           {walletType === "cdp" ? <CDPWallets /> : <ConnectButton label="Connect Wallet" />}
 
           {/* Wallet Selection */}

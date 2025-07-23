@@ -8,7 +8,7 @@ import {
   from "lucide-react"
 import { useRouter } from "next/navigation"
 
-import Hashblocks from "@/components/hashblocks/hashblocks"
+import HashblocksAvax from "@/components/hashblocks-avax/hashblocks-avax"
 import HashblockInfo from "@/components/hashblock-info/hashblock-info"
 
 import TokensTable from "@/modules/avax/components/table/table"
@@ -28,6 +28,7 @@ import AvaxService from "@/lib/api/services/avax"
 import { ChartByTime } from "@/modules/avax/components/chart-by-time/chart-by-time"
 import { Tab, Tabs } from "@mui/material"
 import SuzakoService, { Token } from "@/lib/api/services/suzaku"
+import Header from "@/components/header/header"
 
 const Avax: React.FC = () => {
   const router = useRouter()
@@ -648,39 +649,41 @@ const Avax: React.FC = () => {
   }, [])
 
   return (
-    <Layout
-      noPadding
-      sidebar={{
-        actual: actual,
-        onChange: (coin: string) => setActual(coin),
-        open: (page: string) => handleOpen(page),
-      }}
-      header={{
-        onSubmit: () => { },
-      }}
-    >
+    // <Layout
+    //   noPadding
+    //   noSidebar
+    //   sidebar={{
+    //     actual: actual,
+    //     onChange: (coin: string) => setActual(coin),
+    //     open: (page: string) => handleOpen(page),
+    //   }}
+    //   header={{
+    //     onSubmit: () => { },
+    //   }}
+    // >
       <div className={styles.home}>
+        <Header style={{ backgroundColor: 'var(--background-primary)' }} onSubmit={() => { }} />
         <div className="mb-8 mx-[20px] md:mx-[40px]">
           <Tabs
             sx={{
               marginBottom: '4px',
               '.Mui-selected': {
-                color: `#3BEBFC !important`,
+                color: `white !important`,
               },
             }}
             value={value}
             onChange={handleChange}
-            slotProps={{ indicator: { style: { background: '#3BEBFC' } } }}
+            slotProps={{ indicator: { style: { background: 'white' } } }}
             aria-label="avax tabs"
           >
             <Tab className={styles.tab} label="AVAX" value="0" />
-            <Tab className={styles.tab} label="Suzaku" value="1" />
+            <Tab className={styles.tab} disabled label="Suzaku" value="1" />
           </Tabs>
         </div>
         {
           value === '0' && (
             <>
-              <Hashblocks
+              <HashblocksAvax
                 coin={actual}
                 data={hashblocks}
                 onSelect={(hashblock: any) => handleHashblock(hashblock)}
@@ -1722,7 +1725,7 @@ const Avax: React.FC = () => {
 
         <OpenChat />
       </div>
-    </Layout>
+    // </Layout>
   )
 }
 

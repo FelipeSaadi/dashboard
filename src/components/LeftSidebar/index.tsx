@@ -14,16 +14,13 @@ import {
   createNewConversation,
   clearMessagesHistory,
 } from "@/lib/api/services/apiHooks";
-import { SettingsButton } from "@/components/Settings";
-import { Workflows } from "@/components/Workflows";
 import styles from "./index.module.css";
-import { useRouter } from "next/navigation";
-import { ApiCredentialsButton } from "@/components/Credentials/Button";
 import { getUserId } from "@/lib/api/services/userHooks";
 import { MessageSquareText } from "lucide-react";
 import { TrendingPrompts } from "../TrendingPrompts";
 
 import { useChatStore } from "@/store/chat";
+import { useRouter } from "next/navigation";
 
 export type LeftSidebarProps = {
   /** Whether the sidebar is currently open (expanded) or collapsed */
@@ -51,10 +48,13 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
   const [selectedModel, setSelectedModel] = useState("gemini-flash");
   const backendClient = getHttpClient();
   const toast = useToast();
+  const router = useRouter()
 
   const messageToSend = useChatStore((state) => state.messageToSend)
   const readyToSend = useChatStore((state) => state.readyToSend)
   const setIsReadyToSend = useChatStore((state) => state.setIsReadyToSend)
+  const resetChat = useChatStore((state) => state.resetChat)
+  const setResetChat = useChatStore((state) => state.setResetChat)
 
   const modelOptions = [{ value: "gemini-flash", label: "Gemini Flash 1.5" }];
 
@@ -158,7 +158,7 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
   const handleClearChatHistory = async () => {
     try {
       await clearMessagesHistory(backendClient);
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       console.error("Failed to clear chat history:", error);
     }
@@ -186,6 +186,13 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
     }
     setIsLoading(false);
   }, [messageToSend, readyToSend]);
+
+  useEffect(() => {
+    if (resetChat) {
+      handleClearChatHistory();
+      setResetChat(false);
+    }
+  }, [resetChat]);
 
   // Simple function to give each conversation a friendly name
   const formatConversationName = (id: string) => {
@@ -309,10 +316,6 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
                 More powerful models are coming soon via the Lumerin Node Router
               </Text> */}
             </Box>
-
-            {/* <Workflows />
-            <ApiCredentialsButton />
-            <SettingsButton /> */}
           </VStack>
         </div>
       </div>
