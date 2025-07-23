@@ -158,7 +158,7 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
   const handleClearChatHistory = async () => {
     try {
       await clearMessagesHistory(backendClient);
-      router.refresh();
+      window.location.reload();
     } catch (error) {
       console.error("Failed to clear chat history:", error);
     }
