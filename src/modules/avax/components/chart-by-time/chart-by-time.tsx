@@ -80,12 +80,12 @@ export function ChartByTime({
             </p>
           </div>
           <Tabs defaultValue={defaultPeriod} className="mx-8">
-            <TabsList className="bg-[#3ce0ef32]">
+            <TabsList className="bg-[var(--background-primary)]">
               {periods.map((period) => (
                 <TabsTrigger
                   key={period.value}
                   value={period.value}
-                  className="text-gray-400 data-[state=active]:bg-[#3CDFEF99] data-[state=active]:text-white"
+                  className="text-gray-400 data-[state=active]:bg-[var(--background-secondary)] data-[state=active]:text-white"
                 >
                   {period.label}
                 </TabsTrigger>
@@ -147,7 +147,7 @@ export function ChartByTime({
                   if (active && payload && payload.length) {
                     const data = payload[0].payload as ChartData
                     return (
-                      <div className="rounded-lg border border-[#1a2657] bg-[#3CDFEF99] p-2 shadow-xl">
+                      <div className="rounded-lg border border-[#1a2657] bg-[var(--background-primary)] p-2 shadow-xl">
                         <div className="grid gap-2">
                           <div className="flex flex-col">
                             <span className="text-[0.70rem] uppercase text-gray-300">

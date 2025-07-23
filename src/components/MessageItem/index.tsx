@@ -38,6 +38,9 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
       if (message.agentName === "tweet sizzler") {
         return <Tweet initialContent={content} />;
       }
+      if (message.agentName === "Zico AI") {
+        return <Text fontSize="xl" fontWeight="normal" color="white/50"></Text>
+      }
       return (
         <ReactMarkdown className={`${styles.messageText} ${isUser ? styles.user : styles.assistant}`}>{content}</ReactMarkdown>
       );
@@ -120,7 +123,7 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
         // max-width="80%"
         width="fit-content"
         ml={isUser ? "auto" : "0"}
-        // mr={!isUser ? "0" : "auto"}
+      // mr={!isUser ? "0" : "auto"}
       >
         {renderContent()}
       </GridItem>

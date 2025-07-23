@@ -10,15 +10,15 @@ import { useChatStore } from "@/store/chat"
 const Prompts = [
   {
     'id': '1',
-    'text': 'What is the Fully Diluted Valuation in avax?'
+    'text': 'What is the Fully Diluted Valuation in AVAX?'
   },
   {
     'id': '2',
-    'text': 'What is the best performing token in avax?'
+    'text': 'The number of Activities Addresses in AVAX?'
   },
   {
     'id': '3',
-    'text': 'What is DeFi?'
+    'text': 'What is the current AVAX Price?'
   },
 ]
 

@@ -12,6 +12,7 @@ import {
     optimism,
     polygon,
     bsc,
+    avalanche,
 } from 'wagmi/chains';
 import { getDefaultConfig, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 
@@ -27,6 +28,7 @@ const config = getDefaultConfig({
     appName: 'Panorama Block',
     projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID!,
     chains: [
+        avalanche,
         mainnet,
         polygon,
         optimism,
