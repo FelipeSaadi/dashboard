@@ -15,9 +15,10 @@
 }
 
 .featureBox {
+  border: 1px solid #4C4C4C;
   background-color: var(--background-primary);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 12px;
+  padding: 28px;
   display: flex;
   flex-direction: column;
   color: white;
@@ -36,7 +37,7 @@
 
 .featureDescription {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.5);
   margin-bottom: 16px;
   flex-grow: 1;
 }
@@ -45,7 +46,7 @@
   background-color: white;
   color: #1c1e21;
   border: none;
-  border-radius: 4px;
+  border-radius: 25px;
   padding: 8px 16px;
   font-size: 14px;
   font-weight: 500;

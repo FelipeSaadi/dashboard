@@ -20,6 +20,9 @@ import { ArrowUp, WalletMinimal, X } from "lucide-react";
 import { FaWallet } from "react-icons/fa";
 import { FaXTwitter  } from "react-icons/fa6";
 import { MdOutlineSwapCalls } from "react-icons/md";
+import { IoBarChartSharp } from "react-icons/io5";
+import { PiBagSimpleFill } from "react-icons/pi";
+import { PiSquaresFourFill } from "react-icons/pi";
 
 import { Features } from "./features";
 
@@ -42,7 +45,7 @@ const features = [
   {
     title: "Wallet Tracking",
     icon: <FaWallet width="24px" height="24px" />,
-    description: "Track your wallet",
+    description: "Real-time wallet monitoring",
     url: "/wallet-tracking",
   },
   {
@@ -58,22 +61,22 @@ const features = [
     url: "/liquid-swap",
   },
   {
-    title: "DeFi Vista",
-    icon: <MdOutlineSwapCalls width="28px" height="28px" />,
-    description: "Swap your assets",
-    url: "/liquid-swap",
+    title: "Pano View",
+    icon: <PiSquaresFourFill width="28px" height="28px" />,
+    description: "Unified on-chain analytics",
+    url: "/pano-view/avax",
   },
   {
     title: "Ai MarketPlace",
-    icon: <MdOutlineSwapCalls width="28px" height="28px" />,
-    description: "Swap your assets",
-    url: "/liquid-swap",
+    icon: <IoBarChartSharp width="28px" height="28px" />,
+    description: "Coming Soon!",
+    url: "/ai-marketplace",
   },
   {
     title: "Portfolio",
-    icon: <MdOutlineSwapCalls width="28px" height="28px" />,
-    description: "Swap your assets",
-    url: "/liquid-swap",
+    icon: <PiBagSimpleFill width="28px" height="28px" />,
+    description: "View your positions & balance",
+    url: "/portfolio",
   },
 ]
 

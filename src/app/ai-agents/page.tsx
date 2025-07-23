@@ -153,6 +153,7 @@ const Home: NextPage = () => {
   }
 
   return (
+    <div style={{ minHeight: "100vh", minWidth: "100vw", backgroundColor: "var(--background-secondary)" }}>
     <ChakraProvider theme={theme}>
       <Box
         sx={{
@@ -193,6 +194,7 @@ const Home: NextPage = () => {
         {/* <ErrorBackendModal show={showBackendError} /> */}
       </Box>
     </ChakraProvider>
+    </div>
   )
 }
 
