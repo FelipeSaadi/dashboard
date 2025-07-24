@@ -3,8 +3,8 @@
 import type { NextPage } from "next"
 import { ChakraProvider, defineStyleConfig, extendTheme } from "@chakra-ui/react"
 import { Box, Flex } from "@chakra-ui/react"
-import { LeftSidebar } from "@/components/LeftSidebar"
-import { Chat } from "@/components/Chat"
+import { LeftSidebar } from "@/modules/ai-agents/components/left-sidebar"
+import { Chat } from "@/modules/ai-agents/components/chat"
 import {
   writeMessage,
   getMessagesHistory,
@@ -16,7 +16,7 @@ import { getHttpClient, SWAP_STATUS } from "@/lib/api/services/constants"
 import { ChatMessage } from "@/lib/api/services/types"
 import { useEffect, useState } from "react"
 import { useAccount, useChainId } from "wagmi"
-import { HeaderBar } from "@/components/HeaderBar"
+import { HeaderBar } from "@/modules/ai-agents/components/header-bar"
 import styles from "./styles.module.scss";
 
 const ButtonStyles = defineStyleConfig({

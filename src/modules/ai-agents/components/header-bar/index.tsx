@@ -5,13 +5,13 @@ import { useRouter } from 'next/navigation'
 import Image from "next/image";
 import { Box, HStack, Spacer, Button, ButtonGroup, Text, IconButton } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { CDPWallets } from "@/components/CDPWallets";
+import { CDPWallets } from "@/modules/ai-agents/components/cdp-wallets";
 import classes from "./index.module.css";
 import { IoHomeOutline } from "react-icons/io5";
 import { HiMiniBellAlert } from "react-icons/hi2";
-import { SettingsButton } from "@/components/Settings";
-import { Workflows } from "@/components/Workflows";
-import { ApiCredentialsButton } from "@/components/Credentials/Button";
+import { SettingsButton } from "@/modules/ai-agents/components/settings";
+import { Workflows } from "@/modules/ai-agents/components/workflows";
+import { ApiCredentialsButton } from "@/modules/ai-agents/components/credentials/Button";
 import { useChatStore } from "@/store/chat";
 
 export const HeaderBar: FC = () => {

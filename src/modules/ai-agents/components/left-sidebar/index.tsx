@@ -17,7 +17,7 @@ import {
 import styles from "./index.module.css";
 import { getUserId } from "@/lib/api/services/userHooks";
 import { MessageSquareText } from "lucide-react";
-import { TrendingPrompts } from "../TrendingPrompts";
+import { TrendingPrompts } from "../trending-prompts";
 
 import { useChatStore } from "@/store/chat";
 import { useRouter } from "next/navigation";

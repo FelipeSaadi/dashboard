@@ -12,7 +12,7 @@ import {
   Container,
   useToast,
 } from "@chakra-ui/react";
-import { WalletRequiredModal } from "@/components/WalletRequiredModal";
+import { WalletRequiredModal } from "@/modules/ai-agents/components/WalletRequiredModal";
 
 interface Agent {
   name: string;

@@ -17,9 +17,9 @@ import {
   Button,
   Flex,
 } from "@chakra-ui/react";
-import { TwitterConfig } from "@/components/Credentials/TwitterConfig";
-import { CoinbaseConfig } from "@/components/Credentials/CoinbaseConfig";
-import { OneInchConfig } from "@/components/Credentials/OneInchConfig";
+import { TwitterConfig } from "@/modules/ai-agents/components/credentials/TwitterConfig";
+import { CoinbaseConfig } from "@/modules/ai-agents/components/credentials/CoinbaseConfig";
+import { OneInchConfig } from "@/modules/ai-agents/components/credentials/OneInchConfig";
 import { IoArrowBack } from "react-icons/io5";
 
 interface ApiOption {

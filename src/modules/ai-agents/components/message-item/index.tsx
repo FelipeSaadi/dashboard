@@ -9,8 +9,8 @@ import {
   AssistantMessage,
 } from "@/lib/api/services/types";
 import { getHumanReadableAgentName } from "@/lib/api/services/utils";
-import { Avatar } from "@/components/Avatar";
-import { Tweet } from "@/components/Agents/Tweet/TweetMessage";
+import { Avatar } from "@/modules/ai-agents/components/avatar";
+import { Tweet } from "@/modules/ai-agents/components/agents/tweet/TweetMessage";
 
 import styles from "./index.module.css";
 

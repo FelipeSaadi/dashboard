@@ -5,7 +5,7 @@ import React, { FC } from "react";
 import { Box, IconButton, Text } from "@chakra-ui/react";
 import { X } from "lucide-react";
 import { ChatMessage } from "@/lib/api/services/types";
-import { ImageDisplay } from "@/components/Agents/Imagen/ImageDisplayMessage";
+import { ImageDisplay } from "@/modules/ai-agents/components/agents/imagen/ImageDisplayMessage";
 import TradingViewWidget from "./TradingViewWidget";
 import DCAWidget from "./DCAWidget";
 import BaseSwapWidget from "./BaseSwapWidget";

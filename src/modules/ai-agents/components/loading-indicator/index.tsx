@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Grid, GridItem, Text, Box } from "@chakra-ui/react";
-import { Avatar } from "../Avatar";
-import { Loader } from "../Loader";
+import { Avatar } from "../avatar";
+import { Loader } from "../loader";
 import styles from "./index.module.css";
 
 export const LoadingIndicator: FC = () => {

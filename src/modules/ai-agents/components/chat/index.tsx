@@ -4,11 +4,11 @@ import React, { FC, useEffect, useState } from "react";
 import { Flex, Box } from "@chakra-ui/react";
 import { ChatMessage } from "@/lib/api/services/types";
 // import { useTransactionConfirmations } from "wagmi";
-import { MessageList } from "@/components/MessageList";
-import { ChatInput } from "@/components/ChatInput";
-import { LoadingIndicator } from "@/components/LoadingIndicator";
-import { Widgets, shouldOpenWidget } from "@/components/Widgets";
-import { ChatProps } from "@/components/Chat/types";
+import { MessageList } from "@/modules/ai-agents/components/MessageList";
+import { ChatInput } from "@/modules/ai-agents/components/ChatInput";
+import { LoadingIndicator } from "@/modules/ai-agents/components/LoadingIndicator";
+import { Widgets, shouldOpenWidget } from "@/modules/ai-agents/components/Widgets";
+import { ChatProps } from "@/modules/ai-agents/components/chat/types";
 import { useChatStore } from "@/store/chat";
 
 export const Chat: FC<ChatProps> = ({

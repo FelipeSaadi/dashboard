@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Box } from "@chakra-ui/react";
 import { ChatMessage } from "@/lib/api/services/types";
-import { MessageItem } from "../MessageItem";
+import { MessageItem } from "../message-item";
 
 export const MessageList: FC<{ messages: ChatMessage[] }> = ({ messages }) => {
   return (

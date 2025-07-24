@@ -12,7 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { AttachmentIcon } from "@chakra-ui/icons";
-import { SendIcon } from "../CustomIcon/SendIcon";
+import { SendIcon } from "../custom-icon/SendIcon";
 import PrefilledOptions from "./PrefilledOptions";
 import styles from "./index.module.css";
 
