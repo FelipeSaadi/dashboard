@@ -1,5 +1,4 @@
 .messageGrid {
-  /* background-color: var(--background-primary); */
   /* color: var(--text-color); */
   border-radius: 4px;
   margin-bottom: 8px;
@@ -35,3 +34,13 @@
   color: var(--text-color);
 }
 
+.messageOptions {
+  padding: 0 20px;
+  display: flex;
+  gap: 12px;
+  color: #B4B4B4;
+}
+
+.messageOptions svg {
+  cursor: pointer;
+}

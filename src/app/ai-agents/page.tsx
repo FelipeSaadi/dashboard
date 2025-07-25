@@ -153,11 +153,11 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div style={{ minHeight: "100vh", minWidth: "100vw", backgroundColor: "var(--background-secondary)" }}>
+    <div style={{ minHeight: "100vh", minWidth: "100vw", background: "var(--background-secondary-gradient)" }}>
     <ChakraProvider theme={theme}>
       <Box
         sx={{
-          backgroundColor: "var(--background-secondary)",
+          background: "var(--background-secondary-gradient)",
           height: "100vh",
           display: "flex",
           flexDirection: "column",

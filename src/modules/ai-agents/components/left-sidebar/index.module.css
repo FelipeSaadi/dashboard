@@ -108,7 +108,7 @@
 }
 
 .conversationItem.active {
-  background: var(--background-secondary);
+  background: var(--background-primary);
   border-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -200,5 +200,5 @@
 }
 
 .toggleButton:hover {
-  background: var(--background-secondary);
+  background: var(--background-primary);
 }

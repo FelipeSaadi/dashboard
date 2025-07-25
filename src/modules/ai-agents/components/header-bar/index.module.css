@@ -1,5 +1,5 @@
 .headerBar {
-  background-color: var(--background-secondary);
+  background: var(--background-secondary-gradient);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding: 8px 0;
   width: 100%;

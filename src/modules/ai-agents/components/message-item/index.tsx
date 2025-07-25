@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Grid, GridItem, Text } from "@chakra-ui/react";
+import { Grid, GridItem, IconButton, Text } from "@chakra-ui/react";
 import ReactMarkdown from "react-markdown";
 import {
   ChatMessage,
@@ -13,10 +13,15 @@ import { Avatar } from "@/modules/ai-agents/components/avatar";
 import { Tweet } from "@/modules/ai-agents/components/agents/tweet/TweetMessage";
 
 import styles from "./index.module.css";
+import { CopyIcon } from "lucide-react";
+
+import { MessageOptions } from "./message-options";
 
 type MessageItemProps = {
   message: ChatMessage;
 };
+
+
 
 export const MessageItem: FC<MessageItemProps> = ({ message }) => {
   const isUser = message.role === "user";
@@ -42,7 +47,10 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
         return <Text fontSize="xl" fontWeight="normal" color="white/50"></Text>
       }
       return (
+        <>
         <ReactMarkdown className={`${styles.messageText} ${isUser ? styles.user : styles.assistant}`}>{content}</ReactMarkdown>
+        {!isUser && <MessageOptions />}
+        </>
       );
     }
 
@@ -60,9 +68,12 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
           );
         }
         return (
+          <>
           <ReactMarkdown className={styles.messageText}>
             {`Successfully generated image with ${imageContent.service}`}
           </ReactMarkdown>
+          <MessageOptions />
+          </>
         );
       }
 
@@ -70,18 +81,24 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
         const cryptoDataContent =
           assistantMessage.content as CryptoDataMessageContent;
         return (
+          <>
           <ReactMarkdown className={styles.messageText}>
             {cryptoDataContent.data}
           </ReactMarkdown>
+          <MessageOptions />
+          </>
         );
       }
 
       if (message.agentName === "base") {
         const baseContent = assistantMessage.content as BaseMessageContent;
         return (
+          <>
           <ReactMarkdown className={styles.messageText}>
             {baseContent.message}
           </ReactMarkdown>
+          <MessageOptions />
+          </>
         );
       }
 

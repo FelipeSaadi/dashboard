@@ -35,9 +35,9 @@ export const HeaderBar: FC = () => {
         </Box>
         <Box className={classes.logo} flexShrink={0} display="flex" alignItems="center">
           <a>
-            <Image src="/assets/logo.png" alt="logo" width={40} height={40} />
+            <img src="/assets/logo.png" alt="logo" width={40} height={40} />
           </a>
-          <Image src="/assets/logo-text.jpg" alt="logo" width={100} height={40} />
+          <img src="/assets/logo-text.png" alt="logo" width={100} height={40} />
         </Box>
         <Spacer />
         <HStack spacing={4} flexShrink={0}>
