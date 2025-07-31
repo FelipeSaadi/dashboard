@@ -73,7 +73,11 @@ export const Chat: FC<ChatProps> = ({
         ml="auto"
         mr="auto"
       >
-        <MessageList messages={messagesData} />
+        {
+          messagesData.length > 1 && (
+            <MessageList messages={messagesData} />
+          )
+        }
 
         {isLoading && <LoadingIndicator />}
         <ChatInput

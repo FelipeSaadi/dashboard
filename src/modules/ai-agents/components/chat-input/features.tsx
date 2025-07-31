@@ -1,5 +1,6 @@
 import styles from "./index.module.css";
 import { useRouter } from "next/navigation";
+import { Box, Text } from "@chakra-ui/react";
 
 interface Feature {
   title: string;
@@ -13,6 +14,11 @@ export const Features = ({ features }: { features: Feature[] }) => {
 
   return (
     <div>
+      <Box p={4} display="flex" alignItems="center" gap={2}>
+        <Text marginX={"5"} fontSize="32px" fontWeight="regular" color="#828282">
+          Select a Feature or Start a Chat
+        </Text>
+      </Box>
       <div className={styles.featureGrid}>
         {
           features.map((feature, index) => (

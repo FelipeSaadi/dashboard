@@ -16,11 +16,9 @@ import {
   Tab,
   TabPanel,
   useColorModeValue,
-  IconButton,
 } from "@chakra-ui/react";
 import { GeneralSettings } from "./GeneralSettings";
 import { AgentSelection } from "./AgentSelection";
-import { Settings } from "lucide-react";
 
 export const SettingsButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,33 +26,21 @@ export const SettingsButton: React.FC = () => {
 
   return (
     <>
-      {/* <Button
+      <Button
         leftIcon={<FaCog />}
         onClick={() => setIsOpen(true)}
         size="md"
-        backgroundColor="var(--background-secondary)"
-        color="var(--text-primary)"
+        backgroundColor="white"
+        color="black"
+        fontWeight="normal"
+        rounded={'25px'}
         _hover={{
-          backgroundColor: "var(--background-primary)"
+          backgroundColor: "grey"
         }}
         variant="solid"
       >
         Settings
-      </Button> */}
-      <IconButton
-        aria-label="Alert"
-        onClick={() => setIsOpen(true)}
-        variant="outline"
-        bgColor="transparent"
-        borderRadius="full"
-        color="white"
-        _hover={{
-          bgColor: "transparent",
-          color: "grey",
-        }}
-        border="1px solid grey"
-        icon={<Settings width="16px" height="16px" />}
-      />
+      </Button>
 
       <Modal
         isOpen={isOpen}

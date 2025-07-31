@@ -52,8 +52,10 @@ export const HeaderBar: FC = () => {
               bgColor: "transparent",
               color: "grey",
             }}
+            height={"48px"}
+            width={"48px"}
             border="1px solid grey"
-            icon={<IoHomeOutline width="24px" height="24px" />}
+            icon={<IoHomeOutline size={24} />}
           />
           <IconButton
             aria-label="Alert"
@@ -66,12 +68,11 @@ export const HeaderBar: FC = () => {
               bgColor: "transparent",
               color: "grey",
             }}
+            height={"48px"}
+            width={"48px"}
             border="1px solid grey"
-            icon={<HiMiniBellAlert width="24px" height="24px" />}
+            icon={<HiMiniBellAlert size={24} />}
           />
-          <Workflows />
-          <ApiCredentialsButton />
-          <SettingsButton />
           {walletType === "cdp" ? <CDPWallets /> : <ConnectButton label="Connect Wallet" />}
 
           {/* Wallet Selection */}

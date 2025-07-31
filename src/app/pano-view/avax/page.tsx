@@ -662,7 +662,7 @@ const Avax: React.FC = () => {
     //   }}
     // >
       <div className={styles.home}>
-        <Header style={{ backgroundColor: 'var(--background-primary)' }} onSubmit={() => { }} />
+        <Header style={{ background: 'var(--background-primary)' }} onSubmit={() => { }} />
         <div className="mb-8 mx-[20px] md:mx-[40px]">
           <Tabs
             sx={{

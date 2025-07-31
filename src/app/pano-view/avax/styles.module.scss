@@ -1,5 +1,5 @@
 .home {
-  background-color: var(--background-primary);
+  background: var(--background-primary);
   .infoBox,
   .chartByTime,
   .infoList {
@@ -24,7 +24,7 @@
     border-radius: 30px;
     transition: 0.3s;
 
-    background-color: var(--background-secondary);
+    background: var(--background-secondary);
 
     img {
       width: 30px;

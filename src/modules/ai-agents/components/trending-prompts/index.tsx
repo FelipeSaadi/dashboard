@@ -32,11 +32,12 @@ export const TrendingPrompts = () => {
   return (
     <>  
       <Box p={4} display="flex" alignItems="center" gap={2}>
-        <HiOutlineSparkles   size={20} />
+        <img src="ai-agents/trend.svg" alt="" />
         <Text fontSize="md" fontWeight="bold" color="white">
           Trending Prompts
         </Text>
       </Box>
+      <div className={styles.trendingPrompts}>
       {Prompts.map((prompt) => (
         <div
           key={prompt.id}
@@ -52,6 +53,7 @@ export const TrendingPrompts = () => {
           </div>
         </div>
       ))}
+      </div>
     </>
   )
 }

@@ -44,37 +44,37 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'localhost:8080'
 const features = [
   {
     title: "Wallet Tracking",
-    icon: <FaWallet width="24px" height="24px" />,
+    icon: <img src="ai-agents/wallet.svg" alt="" />,
     description: "Real-time wallet monitoring",
     url: "/wallet-tracking",
   },
   {
     title: "AI Agents on X",
-    icon: <FaXTwitter  width="24px" height="24px" />,
+    icon: <img src="ai-agents/x.svg" alt="" />,
     description: "See what AI agents are saying on X",
     url: "/x-ai-agents",
   },
   {
     title: "Liquid Swap",
-    icon: <MdOutlineSwapCalls width="28px" height="28px" />,
+    icon: <img src="ai-agents/swap.svg" alt="" />,
     description: "Swap your assets",
     url: "/liquid-swap",
   },
   {
     title: "Pano View",
-    icon: <PiSquaresFourFill width="28px" height="28px" />,
+    icon: <img src="ai-agents/pano-view.svg" alt="" />,
     description: "Unified on-chain analytics",
     url: "/pano-view/avax",
   },
   {
     title: "Ai MarketPlace",
-    icon: <IoBarChartSharp width="28px" height="28px" />,
+    icon: <img src="ai-agents/market.svg" alt="" />,
     description: "Coming Soon!",
     url: "/ai-marketplace",
   },
   {
     title: "Portfolio",
-    icon: <PiBagSimpleFill width="28px" height="28px" />,
+    icon: <img src="ai-agents/portfolio.svg" alt="" />,
     description: "View your positions & balance",
     url: "/portfolio",
   },

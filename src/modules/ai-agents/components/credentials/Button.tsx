@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { Button, IconButton } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { FaLock } from "react-icons/fa";
 import { ApiCredentialsModal } from "./Modal";
 
@@ -10,34 +10,21 @@ export const ApiCredentialsButton: React.FC = () => {
 
   return (
     <>
-      {/* <Button
+      <Button
         leftIcon={<FaLock />}
         onClick={() => setIsOpen(true)}
         size="md"
-        backgroundColor="var(--background-secondary)"
-        color="var(--text-primary)"
+        backgroundColor="white"
+        color="black"
+        fontWeight="normal"
+        rounded={'25px'}
         _hover={{
-          backgroundColor: "var(--background-primary)"
+          backgroundColor: "grey"
         }}
         variant="solid"
       >
         API Keys
-      </Button> */}
-      <IconButton
-              aria-label="Alert"
-              onClick={() => setIsOpen(true)}
-              variant="outline"
-              bgColor="transparent"
-              borderRadius="full"
-              color="white"
-              _hover={{
-                bgColor: "transparent",
-                color: "grey",
-              }}
-              border="1px solid grey"
-              icon={<FaLock width="14px" height="14px" />}
-            />
-
+      </Button>
       <ApiCredentialsModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );

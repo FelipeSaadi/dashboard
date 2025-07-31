@@ -9,13 +9,13 @@ import { Swap } from "../swap";
 export const MessageOptions = () => {
     return (
         <>
-        {/* <div className={styles.messageOptions}>
+        <div className={styles.messageOptions}>
             <GoUnmute size={18}/>
             <BiCopy size={18}/>
             <FaArrowsRotate size={18}/>
             <FiThumbsDown size={18}/>
-        </div> */}
-        <Swap />
+        </div>
+        {/* <Swap /> */}
         </>
     )
 }

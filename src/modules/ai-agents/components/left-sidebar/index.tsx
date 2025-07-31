@@ -1,7 +1,7 @@
 "use client"
 
 import React, { FC, useEffect, useState } from "react";
-import { useToast, Select, VStack, Box, Text } from "@chakra-ui/react";
+import { useToast, Select, VStack, Box, Text, Spacer } from "@chakra-ui/react";
 import {
   IconTrash,
   IconPencilPlus,
@@ -21,6 +21,9 @@ import { TrendingPrompts } from "../trending-prompts";
 
 import { useChatStore } from "@/store/chat";
 import { useRouter } from "next/navigation";
+import Workflows from "../workflows";
+import { SettingsButton } from "../settings";
+import { ApiCredentialsButton } from "../credentials/Button";
 
 export type LeftSidebarProps = {
   /** Whether the sidebar is currently open (expanded) or collapsed */
@@ -233,7 +236,7 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
                 }}
               >
                 <div className={styles.conversationItemContent}>
-                  <MessageSquareText size={20} />
+                  <img src="ai-agents/comment.svg" alt="" />
                   <span className={styles.conversationName}>
                     {formatConversationName(conversationId)}
                   </span>
@@ -264,57 +267,17 @@ export const LeftSidebar: FC<LeftSidebarProps> = ({
             ))}
           </div>
 
+          <div className={styles.divider}></div>
+
           <VStack spacing={4} className={styles.sidebarFooter} align="stretch">
             <Box display="flex" flexDirection="column" gap={2}>
               <TrendingPrompts />
-
-              {/* <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Text fontSize="md" fontWeight="bold" color="white" mr={2}>
-                  Model:
-                </Text>
-                <Select
-                  value={selectedModel}
-                  onChange={(e) => setSelectedModel(e.target.value)}
-                  size="md"
-                  bg="#1f1f1f"
-                  color="white"
-                  borderColor="rgba(255, 255, 255, 0.2)"
-                  _hover={{ borderColor: "rgba(255, 255, 255, 0.4)" }}
-                  _focus={{ borderColor: "teal.400" }}
-                  width="65%"
-                >
-                  {modelOptions.map((option) => (
-                    <option
-                      key={option.value}
-                      value={option.value}
-                      style={{ backgroundColor: "#1f1f1f", color: "white" }}
-                    >
-                      {option.label}
-                    </option>
-                  ))}
-                </Select>
-              </Box> */}
-
-              {/* <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Text fontSize="md" fontWeight="bold" color="white" mr={2}>
-                  Cost:
-                </Text>
-                <Text fontSize="sm" color="green.400" fontWeight="500">
-                  Free. Running locally.
-                </Text>
-              </Box> */}
-
-              {/* <Text fontSize="sm" color="gray.400" fontStyle="italic">
-                More powerful models are coming soon via the Lumerin Node Router
-              </Text> */}
+              
+              <Box display="flex" flexDirection="column" marginTop={8} marginBottom={6} gap={6}>
+                <Workflows />
+                <ApiCredentialsButton />
+                <SettingsButton />
+              </Box>
             </Box>
           </VStack>
         </div>

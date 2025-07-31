@@ -9,8 +9,8 @@
       #17707812 15%,
       #12606750 35%,
       #0c4b51 100%);
-  --background-primary: 0, 0%, 8%;
-  --background-secondary: 0, 0%, 13%;
+  --background-primary: #141414;
+  --background-secondary: #1E1E1E;
   --background-secondary-gradient: linear-gradient(179.83deg, #1E1E1E -19.03%, #000000 148.11%);
   --background-highlight: 179, 100%, 50%;
   --landing-background: 0 0% 2%;
@@ -42,7 +42,7 @@ body {
   color: var(--text-color);
   min-height: 100vh;
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'SuisseIntl', sans-serif;
 }
 
 @font-face {
