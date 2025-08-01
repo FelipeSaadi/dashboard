@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import { ChakraProvider } from "@chakra-ui/react"
 import CodeLock from '@/components/code-lock/code-lock'
 
 export const ProtectionMobile = ({ children }: { children: React.ReactNode }) => {
@@ -58,5 +59,9 @@ export const ProtectionMobile = ({ children }: { children: React.ReactNode }) =>
     )
   }
 
-  return <>{children} </>
+  return (
+    <>
+      {children}
+    </>
+  )
 }

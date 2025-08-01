@@ -1,15 +1,16 @@
 'use client'
 
+import styles from './styles.module.scss'
+
 import React, { useState, useEffect } from 'react'
 import TokenDetailsModal from '@/components/token-details-modal/token-details-modal'
-import styles from './styles.module.scss'
-import Layout from '@/components/layout/Layout'
-import OpenChat from '@/components/open-chat/open-chat'
 import RangoService from '@/lib/api/services/rango'
 import { Button } from '@/components/ui/button'
 import TrackAddressModal from '@/components/track-address-modal/track-address-modal'
 import { useWalletStore } from '@/store/wallet'
 import { LoaderCircle } from 'lucide-react'
+import { HeaderBar } from '@/components/header-bar'
+import { ChakraProvider } from '@chakra-ui/react'
 
 interface Asset {
   blockchain: string
@@ -47,6 +48,12 @@ const Page: React.FC = () => {
   const [filteredData, setFilteredData] = useState<WalletData[]>([])
   const [selectedWallet, setSelectedWallet] = useState<WalletData | null>(null)
   const [isTracking, setIsTracking] = useState(false)
+  const [isStarred, setIsStarred] = useState(walletData.map(item => {
+    return {
+      address: item.address,
+      starred: false
+    }
+  }))
 
   const fetchData = async () => {
     if (!token) {
@@ -117,7 +124,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     setWalletData([])
     setFilteredData([])
-    
+
     if (token) {
       fetchData()
     }
@@ -155,17 +162,23 @@ const Page: React.FC = () => {
     setSelectedWallet(wallet)
   }
 
+  const handleStar = (address: string) => {
+    const stareds = [...isStarred]
+    const stared = stareds.find(item => item.address === address)
+    if (stared) {
+      stared.starred = !stared.starred
+    }
+    else {
+      stareds.push({ address, starred: true })
+    }
+    setIsStarred(stareds)
+  }
+
   return (
-    <Layout
-      sidebar={{
-        actual,
-        onChange: (coin: string) => setActual(coin),
-        open: () => void 0,
-      }}
-      header={{
-        onSubmit: () => { },
-      }}
-    >
+    <div>
+      <ChakraProvider>
+        <HeaderBar />
+      </ChakraProvider>
       <div className={styles.home}>
         {loading && (
           <div className="flex items-center justify-center h-[60vh] text-white">
@@ -175,66 +188,82 @@ const Page: React.FC = () => {
         {token && (
           <div className="flex flex-col mx-4 md:mx-12 text-white">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <h1 className="text-xl font-bold">Wallet Tracking</h1>
-              <div className="flex flex-col md:flex-row w-full md:w-auto gap-4">
-                <Button
-                  className='bg-[#3CDFEF46] hover:bg-[#3CDFEF25] w-full md:w-auto'
-                  onClick={() => wallet && setIsTrackModalOpen(true)}
-                  disabled={!wallet}
-                  title={!wallet ? "Connect your wallet to track addresses" : "Track a new address"}
-                >
-                  {!wallet ? "Connect Wallet to Track" : "Track New Address"}
-                </Button>
+              <h1 className="text-[36px] text-muted-foreground font-regular">Wallet Tracking</h1>
+              <div className="flex flex-col items-center justify-center md:flex-row w-full md:w-auto gap-4">
                 <div className={styles.search}>
+                  <img src="/assets/search.svg" alt="Search" />
                   <input
                     type="text"
-                    placeholder={wallet ? "Search by address or network..." : "Connect wallet to search..."}
+                    placeholder={wallet ? "Wallet Address" : "Connect wallet to search..."}
                     value={searchQuery}
                     onChange={handleSearch}
                     className={styles.searchInput}
                     disabled={!wallet}
                   />
                 </div>
+                <Button
+                  className={styles.trackNewAddressButton}
+                  onClick={() => wallet && setIsTrackModalOpen(true)}
+                  disabled={!wallet}
+                  title={!wallet ? "Connect your wallet to track addresses" : "Track a new address"}
+                >
+                  {!wallet ? "Connect Wallet to Track" : "Track New Address"}
+                </Button>
               </div>
             </div>
 
-            <div className={`${styles.card} my-4`}>
-              <div className={styles.table}>
-                <div className={styles.tableHeader}>
-                  <div className={styles.headerCell}>Address</div>
-                  <div className={styles.headerCell}>Network</div>
-                  <div className={styles.headerCell}>Tokens</div>
-                  <div className={styles.headerCell}>Total Balance</div>
-                </div>
-                {loading ? (
-                  <div className="text-center py-4 text-gray-400">Loading...</div>
-                ) : filteredData.map((item, index) => (
-                  <div
-                    className={styles.tableRow}
-                    key={`wallet-${index}`}
-                    onClick={() => handleWalletClick(item)}
-                  >
-                    <div className={styles.cell}>
-                      <span className={styles.copy}></span>
-                      <span className={styles.address}>{item.address}</span>
-                    </div>
-                    <div className={styles.cell}>{item.network}</div>
-                    <div className={styles.cell}>{item.totalTokens}</div>
-                    <div className={styles.cell}>${item.balance.toFixed(2)}</div>
-                  </div>
-                ))}
-
-                {!loading && filteredData.length === 0 && (
-                  <div className="text-center py-4 text-gray-400">
-                    You are not tracking any wallets
-                  </div>
-                )}
+            <div className={styles.table}>
+              <div className={styles.tableHeader}>
+                <div className={styles.headerCell}>Address</div>
+                {/* <div className={styles.headerCell}>Custom Name</div> */}
+                <div className={styles.headerCell}>Network</div>
+                <div className={styles.headerCell}>Tokens</div>
+                <div className={styles.headerCell}>Total Balance</div>
               </div>
+              {loading ? (
+                <div className="text-center py-4 text-gray-400">Loading...</div>
+              ) : filteredData.map((item, index) => (
+                <div
+                  className={styles.tableRow}
+                  key={`wallet-${index}`}
+                  onClick={() => handleWalletClick(item)}
+                >
+                  <div className={styles.cell}>
+                    <div className={styles.address}>
+                      <div className={`w-fit p-2 border border-[#FFFFFF42] rounded-[7px] ${isStarred.find((starred) => starred.address === item.address)?.starred ? "bg-[#44FF00]" : "bg-transparent"}`} onClick={(e) => {
+                        e.stopPropagation()
+                        handleStar(item.address)
+                      }}>
+                        {
+                          isStarred.find((starred) => starred.address === item.address)?.starred ? (
+                            <img src="/assets/star-filled.svg" width={20} height={20} alt="" />
+                          ) : (
+                            <img src="/assets/star.svg" width={20} height={20} alt="" />
+                          )
+                        }
+                      </div>
+                      <span>
+                        {item.address}
+                      </span>
+                    </div>
+                  </div>
+                  <div className={styles.cell}>{item.network}</div>
+                  {/* <div className={styles.cell}>{item.customName}</div> */}
+                  <div className={styles.cell}>{item.totalTokens}</div>
+                  <div className={styles.cell}>${item.balance.toFixed(2)}</div>
+                </div>
+              ))}
+
+              {!loading && filteredData.length === 0 && (
+                <div className="text-center py-4 text-gray-400">
+                  You are not tracking any wallets
+                </div>
+              )}
             </div>
           </div>
         )}
 
-        { !token && (
+        {!token && (
           <div className="flex flex-col gap-4 p-4">
             <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
               <h2 className="text-2xl font-semibold text-white">Connect Your Wallet</h2>
@@ -244,28 +273,30 @@ const Page: React.FC = () => {
         )}
       </div>
 
-      {token && (
-        <TrackAddressModal
-          open={isTrackModalOpen}
-          onClose={() => {
-            setIsTrackModalOpen(false)
-          }}
-          onSubmit={(blockchain, address) => handleTrackAddress(blockchain, address)}
-          isLoading={isTracking}
-        />
-      )}
+      {
+        token && (
+          <TrackAddressModal
+            open={isTrackModalOpen}
+            onClose={() => {
+              setIsTrackModalOpen(false)
+            }}
+            onSubmit={(blockchain, address) => handleTrackAddress(blockchain, address)}
+            isLoading={isTracking}
+          />
+        )
+      }
 
-      {selectedWallet && (
-        <TokenDetailsModal
-          open={!!selectedWallet}
-          onClose={() => setSelectedWallet(null)}
-          address={selectedWallet.address}
-          tokens={selectedWallet.tokens}
-        />
-      )}
-
-      <OpenChat />
-    </Layout>
+      {
+        selectedWallet && (
+          <TokenDetailsModal
+            open={!!selectedWallet}
+            onClose={() => setSelectedWallet(null)}
+            address={selectedWallet.address}
+            tokens={selectedWallet.tokens}
+          />
+        )
+      }
+    </div >
   )
 }
 
