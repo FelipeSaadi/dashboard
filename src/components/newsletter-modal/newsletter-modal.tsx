@@ -42,9 +42,9 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ isOpen, onClose, onSu
     return (
         <div className="fixed inset-0 z-50 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
-                <div className="fixed inset-0 bg-gray-900/75 backdrop-blur-sm transition-opacity" onClick={onClose} />
+                <div className="fixed inset-0 bg-backgroundPrimary/75 backdrop-blur-sm transition-opacity" onClick={onClose} />
                 
-                <div className="relative transform overflow-hidden rounded-xl bg-gray-800/90 border border-blue-500/20 p-6 text-left shadow-xl transition-all w-full max-w-md">
+                <div className="relative transform overflow-hidden rounded-xl bg-backgroundSecondary border border-blue-500/20 p-6 text-left shadow-xl transition-all w-full max-w-md">
                     <div className="absolute right-4 top-4">
                         <button
                             onClick={onClose}
@@ -102,7 +102,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ isOpen, onClose, onSu
                                     <button
                                         type="submit"
                                         disabled={isLoading}
-                                        className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:ring-blue-500/50 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="px-4 py-2 bg-[#3BEBFC] hover:bg-[#3BEBFC]/80 text-white text-sm font-medium rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:ring-blue-500/50 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {isLoading ? 'Subscribing...' : 'Subscribe'}
                                     </button>

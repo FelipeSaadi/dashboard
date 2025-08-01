@@ -26,7 +26,7 @@ export const HeaderBar: FC = () => {
   const router = useRouter()
   const menuRef = useRef<HTMLDivElement>(null)
 
-  const isAiAgentsPage = pathname.includes('ai-agents')
+  const isAiAgentsPage = pathname.includes('/ai-agents')
 
   const handleHome = () => {
     resetChat(true)

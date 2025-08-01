@@ -14,6 +14,8 @@ import { Tabs, Tab, Box } from '@mui/material'
 import styles from './styles.module.scss'
 import Layout from '@/components/layout/Layout'
 import XService from '@/lib/api/services/x'
+import { ChakraProvider } from '@chakra-ui/react'
+import { HeaderBar } from '@/components/header-bar'
 
 const XAiAgents: React.FC = () => {
   const [actual, setActual] = useState('bitcoin')
@@ -24,7 +26,7 @@ const XAiAgents: React.FC = () => {
   const [tweets, setTweets] = useState<Tweet[]>([])
   const [zicoTweets, setZicoTweets] = useState<Tweet[]>([])
   const [avaxTweets, setAvaxTweets] = useState<Tweet[]>([])
-  
+
   const [currentPage, setCurrentPage] = useState(1)
   const [zicoCurrentPage, setZicoCurrentPage] = useState(1)
   const [avaxCurrentPage, setAvaxCurrentPage] = useState(1)
@@ -176,21 +178,15 @@ const XAiAgents: React.FC = () => {
   }
 
   return (
-    <div className={styles.xAiAgents}>
-      <Layout
-        sidebar={{
-          actual: actual,
-          onChange: (coin: string) => setActual(coin),
-          open: (page: string) => handleOpen(page),
-        }}
-        header={{
-          onSubmit: handleGetInfo,
-        }}
-      >
+    <>
+      <ChakraProvider>
+        <HeaderBar />
+      </ChakraProvider>
+      <div className={styles.xAiAgents}>
         <div className="flex flex-col w-full h-[calc(80vh)] gap-6">
           <h1 className="ml-4 text-xl font-bold text-zinc-100">AI Agents on X</h1>
 
-          <div className="mx-4 p-3 rounded-lg bg-gradient-to-r from-blue-900/40 to-purple-900/40 border border-blue-500/20">
+          <div className="mx-4 p-3 rounded-lg bg-backgroundSecondary border border-[#FFFFFF8F]">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="flex-1">
                 <h2 className="text-md font-semibold text-blue-100 mb-2">
@@ -204,7 +200,7 @@ const XAiAgents: React.FC = () => {
               </div>
               <div className="flex-shrink-0">
                 <button
-                  className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors"
+                  className="px-6 py-3 bg-[#3BEBFC] hover:bg-[#3BEBFC]/80 text-white font-medium rounded-lg transition-colors"
                   onClick={() => setNewsletterModalOpen(true)}
                 >
                   Subscribe Now
@@ -218,7 +214,7 @@ const XAiAgents: React.FC = () => {
               <Box
                 sx={{
                   borderBottom: 1,
-                  borderColor: 'rgba(59, 130, 246, 0.2)',
+                  borderColor: 'var(--background-secondary)',
                   mb: 2,
                 }}
               >
@@ -226,10 +222,10 @@ const XAiAgents: React.FC = () => {
                   sx={{
                     marginBottom: '4px',
                     '.Mui-selected': {
-                      color: `#3BEBFC !important`,
+                      color: `white !important`,
                     },
                   }}
-                  slotProps={{ indicator: { style: { background: '#3BEBFC' } } }}
+                  slotProps={{ indicator: { style: { backgroundColor: 'white' } } }}
                   value={activeTab}
                   onChange={handleTabChange}
                   aria-label="tweet tabs"
@@ -293,36 +289,36 @@ const XAiAgents: React.FC = () => {
             </div>
           </div>
         </div>
-      </Layout>
 
-      {modalOpened && (
-        <InfoModal data={info} onClose={() => handleClose()}>
-          {info?.type === 'address' ? (
-            <AddressInfo title="Address Information" data={info?.['ok']} />
-          ) : (
-            <TransactionInfo
-              title="Transaction Information"
-              data={info?.['ok']}
-            />
-          )}
-        </InfoModal>
-      )}
+        {modalOpened && (
+          <InfoModal data={info} onClose={() => handleClose()}>
+            {info?.type === 'address' ? (
+              <AddressInfo title="Address Information" data={info?.['ok']} />
+            ) : (
+              <TransactionInfo
+                title="Transaction Information"
+                data={info?.['ok']}
+              />
+            )}
+          </InfoModal>
+        )}
 
-      <OpenChat />
+        <OpenChat />
 
-      {whaleOpened && (
-        <WhaleHunting
-          onSelect={(id: string) => handleGetInfo('address', id)}
-          onClose={() => setWhaleOpened(false)}
+        {whaleOpened && (
+          <WhaleHunting
+            onSelect={(id: string) => handleGetInfo('address', id)}
+            onClose={() => setWhaleOpened(false)}
+          />
+        )}
+
+        <NewsletterModal
+          isOpen={newsletterModalOpen}
+          onClose={() => setNewsletterModalOpen(false)}
+          onSubmit={handleNewsletterSubmit}
         />
-      )}
-
-      <NewsletterModal
-        isOpen={newsletterModalOpen}
-        onClose={() => setNewsletterModalOpen(false)}
-        onSubmit={handleNewsletterSubmit}
-      />
-    </div>
+      </div >
+    </>
   )
 }
 
