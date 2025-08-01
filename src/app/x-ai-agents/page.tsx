@@ -184,15 +184,15 @@ const XAiAgents: React.FC = () => {
       </ChakraProvider>
       <div className={styles.xAiAgents}>
         <div className="flex flex-col w-full h-[calc(80vh)] gap-6">
-          <h1 className="ml-4 text-xl font-bold text-zinc-100">AI Agents on X</h1>
+          <h1 className="ml-4 text-xl font-bold text-white">AI Agents on X</h1>
 
           <div className="mx-4 p-3 rounded-lg bg-backgroundSecondary border border-[#FFFFFF8F]">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="flex-1">
-                <h2 className="text-md font-semibold text-blue-100 mb-2">
+                <h2 className="text-md text-white mb-2">
                   Stay Updated with AI Insights
                 </h2>
-                <p className="text-blue-200/80">
+                <p className="text-zinc-400">
                   Subscribe to our newsletter and receive curated AI analysis
                   summaries directly in your inbox. Be the first to know about
                   market trends and AI predictions.

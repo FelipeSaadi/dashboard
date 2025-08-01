@@ -84,6 +84,7 @@ export const HeaderBar: FC = () => {
               <li className="cursor-pointer hover:text-white" onClick={() => handleNavigate('/ai-agents')}>AI Agents</li>
               <li className="cursor-pointer hover:text-white" onClick={() => handleNavigate('/wallet-tracking')}>Wallet Tracking</li>
               <li className="cursor-pointer hover:text-white" onClick={() => handleNavigate('/liquid-swap')}>Liquid Swap</li>
+              <li className="cursor-pointer hover:text-white" onClick={() => handleNavigate('/x-ai-agents')}>X AI Agents</li>
               <li className="cursor-pointer hover:text-white" onClick={() => handleNavigate('/pano-view/avax')}>Pano-View</li>
             </ul>
           </div>
