@@ -6,7 +6,7 @@ interface Feature {
   title: string;
   icon: React.ReactNode;
   description: string;
-  url: string;
+  url: string | null;
 }
 
 export const Features = ({ features }: { features: Feature[] }) => {
@@ -34,7 +34,7 @@ export const Features = ({ features }: { features: Feature[] }) => {
               </div>
               <button
                 className={styles.continueButton}
-                onClick={() => router.push(feature.url)}
+                onClick={() => feature.url && router.push(feature.url)}
               >
                 Continue
               </button>

@@ -13,7 +13,7 @@ export const ApiCredentialsButton: React.FC = () => {
       <Button
         leftIcon={<FaLock />}
         onClick={() => setIsOpen(true)}
-        size="md"
+        height={42}
         backgroundColor="white"
         color="black"
         fontWeight="normal"

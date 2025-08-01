@@ -27,22 +27,30 @@
 }
 
 body {
-  background: var(--background-gradient);
-  background-primary: var(--background-primary);
-  background-secondary: var(--background-secondary);
-  background-highlight: var(--background-highlight);
-  landing-background: var(--landing-background);
-  landing-primary: var(--landing-primary);
-  landing-secondary: var(--landing-secondary);
-  landing-tertiary: var(--landing-tertiary);
-  landing-title-color: var(--landing-title-color);
-  landing-text-color: var(--landing-text-color);
-  landing-highlight-color: var(--landing-highlight-color);
-  landing-border-color: var(--landing-border-color);
+  background: var(--background-primary);
   color: var(--text-color);
   min-height: 100vh;
   margin: 0;
   font-family: 'SuisseIntl', sans-serif;
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--background-primary);
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--background-secondary);
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--background-secondary-gradient);
+  }
 }
 
 @font-face {

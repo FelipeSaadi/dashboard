@@ -29,7 +29,7 @@ export const SettingsButton: React.FC = () => {
       <Button
         leftIcon={<FaCog />}
         onClick={() => setIsOpen(true)}
-        size="md"
+        height={42}
         backgroundColor="white"
         color="black"
         fontWeight="normal"

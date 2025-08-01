@@ -10,6 +10,10 @@ import { FaArrowDown } from "react-icons/fa6";
 
 const tokens = [
   {
+    name: "AVAX",
+    icon: "/swap/avax.png"
+  },
+  {
     name: "ETH",
     icon: "/swap/eth.png"
   },
@@ -27,8 +31,8 @@ export const Swap = () => {
 
   return (
     <div>
-      <h1 className="w-fit mx-auto text-2xl font-bold">Liquid Swap</h1>
-      <div className="mt-4 p-4 shadow-lg bg-[#141414] shadow-[0px_4px_36.5px_10px_#00000040] rounded-lg">
+      <h1 className="w-fit ml-2 text-2xl text-muted-foreground font-regular">Liquid Swap</h1>
+      <div className="mt-6 p-4 bg-backgroundPrimary shadow-[0_0_36.5px_10px_rgba(0,0,0,0.25)] rounded-lg">
         <div className="relative flex flex-col">
           <div className="flex flex-col gap-4 border rounded-lg border-[#4C4C4C] p-4">
             <h2 className="text-lg text-gray-400">Sell</h2>

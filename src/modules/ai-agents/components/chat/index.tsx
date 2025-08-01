@@ -64,7 +64,6 @@ export const Chat: FC<ChatProps> = ({
       <Flex
         direction="column"
         height="100%"
-        maxWidth="80%"
         width="100%"
         transition="all 0.3s ease-in-out"
         mt={4}

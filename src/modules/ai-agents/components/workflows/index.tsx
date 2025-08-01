@@ -397,7 +397,7 @@ export const Workflows: React.FC = () => {
       <Button
         leftIcon={<FaRobot />}
         onClick={() => setIsOpen(true)}
-        size="md"
+        height={42}
         backgroundColor="white"
         color="black"
         fontWeight="normal"

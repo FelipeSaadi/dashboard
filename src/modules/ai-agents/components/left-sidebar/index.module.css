@@ -10,7 +10,7 @@
   width: 340px;
   overflow: visible;
   transition: transform 0.3s ease;
-  z-index: 1000;
+  z-index: 5;
 }
 
 .sidebarContainer.collapsed {

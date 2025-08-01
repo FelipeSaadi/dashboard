@@ -74,7 +74,6 @@ const Header: React.FC<Props> = ({ onSubmit, style }: Props) => {
         )}
 
         <div className={styles.actions}>
-          <ChakraProvider>
             <IconButton
               aria-label="Home"
               onClick={() => router.push('/ai-agents')}
@@ -89,7 +88,6 @@ const Header: React.FC<Props> = ({ onSubmit, style }: Props) => {
               border="1px solid grey"
               icon={<IoHomeOutline width="24px" height="24px" />}
             />
-          </ChakraProvider>
           <SelectNetwork />
           <ConnectButton client={client} wallets={wallets} onConnect={handleConnect} onDisconnect={handleDisconnect} />
         </div>

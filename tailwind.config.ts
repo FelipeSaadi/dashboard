@@ -22,8 +22,8 @@ const config: Config = {
 			colors: {
 				background: 'hsl(var(--background))',
 				backgroundHighlight: 'hsl(var(--background-highlight))',
-				backgroundPrimary: 'hsl(var(--background-primary))',
-				backgroundSecondary: 'hsl(var(--background-secondary))',
+				backgroundPrimary: 'var(--background-primary)',
+				backgroundSecondary: 'var(--background-secondary)',
 				backgroundSecondaryGradient: 'hsl(var(--background-secondary-gradient))',
 				foreground: 'hsl(var(--foreground))',
 				card: {

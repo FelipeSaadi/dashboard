@@ -21,8 +21,6 @@ type MessageItemProps = {
   message: ChatMessage;
 };
 
-
-
 export const MessageItem: FC<MessageItemProps> = ({ message }) => {
   const isUser = message.role === "user";
   const { content, error_message } = message;
@@ -48,8 +46,8 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
       }
       return (
         <>
-        <ReactMarkdown className={`${styles.messageText} ${isUser ? styles.user : styles.assistant}`}>{content}</ReactMarkdown>
-        {!isUser && <MessageOptions />}
+          <ReactMarkdown className={`${styles.messageText} ${isUser ? styles.user : styles.assistant}`}>{content}</ReactMarkdown>
+          {!isUser && <MessageOptions />}
         </>
       );
     }
@@ -69,10 +67,10 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
         }
         return (
           <>
-          <ReactMarkdown className={styles.messageText}>
-            {`Successfully generated image with ${imageContent.service}`}
-          </ReactMarkdown>
-          <MessageOptions />
+            <ReactMarkdown className={styles.messageText}>
+              {`Successfully generated image with ${imageContent.service}`}
+            </ReactMarkdown>
+            <MessageOptions />
           </>
         );
       }
@@ -82,10 +80,10 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
           assistantMessage.content as CryptoDataMessageContent;
         return (
           <>
-          <ReactMarkdown className={styles.messageText}>
-            {cryptoDataContent.data}
-          </ReactMarkdown>
-          <MessageOptions />
+            <ReactMarkdown className={styles.messageText}>
+              {cryptoDataContent.data}
+            </ReactMarkdown>
+            <MessageOptions />
           </>
         );
       }
@@ -94,10 +92,10 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
         const baseContent = assistantMessage.content as BaseMessageContent;
         return (
           <>
-          <ReactMarkdown className={styles.messageText}>
-            {baseContent.message}
-          </ReactMarkdown>
-          <MessageOptions />
+            <ReactMarkdown className={styles.messageText}>
+              {baseContent.message}
+            </ReactMarkdown>
+            <MessageOptions />
           </>
         );
       }

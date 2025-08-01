@@ -4,7 +4,7 @@ import { FaArrowsRotate } from "react-icons/fa6";
 import { FiThumbsDown } from "react-icons/fi";
 
 import styles from "./index.module.css";
-import { Swap } from "../swap";
+import { Swap } from "../../../liquid-swap/components/swap";
 
 export const MessageOptions = () => {
     return (

@@ -6,9 +6,11 @@ import { MessageItem } from "../message-item";
 export const MessageList: FC<{ messages: ChatMessage[] }> = ({ messages }) => {
   return (
     <Box
-      flex="1"
+      width="100%"
+      height="100%"
       // bg="var(--background-secondary-gradient)"
       p={4}
+      paddingRight={6}
       sx={{
         overflowY: "scroll",
         overflowX: "hidden",

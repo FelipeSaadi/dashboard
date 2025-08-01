@@ -52,13 +52,13 @@ const features = [
     title: "AI Agents on X",
     icon: <img src="ai-agents/x.svg" alt="" />,
     description: "See what AI agents are saying on X",
-    url: "/x-ai-agents",
+    url: "/x-ai-agents"
   },
   {
     title: "Liquid Swap",
     icon: <img src="ai-agents/swap.svg" alt="" />,
     description: "Swap your assets",
-    url: "/liquid-swap",
+    url: "/liquid-swap"
   },
   {
     title: "Pano View",
@@ -67,16 +67,18 @@ const features = [
     url: "/pano-view/avax",
   },
   {
-    title: "Ai MarketPlace",
+    title: "AI Marketplace",
     icon: <img src="ai-agents/market.svg" alt="" />,
     description: "Coming Soon!",
-    url: "/ai-marketplace",
+    // url: "/ai-marketplace",
+    url: null
   },
   {
     title: "Portfolio",
     icon: <img src="ai-agents/portfolio.svg" alt="" />,
     description: "View your positions & balance",
-    url: "/portfolio",
+    // url: "/portfolio",
+    url: null
   },
 ]
 
@@ -248,7 +250,7 @@ export const ChatInput: FC<ChatInputProps> = ({
         </Box>
       )}
 
-      <div className={styles.container}>
+      <div className={`${styles.container} ${hasMessages ? "" : styles.noMessages}`}>
         {!hasMessages && (
           <Features features={features} />
         )}
