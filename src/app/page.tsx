@@ -10,7 +10,7 @@ import Hero from '@/modules/landing/hero'
 
 const Page = () => {
   return (
-    <div className='bg-landing min-h-screen [&_*]:font-suisse'>
+    <div className='bg-landing min-h-screen'>
       <div className="relative">
         {/* <div className="absolute w-[1px] h-full bg-landing-borderGradient/50 left-3 md:left-10 top-0"></div>
         <div className="absolute w-[1px] h-full bg-landing-borderGradient/50 left-24 md:left-44 top-0"></div> */}

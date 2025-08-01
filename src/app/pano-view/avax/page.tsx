@@ -28,7 +28,9 @@ import AvaxService from "@/lib/api/services/avax"
 import { ChartByTime } from "@/modules/avax/components/chart-by-time/chart-by-time"
 import { Tab, Tabs } from "@mui/material"
 import SuzakoService, { Token } from "@/lib/api/services/suzaku"
-import Header from "@/components/header/header"
+import { HeaderBar } from "@/components/header-bar"
+
+import { ChakraProvider, Divider } from "@chakra-ui/react"
 
 const Avax: React.FC = () => {
   const router = useRouter()
@@ -649,1057 +651,1141 @@ const Avax: React.FC = () => {
   }, [])
 
   return (
-    // <Layout
-    //   noPadding
-    //   noSidebar
-    //   sidebar={{
-    //     actual: actual,
-    //     onChange: (coin: string) => setActual(coin),
-    //     open: (page: string) => handleOpen(page),
-    //   }}
-    //   header={{
-    //     onSubmit: () => { },
-    //   }}
-    // >
+    <>
+      <ChakraProvider>
+        <HeaderBar />
+      </ChakraProvider>
       <div className={styles.home}>
-        <Header style={{ backgroundColor: 'var(--background-primary)' }} onSubmit={() => { }} />
-        <div className="mb-8 mx-[20px] md:mx-[40px]">
-          <Tabs
-            sx={{
-              marginBottom: '4px',
-              '.Mui-selected': {
-                color: `white !important`,
-              },
-            }}
-            value={value}
-            onChange={handleChange}
-            slotProps={{ indicator: { style: { background: 'white' } } }}
-            aria-label="avax tabs"
-          >
-            <Tab className={styles.tab} label="AVAX" value="0" />
-            <Tab className={styles.tab} disabled label="Suzaku" value="1" />
-          </Tabs>
+        <div className="mb-8 mx-[20px] md:mx-[120px]">
+          <h2 className="text-[48px] text-white">AVAX</h2>
         </div>
+
+        <div className="mb-12 h-[0.5px] w-full bg-[#4C4C4C]"></div>
         {
           value === '0' && (
             <>
               <HashblocksAvax
                 coin={actual}
                 data={hashblocks}
-                onSelect={(hashblock: any) => handleHashblock(hashblock)}
+                onSelect={(hashblock: any) => { }}
               />
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-12 mt-6">
-                <div className="flex flex-col col-span-3 md:col-span-3 gap-6">
-                  {
-                    bridgeFee && (
-                      <ChartByTime
-                        data={bridgeFee.data}
-                        className={styles.chartByTime}
-                        title={bridgeFee.chart}
-                        description={bridgeFee.description}
-                        label1={bridgeFee.label1}
-                        label2={bridgeFee.label2}
-                        valueColor="#FF6B6B"
-                        transactionsColor="#FFD93D"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+              <div className="relative mt-16 grid border-y border-y-[0.5px] border-y-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  bridgeFee && (
+                    <ChartByTime
+                      data={bridgeFee.data}
+                      className={styles.chartByTime}
+                      title={bridgeFee.chart}
+                      description={bridgeFee.description}
+                      label1={bridgeFee.label1}
+                      label2={bridgeFee.label2}
+                      valueColor="#FF6B6B"
+                      transactionsColor="#FFD93D"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
 
-                  {
-                    bridgeVol && (
-                      <ChartByTime
-                        data={bridgeVol.data}
-                        className={styles.chartByTime}
-                        title={bridgeVol.chart}
-                        description={bridgeVol.description}
-                        label1={bridgeVol.label1}
-                        label2={bridgeVol.label2}
-                        valueColor="#845EC2"
-                        transactionsColor="#00C9A7"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    bridgeSwap && (
-                      <ChartByTime
-                        data={bridgeSwap.data}
-                        className={styles.chartByTime}
-                        title={bridgeSwap.chart}
-                        description={bridgeSwap.description}
-                        label={bridgeSwap.label1}
-                        label1={bridgeSwap.label1}
-                        label2={bridgeSwap.label2}
-                        valueColor="#0081CF"
-                        transactionsColor="#FF8066"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                {
+                  bridgeVol && (
+                    <ChartByTime
+                      data={bridgeVol.data}
+                      className={styles.chartByTime}
+                      title={bridgeVol.chart}
+                      description={bridgeVol.description}
+                      label1={bridgeVol.label1}
+                      label2={bridgeVol.label2}
+                      valueColor="#845EC2"
+                      transactionsColor="#00C9A7"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+              </div>
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  bridgeSwap && (
+                    <ChartByTime
+                      data={bridgeSwap.data}
+                      className={styles.chartByTime}
+                      title={bridgeSwap.chart}
+                      description={bridgeSwap.description}
+                      label={bridgeSwap.label1}
+                      label1={bridgeSwap.label1}
+                      label2={bridgeSwap.label2}
+                      valueColor="#0081CF"
+                      transactionsColor="#FF8066"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
 
-                  {
-                    bridgeDailyVol && (
-                      <ChartByTime
-                        data={bridgeDailyVol.data}
-                        className={styles.chartByTime}
-                        title={bridgeDailyVol.chart}
-                        description={bridgeDailyVol.description}
-                        label1={bridgeDailyVol.label1}
-                        valueColor="#FFC75F"
-                        transactionsColor="#F9F871"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    bridgeSubnet && (
-                      <ChartByTime
-                        data={bridgeSubnet.data}
-                        className={styles.chartByTime}
-                        title={bridgeSubnet.chart}
-                        description={bridgeSubnet.description}
-                        label={bridgeSubnet.label}
-                        label1={bridgeSubnet.label1}
-                        valueColor="#4ECDC4"
-                        transactionsColor="#FF6F91"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                {
+                  bridgeDailyVol && (
+                    <ChartByTime
+                      data={bridgeDailyVol.data}
+                      className={styles.chartByTime}
+                      title={bridgeDailyVol.chart}
+                      description={bridgeDailyVol.description}
+                      label1={bridgeDailyVol.label1}
+                      valueColor="#FFC75F"
+                      transactionsColor="#F9F871"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
 
-                  {
-                    dexTvl && (
-                      <ChartByTime
-                        data={dexTvl.data}
-                        className={styles.chartByTime}
-                        title={dexTvl.chart}
-                        description={dexTvl.description}
-                        label={dexTvl.label}
-                        label1={dexTvl.label1}
-                        valueColor="#00B8A9"
-                        transactionsColor="#F67280"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                {
+                  bridgeSubnet && (
+                    <ChartByTime
+                      data={bridgeSubnet.data}
+                      className={styles.chartByTime}
+                      title={bridgeSubnet.chart}
+                      description={bridgeSubnet.description}
+                      label={bridgeSubnet.label}
+                      label1={bridgeSubnet.label1}
+                      valueColor="#4ECDC4"
+                      transactionsColor="#FF6F91"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    dexVolume && (
-                      <ChartByTime
-                        data={dexVolume.data}
-                        className={styles.chartByTime}
-                        title={dexVolume.chart}
-                        description={dexVolume.description}
-                        label={dexVolume.label}
-                        label1={dexVolume.label1}
-                        valueColor="#B39CD0"
-                        transactionsColor="#F8B195"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  dexTvl && (
+                    <ChartByTime
+                      data={dexTvl.data}
+                      className={styles.chartByTime}
+                      title={dexTvl.chart}
+                      description={dexTvl.description}
+                      label={dexTvl.label}
+                      label1={dexTvl.label1}
+                      valueColor="#00B8A9"
+                      transactionsColor="#F67280"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
 
-                  {
-                    dexFeeRatio && (
-                      <ChartByTime
-                        data={dexFeeRatio.data}
-                        className={styles.chartByTime}
-                        title={dexFeeRatio.chart}
-                        description={dexFeeRatio.description}
-                        label={dexFeeRatio.label}
-                        label1={dexFeeRatio.label1}
-                        valueColor="#355C7D"
-                        transactionsColor="#F8B195"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    dexStable && (
-                      <ChartByTime
-                        data={dexStable.data}
-                        className={styles.chartByTime}
-                        title={dexStable.chart}
-                        description={dexStable.description}
-                        label={dexStable.label}
-                        label1={dexStable.label1}
-                        valueColor="#F67280"
-                        transactionsColor="#C06C84"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+                {
+                  dexVolume && (
+                    <ChartByTime
+                      data={dexVolume.data}
+                      className={styles.chartByTime}
+                      title={dexVolume.chart}
+                      description={dexVolume.description}
+                      label={dexVolume.label}
+                      label1={dexVolume.label1}
+                      valueColor="#B39CD0"
+                      transactionsColor="#F8B195"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    dexWhaleShare && (
-                      <ChartByTime
-                        data={dexWhaleShare.data}
-                        className={styles.chartByTime}
-                        title={dexWhaleShare.chart}
-                        description={dexWhaleShare.description}
-                        label={dexWhaleShare.label}
-                        label1={dexWhaleShare.label1}
-                        valueColor="#11998E"
-                        transactionsColor="#38EF7D"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  dexFeeRatio && (
+                    <ChartByTime
+                      data={dexFeeRatio.data}
+                      className={styles.chartByTime}
+                      title={dexFeeRatio.chart}
+                      description={dexFeeRatio.description}
+                      label={dexFeeRatio.label}
+                      label1={dexFeeRatio.label1}
+                      valueColor="#355C7D"
+                      transactionsColor="#F8B195"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
 
-                  {
-                    gasUsed && (
-                      <ChartByTime
-                        data={gasUsed.data}
-                        className={styles.chartByTime}
-                        title={gasUsed.chart}
-                        description={gasUsed.description}
-                        label={gasUsed.label}
-                        label1={gasUsed.label1}
-                        valueColor="#F8B400"
-                        transactionsColor="#6A0572"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    gasCost && (
-                      <ChartByTime
-                        data={gasCost.data}
-                        className={styles.chartByTime}
-                        title={gasCost.chart}
-                        description={gasCost.description}
-                        label={gasCost.label}
-                        label1={gasCost.label1}
-                        valueColor="#009FFD"
-                        transactionsColor="#FFA400"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+                {
+                  dexStable && (
+                    <ChartByTime
+                      data={dexStable.data}
+                      className={styles.chartByTime}
+                      title={dexStable.chart}
+                      description={dexStable.description}
+                      label={dexStable.label}
+                      label1={dexStable.label1}
+                      valueColor="#F67280"
+                      transactionsColor="#C06C84"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    gasPrice && (
-                      <ChartByTime
-                        data={gasPrice.data}
-                        className={styles.chartByTime}
-                        title={gasPrice.chart}
-                        description={gasPrice.description}
-                        label={gasPrice.label}
-                        label1={gasPrice.label1}
-                        valueColor="#2A9D8F"
-                        transactionsColor="#E76F51"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  dexWhaleShare && (
+                    <ChartByTime
+                      data={dexWhaleShare.data}
+                      className={styles.chartByTime}
+                      title={dexWhaleShare.chart}
+                      description={dexWhaleShare.description}
+                      label={dexWhaleShare.label}
+                      label1={dexWhaleShare.label1}
+                      valueColor="#11998E"
+                      transactionsColor="#38EF7D"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
 
-                  {
-                    gasSpike && (
-                      <ChartByTime
-                        data={gasSpike.data}
-                        className={styles.chartByTime}
-                        title={gasSpike.chart}
-                        description={gasSpike.description}
-                        label={gasSpike.label}
-                        label1={gasSpike.label1}
-                        valueColor="#E63946"
-                        transactionsColor="#457B9D"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    gasMaxSpike && (
-                      <ChartByTime
-                        data={gasMaxSpike.data}
-                        className={styles.chartByTime}
-                        title={gasMaxSpike.chart}
-                        description={gasMaxSpike.description}
-                        label={gasMaxSpike.label}
-                        label1={gasMaxSpike.label1}
-                        valueColor="#8D8741"
-                        transactionsColor="#659DBD"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+                {
+                  gasUsed && (
+                    <ChartByTime
+                      data={gasUsed.data}
+                      className={styles.chartByTime}
+                      title={gasUsed.chart}
+                      description={gasUsed.description}
+                      label={gasUsed.label}
+                      label1={gasUsed.label1}
+                      valueColor="#F8B400"
+                      transactionsColor="#6A0572"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    gasTotalFee && (
-                      <ChartByTime
-                        data={gasTotalFee.data}
-                        className={styles.chartByTime}
-                        title={gasTotalFee.chart}
-                        description={gasTotalFee.description}
-                        label={gasTotalFee.label}
-                        label1={gasTotalFee.label1}
-                        valueColor="#FF6B6B"
-                        transactionsColor="#FFD93D"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  gasCost && (
+                    <ChartByTime
+                      data={gasCost.data}
+                      className={styles.chartByTime}
+                      title={gasCost.chart}
+                      description={gasCost.description}
+                      label={gasCost.label}
+                      label1={gasCost.label1}
+                      valueColor="#009FFD"
+                      transactionsColor="#FFA400"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
 
-                  {
-                    poolHighVol && (
-                      <ChartByTime
-                        data={poolHighVol.data}
-                        className={styles.chartByTime}
-                        title={poolHighVol.chart}
-                        description={poolHighVol.description}
-                        label={poolHighVol.label}
-                        label1={poolHighVol.label1}
-                        valueColor="#11998E"
-                        transactionsColor="#38EF7D"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    poolLiquidity && (
-                      <ChartByTime
-                        data={poolLiquidity.data}
-                        className={styles.chartByTime}
-                        title={poolLiquidity.chart}
-                        description={poolLiquidity.description}
-                        label={poolLiquidity.label}
-                        label1={poolLiquidity.label1}
-                        label2={poolLiquidity.label2}
-                        valueColor="#11998E"
-                        transactionsColor="#845EC2"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+                {
+                  gasPrice && (
+                    <ChartByTime
+                      data={gasPrice.data}
+                      className={styles.chartByTime}
+                      title={gasPrice.chart}
+                      description={gasPrice.description}
+                      label={gasPrice.label}
+                      label1={gasPrice.label1}
+                      valueColor="#2A9D8F"
+                      transactionsColor="#E76F51"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    poolLiquidityGTE && (
-                      <ChartByTime
-                        data={poolLiquidityGTE.data}
-                        className={styles.chartByTime}
-                        title={poolLiquidityGTE.chart}
-                        description={poolLiquidityGTE.description}
-                        label={poolLiquidityGTE.label}
-                        label1={poolLiquidityGTE.label1}
-                        label2={poolLiquidityGTE.label2}
-                        label3={poolLiquidityGTE.label3}
-                        valueColor="#11998E"
-                        transactionsColor="#F9F871"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  gasSpike && (
+                    <ChartByTime
+                      data={gasSpike.data}
+                      className={styles.chartByTime}
+                      title={gasSpike.chart}
+                      description={gasSpike.description}
+                      label={gasSpike.label}
+                      label1={gasSpike.label1}
+                      valueColor="#E63946"
+                      transactionsColor="#457B9D"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
 
-                  {
-                    poolSupply && (
-                      <ChartByTime
-                        data={poolSupply.data}
-                        className={styles.chartByTime}
-                        title={poolSupply.chart}
-                        description={poolSupply.description}
-                        label={poolSupply.label}
-                        label1={poolSupply.label1}
-                        label2={poolSupply.label2}
-                        label3={poolSupply.label3}
-                        valueColor="#11998E"
-                        transactionsColor="#F9F871"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    poolTvl && (
-                      <ChartByTime
-                        data={poolTvl.data}
-                        className={styles.chartByTime}
-                        title={poolTvl.chart}
-                        description={poolTvl.description}
-                        label={poolTvl.label}
-                        label1={poolTvl.label1}
-                        label2={poolTvl.label2}
-                        valueColor="#FF6B6B"
-                        transactionsColor="#4ECDC4"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' }
-                        ]}
-                        defaultPeriod="7D"
-                      />
-                    )
-                  }
+                {
+                  gasMaxSpike && (
+                    <ChartByTime
+                      data={gasMaxSpike.data}
+                      className={styles.chartByTime}
+                      title={gasMaxSpike.chart}
+                      description={gasMaxSpike.description}
+                      label={gasMaxSpike.label}
+                      label1={gasMaxSpike.label1}
+                      valueColor="#8D8741"
+                      transactionsColor="#659DBD"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    poolVol && (
-                      <ChartByTime
-                        data={poolVol.data}
-                        className={styles.chartByTime}
-                        title={poolVol.chart}
-                        description={poolVol.description}
-                        label={poolVol.label}
-                        label1={poolVol.label1}
-                        valueColor="#10B981"
-                        transactionsColor="#3CDFEF99"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                        ]}
-                        defaultPeriod="24H"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  gasTotalFee && (
+                    <ChartByTime
+                      data={gasTotalFee.data}
+                      className={styles.chartByTime}
+                      title={gasTotalFee.chart}
+                      description={gasTotalFee.description}
+                      label={gasTotalFee.label}
+                      label1={gasTotalFee.label1}
+                      valueColor="#FF6B6B"
+                      transactionsColor="#FFD93D"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
 
-                  {
-                    poolToken && (
-                      <ChartByTime
-                        data={poolToken.data}
-                        className={styles.chartByTime}
-                        title={poolToken.chart}
-                        description={poolToken.description}
-                        label={poolToken.label}
-                        label1={poolToken.label1}
-                        valueColor="#FF6B6B"
-                        transactionsColor="#4ECDC4"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                        ]}
-                        defaultPeriod="24H"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    poolRisingVol && (
-                      <ChartByTime
-                        data={poolRisingVol.data}
-                        className={styles.chartByTime}
-                        title={poolRisingVol.chart}
-                        description={poolRisingVol.description}
-                        label={poolRisingVol.label}
-                        label1={poolRisingVol.label1}
-                        label2={poolRisingVol.label2}
-                        valueColor="#10B981"
-                        transactionsColor="#3CDFEF99"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                        ]}
-                        defaultPeriod="24H"
-                      />
-                    )
-                  }
+                {
+                  poolHighVol && (
+                    <ChartByTime
+                      data={poolHighVol.data}
+                      className={styles.chartByTime}
+                      title={poolHighVol.chart}
+                      description={poolHighVol.description}
+                      label={poolHighVol.label}
+                      label1={poolHighVol.label1}
+                      valueColor="#11998E"
+                      transactionsColor="#38EF7D"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    poolStablecoin && (
-                      <ChartByTime
-                        data={poolStablecoin.data}
-                        className={styles.chartByTime}
-                        title={poolStablecoin.chart}
-                        description={poolStablecoin.description}
-                        label={poolStablecoin.label}
-                        label1={poolStablecoin.label1}
-                        label2={poolStablecoin.label2}
-                        valueColor="#FF6B6B"
-                        transactionsColor="#4ECDC4"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                        ]}
-                        defaultPeriod="24H"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  poolLiquidity && (
+                    <ChartByTime
+                      data={poolLiquidity.data}
+                      className={styles.chartByTime}
+                      title={poolLiquidity.chart}
+                      description={poolLiquidity.description}
+                      label={poolLiquidity.label}
+                      label1={poolLiquidity.label1}
+                      label2={poolLiquidity.label2}
+                      valueColor="#11998E"
+                      transactionsColor="#845EC2"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
 
-                  {
-                    stakeConcentration && (
-                      <ChartByTime
-                        data={stakeConcentration.data}
-                        className={styles.chartByTime}
-                        title={stakeConcentration.chart}
-                        description={stakeConcentration.description}
-                        label={stakeConcentration.label}
-                        label1={stakeConcentration.label1}
-                        valueColor="#FF6B6B"
-                        transactionsColor="#4ECDC4"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                        ]}
-                        defaultPeriod="24H"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    stakeTvl && (
-                      <ChartByTime
-                        data={stakeTvl.data}
-                        className={styles.chartByTime}
-                        title={stakeTvl.chart}
-                        description={stakeTvl.description}
-                        label={stakeTvl.label}
-                        label1={stakeTvl.label1}
-                        valueColor="#10B981"
-                        transactionsColor="#3CDFEF99"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                        ]}
-                        defaultPeriod="24H"
-                      />
-                    )
-                  }
+                {
+                  poolLiquidityGTE && (
+                    <ChartByTime
+                      data={poolLiquidityGTE.data}
+                      className={styles.chartByTime}
+                      title={poolLiquidityGTE.chart}
+                      description={poolLiquidityGTE.description}
+                      label={poolLiquidityGTE.label}
+                      label1={poolLiquidityGTE.label1}
+                      label2={poolLiquidityGTE.label2}
+                      label3={poolLiquidityGTE.label3}
+                      valueColor="#11998E"
+                      transactionsColor="#F9F871"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    stakeValidators && (
-                      <ChartByTime
-                        data={stakeValidators.data}
-                        className={styles.chartByTime}
-                        title={stakeValidators.chart}
-                        description={stakeValidators.description}
-                        label={stakeValidators.label}
-                        label1={stakeValidators.label1}
-                        label2={stakeValidators.label2}
-                        valueColor="#00B8A9"
-                        transactionsColor="#F67280"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                        ]}
-                        defaultPeriod="24H"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  poolSupply && (
+                    <ChartByTime
+                      data={poolSupply.data}
+                      className={styles.chartByTime}
+                      title={poolSupply.chart}
+                      description={poolSupply.description}
+                      label={poolSupply.label}
+                      label1={poolSupply.label1}
+                      label2={poolSupply.label2}
+                      label3={poolSupply.label3}
+                      valueColor="#11998E"
+                      transactionsColor="#F9F871"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
 
-                  {
-                    throughputBlock && (
-                      <ChartByTime
-                        data={throughputBlock.data}
-                        className={styles.chartByTime}
-                        title={throughputBlock.chart}
-                        description={throughputBlock.description}
-                        label={throughputBlock.label}
-                        label1={throughputBlock.label1}
-                        valueColor="#10B981"
-                        transactionsColor="#3CDFEF99"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                        ]}
-                        defaultPeriod="24H"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    throughputVariance && (
-                      <ChartByTime
-                        data={throughputVariance.data}
-                        className={styles.chartByTime}
-                        title={throughputVariance.chart}
-                        description={throughputVariance.description}
-                        label={throughputVariance.label}
-                        label1={throughputVariance.label1}
-                        label2={throughputVariance.label2}
-                        valueColor="#F67280"
-                        transactionsColor="#F9F871"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                        ]}
-                        defaultPeriod="24H"
-                      />
-                    )
-                  }
+                {
+                  poolTvl && (
+                    <ChartByTime
+                      data={poolTvl.data}
+                      className={styles.chartByTime}
+                      title={poolTvl.chart}
+                      description={poolTvl.description}
+                      label={poolTvl.label}
+                      label1={poolTvl.label1}
+                      label2={poolTvl.label2}
+                      valueColor="#FF6B6B"
+                      transactionsColor="#4ECDC4"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' }
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    throughputEfficiency && (
-                      <ChartByTime
-                        data={throughputEfficiency.data}
-                        className={styles.chartByTime}
-                        title={throughputEfficiency.chart}
-                        description={throughputEfficiency.description}
-                        label={throughputEfficiency.label}
-                        label1={throughputEfficiency.label1}
-                        label2={throughputEfficiency.label2}
-                        label3={throughputEfficiency.label3}
-                        valueColor="#10B981"
-                        transactionsColor="#3CDFEF99"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  poolVol && (
+                    <ChartByTime
+                      data={poolVol.data}
+                      className={styles.chartByTime}
+                      title={poolVol.chart}
+                      description={poolVol.description}
+                      label={poolVol.label}
+                      label1={poolVol.label1}
+                      valueColor="#10B981"
+                      transactionsColor="#3CDFEF99"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                      ]}
+                      defaultPeriod="24H"
+                    />
+                  )
+                }
 
-                  {
-                    throughputTrend && (
-                      <ChartByTime
-                        data={throughputTrend.data}
-                        className={styles.chartByTime}
-                        title={throughputTrend.chart}
-                        description={throughputTrend.description}
-                        label={throughputTrend.label}
-                        label1={throughputTrend.label1}
-                        valueColor="#B39CD0"
-                        transactionsColor="#F9F871"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    throughputValidation && (
-                      <ChartByTime
-                        data={throughputValidation.data}
-                        className={styles.chartByTime}
-                        title={throughputValidation.chart}
-                        description={throughputValidation.description}
-                        label={throughputValidation.label}
-                        label1={throughputValidation.label1}
-                        label2={throughputValidation.label2}
-                        valueColor="#10B981"
-                        transactionsColor="#3CDFEF99"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                {
+                  poolToken && (
+                    <ChartByTime
+                      data={poolToken.data}
+                      className={styles.chartByTime}
+                      title={poolToken.chart}
+                      description={poolToken.description}
+                      label={poolToken.label}
+                      label1={poolToken.label1}
+                      valueColor="#FF6B6B"
+                      transactionsColor="#4ECDC4"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                      ]}
+                      defaultPeriod="24H"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    tokenLaunch && (
-                      <ChartByTime
-                        data={tokenLaunch.data}
-                        className={styles.chartByTime}
-                        title={tokenLaunch.chart}
-                        description={tokenLaunch.description}
-                        label={tokenLaunch.label}
-                        label1={tokenLaunch.label1}
-                        label2={tokenLaunch.label2}
-                        valueColor="#FF6B6B"
-                        transactionsColor="#4ECDC4"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  poolRisingVol && (
+                    <ChartByTime
+                      data={poolRisingVol.data}
+                      className={styles.chartByTime}
+                      title={poolRisingVol.chart}
+                      description={poolRisingVol.description}
+                      label={poolRisingVol.label}
+                      label1={poolRisingVol.label1}
+                      label2={poolRisingVol.label2}
+                      valueColor="#10B981"
+                      transactionsColor="#3CDFEF99"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                      ]}
+                      defaultPeriod="24H"
+                    />
+                  )
+                }
 
-                  {
-                    tokenPrice && (
-                      <ChartByTime
-                        data={tokenPrice.data}
-                        className={styles.chartByTime}
-                        title={tokenPrice.chart}
-                        description={tokenPrice.description}
-                        label={tokenPrice.label}
-                        label1={tokenPrice.label1}
-                        label2={tokenPrice.label2}
-                        valueColor="#FF6B6B"
-                        transactionsColor="#4ECDC4"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
+                {
+                  poolStablecoin && (
+                    <ChartByTime
+                      data={poolStablecoin.data}
+                      className={styles.chartByTime}
+                      title={poolStablecoin.chart}
+                      description={poolStablecoin.description}
+                      label={poolStablecoin.label}
+                      label1={poolStablecoin.label1}
+                      label2={poolStablecoin.label2}
+                      valueColor="#FF6B6B"
+                      transactionsColor="#4ECDC4"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                      ]}
+                      defaultPeriod="24H"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    tokenPriceImpact && (
-                      <ChartByTime
-                        data={tokenPriceImpact.data}
-                        className={styles.chartByTime}
-                        title={tokenPriceImpact.chart}
-                        description={tokenPriceImpact.description}
-                        label={tokenPriceImpact.label}
-                        label1={tokenPriceImpact.label1}
-                        label2={tokenPriceImpact.label2}
-                        valueColor="#10B981"
-                        transactionsColor="#3CDFEF99"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  stakeConcentration && (
+                    <ChartByTime
+                      data={stakeConcentration.data}
+                      className={styles.chartByTime}
+                      title={stakeConcentration.chart}
+                      description={stakeConcentration.description}
+                      label={stakeConcentration.label}
+                      label1={stakeConcentration.label1}
+                      valueColor="#FF6B6B"
+                      transactionsColor="#4ECDC4"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                      ]}
+                      defaultPeriod="24H"
+                    />
+                  )
+                }
 
-                  {
-                    tokenSupply && (
-                      <ChartByTime
-                        data={tokenSupply.data}
-                        className={styles.chartByTime}
-                        title={tokenSupply.chart}
-                        description={tokenSupply.description}
-                        label={tokenSupply.label}
-                        label1={tokenSupply.label1}
-                        label2={tokenSupply.label2}
-                        label3={tokenSupply.label3}
-                        valueColor="#FF6B6B"
-                        transactionsColor="#4ECDC4"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    tokenVolatility && (
-                      <ChartByTime
-                        data={tokenVolatility.data}
-                        className={styles.chartByTime}
-                        title={tokenVolatility.chart}
-                        description={tokenVolatility.description}
-                        label={tokenVolatility.label}
-                        label1={tokenVolatility.label1}
-                        valueColor="#10B981"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                {
+                  stakeTvl && (
+                    <ChartByTime
+                      data={stakeTvl.data}
+                      className={styles.chartByTime}
+                      title={stakeTvl.chart}
+                      description={stakeTvl.description}
+                      label={stakeTvl.label}
+                      label1={stakeTvl.label1}
+                      valueColor="#10B981"
+                      transactionsColor="#3CDFEF99"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                      ]}
+                      defaultPeriod="24H"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    tokenTrend && (
-                      <ChartByTime
-                        data={tokenTrend.data}
-                        className={styles.chartByTime}
-                        title={tokenTrend.chart}
-                        description={tokenTrend.description}
-                        label={tokenTrend.label}
-                        label1={tokenTrend.label1}
-                        label2={tokenTrend.label2}
-                        label3={tokenTrend.label3}
-                        valueColor="#B39CD0"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  stakeValidators && (
+                    <ChartByTime
+                      data={stakeValidators.data}
+                      className={styles.chartByTime}
+                      title={stakeValidators.chart}
+                      description={stakeValidators.description}
+                      label={stakeValidators.label}
+                      label1={stakeValidators.label1}
+                      label2={stakeValidators.label2}
+                      valueColor="#00B8A9"
+                      transactionsColor="#F67280"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                      ]}
+                      defaultPeriod="24H"
+                    />
+                  )
+                }
 
-                  {
-                    transferVol && (
-                      <ChartByTime
-                        data={transferVol.data}
-                        className={styles.chartByTime}
-                        title={transferVol.chart}
-                        description={transferVol.description}
-                        label={transferVol.label}
-                        label1={transferVol.label1}
-                        valueColor="#F67280"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    transferNFT && (
-                      <ChartByTime
-                        data={transferNFT.data}
-                        className={styles.chartByTime}
-                        title={transferNFT.chart}
-                        description={transferNFT.description}
-                        label={transferNFT.label}
-                        label1={transferNFT.label1}
-                        valueColor="#F67280"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                {
+                  throughputBlock && (
+                    <ChartByTime
+                      data={throughputBlock.data}
+                      className={styles.chartByTime}
+                      title={throughputBlock.chart}
+                      description={throughputBlock.description}
+                      label={throughputBlock.label}
+                      label1={throughputBlock.label1}
+                      valueColor="#10B981"
+                      transactionsColor="#3CDFEF99"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                      ]}
+                      defaultPeriod="24H"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    userContract && (
-                      <ChartByTime
-                        data={userContract.data}
-                        className={styles.chartByTime}
-                        title={userContract.chart}
-                        description={userContract.description}
-                        label={userContract.label}
-                        label1={userContract.label1}
-                        label2={userContract.label2}
-                        label3={userContract.label3}
-                        valueColor="#FF6B6B"
-                        transactionsColor="#4ECDC4"
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  throughputVariance && (
+                    <ChartByTime
+                      data={throughputVariance.data}
+                      className={styles.chartByTime}
+                      title={throughputVariance.chart}
+                      description={throughputVariance.description}
+                      label={throughputVariance.label}
+                      label1={throughputVariance.label1}
+                      label2={throughputVariance.label2}
+                      valueColor="#F67280"
+                      transactionsColor="#F9F871"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                      ]}
+                      defaultPeriod="24H"
+                    />
+                  )
+                }
 
-                  {
-                    userDaily && (
-                      <ChartByTime
-                        data={userDaily.data}
-                        className={styles.chartByTime}
-                        title={userDaily.chart}
-                        description={userDaily.description}
-                        label={userDaily.label}
-                        label1={userDaily.label1}
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
 
-                  {
-                    userNew && (
-                      <ChartByTime
-                        data={userNew.data}
-                        className={styles.chartByTime}
-                        title={userNew.chart}
-                        description={userNew.description}
-                        label={userNew.label}
-                        label1={userNew.label1}
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
-                  {
-                    userHolder && (
-                      <ChartByTime
-                        data={userHolder.data}
-                        className={styles.chartByTime}
-                        title={userHolder.chart}
-                        description={userHolder.description}
-                        label={userHolder.label}
-                        label1={userHolder.label1}
-                        label2={userHolder.label2}
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+                {
+                  throughputEfficiency && (
+                    <ChartByTime
+                      data={throughputEfficiency.data}
+                      className={styles.chartByTime}
+                      title={throughputEfficiency.chart}
+                      description={throughputEfficiency.description}
+                      label={throughputEfficiency.label}
+                      label1={throughputEfficiency.label1}
+                      label2={throughputEfficiency.label2}
+                      label3={throughputEfficiency.label3}
+                      valueColor="#10B981"
+                      transactionsColor="#3CDFEF99"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+              </div>
 
-                  {
-                    uniqueContracts && (
-                      <ChartByTime
-                        data={uniqueContracts.data}
-                        className={styles.chartByTime}
-                        title={uniqueContracts.chart}
-                        description={uniqueContracts.description}
-                        label={uniqueContracts.label}
-                        label1={uniqueContracts.label1}
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  throughputTrend && (
+                    <ChartByTime
+                      data={throughputTrend.data}
+                      className={styles.chartByTime}
+                      title={throughputTrend.chart}
+                      description={throughputTrend.description}
+                      label={throughputTrend.label}
+                      label1={throughputTrend.label1}
+                      valueColor="#B39CD0"
+                      transactionsColor="#F9F871"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
 
-                  {
-                    whaleLiquidity && (
-                      <ChartByTime
-                        data={whaleLiquidity.data}
-                        className={styles.chartByTime}
-                        title={whaleLiquidity.chart}
-                        description={whaleLiquidity.description}
-                        label={whaleLiquidity.label}
-                        label1={whaleLiquidity.label1}
-                        label2={whaleLiquidity.label2}
-                        periods={[
-                          { value: '1H', label: '1H' },
-                          { value: '24H', label: '24H' },
-                          { value: '7D', label: '7D' },
-                          { value: '30D', label: '30D' },
-                        ]}
-                        defaultPeriod="30D"
-                      />
-                    )
-                  }
-                </div>
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
+
+                {
+                  throughputValidation && (
+                    <ChartByTime
+                      data={throughputValidation.data}
+                      className={styles.chartByTime}
+                      title={throughputValidation.chart}
+                      description={throughputValidation.description}
+                      label={throughputValidation.label}
+                      label1={throughputValidation.label1}
+                      label2={throughputValidation.label2}
+                      valueColor="#10B981"
+                      transactionsColor="#3CDFEF99"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+              </div>
+
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  tokenLaunch && (
+                    <ChartByTime
+                      data={tokenLaunch.data}
+                      className={styles.chartByTime}
+                      title={tokenLaunch.chart}
+                      description={tokenLaunch.description}
+                      label={tokenLaunch.label}
+                      label1={tokenLaunch.label1}
+                      label2={tokenLaunch.label2}
+                      valueColor="#FF6B6B"
+                      transactionsColor="#4ECDC4"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
+
+                {
+                  tokenPrice && (
+                    <ChartByTime
+                      data={tokenPrice.data}
+                      className={styles.chartByTime}
+                      title={tokenPrice.chart}
+                      description={tokenPrice.description}
+                      label={tokenPrice.label}
+                      label1={tokenPrice.label1}
+                      label2={tokenPrice.label2}
+                      valueColor="#FF6B6B"
+                      transactionsColor="#4ECDC4"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+              </div>
+
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  tokenPriceImpact && (
+                    <ChartByTime
+                      data={tokenPriceImpact.data}
+                      className={styles.chartByTime}
+                      title={tokenPriceImpact.chart}
+                      description={tokenPriceImpact.description}
+                      label={tokenPriceImpact.label}
+                      label1={tokenPriceImpact.label1}
+                      label2={tokenPriceImpact.label2}
+                      valueColor="#10B981"
+                      transactionsColor="#3CDFEF99"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
+
+                {
+                  tokenSupply && (
+                    <ChartByTime
+                      data={tokenSupply.data}
+                      className={styles.chartByTime}
+                      title={tokenSupply.chart}
+                      description={tokenSupply.description}
+                      label={tokenSupply.label}
+                      label1={tokenSupply.label1}
+                      label2={tokenSupply.label2}
+                      label3={tokenSupply.label3}
+                      valueColor="#FF6B6B"
+                      transactionsColor="#4ECDC4"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+              </div>
+
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  tokenVolatility && (
+                    <ChartByTime
+                      data={tokenVolatility.data}
+                      className={styles.chartByTime}
+                      title={tokenVolatility.chart}
+                      description={tokenVolatility.description}
+                      label={tokenVolatility.label}
+                      label1={tokenVolatility.label1}
+                      valueColor="#10B981"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
+
+                {
+                  tokenTrend && (
+                    <ChartByTime
+                      data={tokenTrend.data}
+                      className={styles.chartByTime}
+                      title={tokenTrend.chart}
+                      description={tokenTrend.description}
+                      label={tokenTrend.label}
+                      label1={tokenTrend.label1}
+                      label2={tokenTrend.label2}
+                      label3={tokenTrend.label3}
+                      valueColor="#B39CD0"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+              </div>
+
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  transferVol && (
+                    <ChartByTime
+                      data={transferVol.data}
+                      className={styles.chartByTime}
+                      title={transferVol.chart}
+                      description={transferVol.description}
+                      label={transferVol.label}
+                      label1={transferVol.label1}
+                      valueColor="#F67280"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
+
+                {
+                  transferNFT && (
+                    <ChartByTime
+                      data={transferNFT.data}
+                      className={styles.chartByTime}
+                      title={transferNFT.chart}
+                      description={transferNFT.description}
+                      label={transferNFT.label}
+                      label1={transferNFT.label1}
+                      valueColor="#F67280"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+              </div>
+
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  userContract && (
+                    <ChartByTime
+                      data={userContract.data}
+                      className={styles.chartByTime}
+                      title={userContract.chart}
+                      description={userContract.description}
+                      label={userContract.label}
+                      label1={userContract.label1}
+                      label2={userContract.label2}
+                      label3={userContract.label3}
+                      valueColor="#FF6B6B"
+                      transactionsColor="#4ECDC4"
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
+
+                {
+                  userDaily && (
+                    <ChartByTime
+                      data={userDaily.data}
+                      className={styles.chartByTime}
+                      title={userDaily.chart}
+                      description={userDaily.description}
+                      label={userDaily.label}
+                      label1={userDaily.label1}
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+              </div>
+
+              <div className="relative grid border-b border-b-[0.5px] border-b-[#4C4C4C] py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  userNew && (
+                    <ChartByTime
+                      data={userNew.data}
+                      className={styles.chartByTime}
+                      title={userNew.chart}
+                      description={userNew.description}
+                      label={userNew.label}
+                      label1={userNew.label1}
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
+
+                {
+                  userHolder && (
+                    <ChartByTime
+                      data={userHolder.data}
+                      className={styles.chartByTime}
+                      title={userHolder.chart}
+                      description={userHolder.description}
+                      label={userHolder.label}
+                      label1={userHolder.label1}
+                      label2={userHolder.label2}
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+              </div>
+
+              <div className="mb-12 relative grid py-[40px] px-[100px] grid-cols-1 md:grid-cols-2 gap-12">
+                {
+                  uniqueContracts && (
+                    <ChartByTime
+                      data={uniqueContracts.data}
+                      className={styles.chartByTime}
+                      title={uniqueContracts.chart}
+                      description={uniqueContracts.description}
+                      label={uniqueContracts.label}
+                      label1={uniqueContracts.label1}
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="30D"
+                    />
+                  )
+                }
+
+                <div className="absolute top-0 left-1/2 w-[1px] h-full bg-[#4C4C4C]"></div>
+
+                {
+                  whaleLiquidity && (
+                    <ChartByTime
+                      data={[
+                        { date: '01/03', value1: 580000, value2: 230000 },
+                        { date: '02/03', value1: 530000, value2: 210000 },
+                        { date: '03/03', value1: 550000, value2: 200000 },
+                        { date: '04/03', value1: 490000, value2: 190000 },
+                        { date: '05/03', value1: 510000, value2: 180000 },
+                        { date: '06/03', value1: 460000, value2: 170000 },
+                        { date: '07/03', value1: 480000, value2: 160000 },
+                        { date: '08/03', value1: 430000, value2: 150000 },
+                        { date: '09/03', value1: 450000, value2: 140000 },
+                        { date: '10/03', value1: 410000, value2: 130000 },
+                        { date: '11/03', value1: 430000, value2: 120000 },
+                        { date: '12/03', value1: 380000, value2: 110000 },
+                        { date: '13/03', value1: 400000, value2: 100000 },
+                        { date: '14/03', value1: 350000, value2: 90000 },
+                      ]}
+                      className={styles.chartByTime}
+                      title="Whale vs Non-Whale Liquidity"
+                      description="WHALE_VS_NON_WHALE.liquidity_usd per day"
+                      label="Data"
+                      label1="Whale Liquidity"
+                      label2="Non-Whale Liquidity"
+                      valueColor="#5271FF"
+                      transactionsColor="#34D399"
+                      valueFormatter={(value) => `$${value.toLocaleString()}`}
+                      periods={[
+                        { value: '1H', label: '1H' },
+                        { value: '24H', label: '24H' },
+                        { value: '7D', label: '7D' },
+                        { value: '30D', label: '30D' },
+                      ]}
+                      defaultPeriod="7D"
+                    />
+                  )
+                }
               </div>
             </>
           )}
@@ -1724,8 +1810,8 @@ const Avax: React.FC = () => {
         )}
 
         <OpenChat />
-      </div>
-    // </Layout>
+      </div >
+    </>
   )
 }
 

@@ -20,11 +20,11 @@ const wins = [
 export const Wins = () => {
   return (
     <section>
+      <h2 className='text-xl md:text-2xl font-bold mb-6'>Our Journey So Far:</h2>
       <div className="flex w-full">
         <div className="bg-black w-1/2 rounded-l-lg">
           <ul className="flex flex-col text-white p-6">
-            <li className="list-disc list-inside">3x Global Hackathon Winners</li>
-            <li className="list-disc list-inside">ICP: Brazil, Vietnam, and Mexico</li>
+            <li className="list-disc list-inside">3x Global ICP Hackathon Winners: Brazil, Vietnam and Mexico</li>
             <li className="list-disc list-inside">Winners of the XRP Ledger LATAM Hackathon</li>
             <li className="list-disc list-inside">Grantees of the Avalanche Infrabuild AI Program</li>
             <li className="list-disc list-inside">Winners of the AVAX Summit Hackathon in the On-Chain Finance category for Chainlink</li>

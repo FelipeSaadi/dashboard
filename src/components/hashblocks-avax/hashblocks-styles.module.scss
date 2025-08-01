@@ -7,7 +7,7 @@
   
   h2 {
     font-size: 18px;
-    padding-left: 40px;
+    padding: 0 100px;
   }
   
   * {
@@ -19,7 +19,7 @@
     align-items: center;
     cursor: grab;
     overflow-x: scroll;
-    padding: 0px 40px;
+    padding: 0 100px;
 
     &::-webkit-scrollbar {
       height: 0px;
@@ -85,8 +85,8 @@
           // width: 50%;
           line-height: 0%;
           width: 25%;
-          border-bottom: 100px solid #17707849;
-          border-left: 55px solid #00000000;
+          border-bottom: 100px solid var(--background-secondary);
+          border-left: 55px solid var(--background-primary);
           border-radius: 0 14px 14px 0;
 
           img {
@@ -111,7 +111,7 @@
 
           // border-right: 60px solid white;
           p {
-            color: #d0f8fe;
+            color: var(--text-muted-foreground);
           }
         }
       }

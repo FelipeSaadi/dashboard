@@ -1,10 +1,11 @@
 'use client'
 
+import styles from "./styles.module.scss";
+
 import type { NextPage } from "next"
-import { ChakraProvider, defineStyleConfig, extendTheme } from "@chakra-ui/react"
 import { Box, Flex } from "@chakra-ui/react"
-import { LeftSidebar } from "@/components/LeftSidebar"
-import { Chat } from "@/components/Chat"
+import { LeftSidebar } from "@/modules/ai-agents/components/left-sidebar"
+import { Chat } from "@/modules/ai-agents/components/chat"
 import {
   writeMessage,
   getMessagesHistory,
@@ -16,46 +17,8 @@ import { getHttpClient, SWAP_STATUS } from "@/lib/api/services/constants"
 import { ChatMessage } from "@/lib/api/services/types"
 import { useEffect, useState } from "react"
 import { useAccount, useChainId } from "wagmi"
-import { HeaderBar } from "@/components/HeaderBar"
-import styles from "./styles.module.scss";
-
-const ButtonStyles = defineStyleConfig({
-  variants: {
-    greenCustom: {
-      fontFamily: 'Inter',
-      fontSize: '16px',
-      background: '#59F886',
-      borderRadius: '24px',
-      color: 'var(--background-secondary)',
-      '&:hover': {
-        background: '#59F886',
-        color: 'var(--background-secondary)',
-        transform: 'scale(1.05)',
-        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-        border: '1px solid #59F886'
-      }
-    }
-  }
-})
-
-const theme = extendTheme({
-  initialColorMode: 'dark',
-  useSystemColorMode: false,
-  colors: {
-    'header': 'var(--background-secondary)',
-    'pop-up-bg': '#1C201D',
-  },
-  components: {
-    Button: ButtonStyles,
-  },
-  Text: {
-    baseStyle: {
-      fontFamily: 'Inter',
-      fontSize: '16px',
-      color: 'var(--dark-text-90, rgba(255, 255, 255, 0.90))'
-    }
-  },
-})
+import { HeaderBar } from "@/components/header-bar"
+import { ChakraProvider } from "@chakra-ui/react"
 
 const Home: NextPage = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([])
@@ -153,11 +116,11 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div style={{ minHeight: "100vh", minWidth: "100vw", backgroundColor: "var(--background-secondary)" }}>
-    <ChakraProvider theme={theme}>
+    <div style={{ minHeight: "100vh", minWidth: "100vw", background: "var(--background-secondary-gradient)" }}>
+      <ChakraProvider>
       <Box
         sx={{
-          backgroundColor: "var(--background-secondary)",
+          background: "var(--background-secondary-gradient)",
           height: "100vh",
           display: "flex",
           flexDirection: "column",
@@ -193,7 +156,7 @@ const Home: NextPage = () => {
 
         {/* <ErrorBackendModal show={showBackendError} /> */}
       </Box>
-    </ChakraProvider>
+      </ChakraProvider>
     </div>
   )
 }
