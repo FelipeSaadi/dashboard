@@ -1,10 +1,11 @@
+import { useEffect } from "react"
+
 import { createThirdwebClient } from "thirdweb"
 import { inAppWallet, createWallet, Wallet } from "thirdweb/wallets"
+import { useActiveWallet, useActiveWalletConnectionStatus } from "thirdweb/react"
+
 import { useWalletStore } from '@/store/wallet'
-import RangoService from '@/lib/api/services/rango'
-import { useActiveWalletConnectionStatus } from "thirdweb/react"
-import { useEffect } from "react"
-import { useActiveWallet } from "thirdweb/react"
+import AuthService from '@/lib/api/services/auth'
 
 export const wallets = [
   inAppWallet({
@@ -47,17 +48,44 @@ export const client = createThirdwebClient({
 export const useWallet = () => {
   const activeWallet = useActiveWallet()
   const wallet = useWalletStore(state => state.wallet)
+  const signature = useWalletStore(state => state.signature)
   const setLoading = useWalletStore(state => state.setLoading)
   const setWallet = useWalletStore(state => state.setWallet)
   const setToken = useWalletStore(state => state.setToken)
+  const setPayload = useWalletStore(state => state.setPayload)
+  const setSignature = useWalletStore(state => state.setSignature)
+  const setAuthToken = useWalletStore(state => state.setAuthToken)
+  const setSessionId = useWalletStore(state => state.setSessionId)
   const connectionStatus = useActiveWalletConnectionStatus()
 
   const handleConnect = async (wallet: Wallet) => {
-    const address = `${wallet.id}:${(wallet.getAccount())?.address}`
-    const token = await RangoService.auth(address)
+    // const address = `${wallet.id}:${(wallet.getAccount())?.address}`
+    const account = wallet.getAccount()
+    const address = account?.address
+    const authResponse = await AuthService.auth(address as string)
+    
+    if (!authResponse) {
+      return
+    }
 
-    setWallet(address)
-    setToken(token)
+    let verifyResponse
+    let validateResponse
+    
+    if (address !== authResponse.payload.address || !signature) {
+      const signature = await AuthService.signature(authResponse.payload, account)
+      setSignature(signature)
+      verifyResponse = await AuthService.verify(authResponse.payload, signature)
+      validateResponse = await AuthService.validate(verifyResponse?.token, verifyResponse?.sessionId)
+    } else {
+      verifyResponse = await AuthService.verify(authResponse.payload, signature)
+      validateResponse = await AuthService.validate(verifyResponse?.token, verifyResponse?.sessionId)
+    }
+
+    setWallet(address as string)
+    setPayload(authResponse.payload)
+    setAuthToken(verifyResponse?.token)
+    setSessionId(verifyResponse?.sessionId)
+    // setToken(authResponse.token)
   }
 
   useEffect(() => {

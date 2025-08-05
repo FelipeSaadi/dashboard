@@ -37,12 +37,15 @@ export const Swap = () => {
           <div className="flex flex-col gap-4 border rounded-lg border-[#4C4C4C] p-4">
             <h2 className="text-lg text-gray-400">Sell</h2>
             <div className="flex items-center justify-between gap-2">
-              <Input
-                value={fromAmount}
-                onChange={(e) => setFromAmount(Number(e.target.value))}
-                type="number"
-                className="w-fit h-fit !text-[42px] outline-gray-400 !outline-none border-none rounded-lg"
-                placeholder="Enter amount" />
+              <div className="flex items-center gap-2">
+                <Input
+                  value={fromAmount}
+                  onChange={(e) => setFromAmount(Number(e.target.value))}
+                  type="number"
+                  className={`max-w-[150px] w-fit h-fit !text-[42px] outline-gray-400 !outline-none border-none rounded-lg`}
+                  placeholder="Enter amount" />
+                <span className="text-gray-400">wei</span>
+              </div>
               <SelectGroup>
                 <Select value={token} onValueChange={setToken}>
                   <SelectTrigger className="w-fit p-2 rounded-[30px] border-[1px] border-solid border-[#4C4C4C]">
@@ -75,16 +78,19 @@ export const Swap = () => {
           <div className="p-4 flex flex-col gap-4 bg-[#202020] rounded-lg">
             <h2 className="text-lg text-gray-400">Buy</h2>
             <div className="flex items-center justify-between gap-2">
-              <Input
-                value={toAmount}
-                onChange={(e) => setToAmount(Number(e.target.value))}
-                type="number"
-                className="w-fit h-fit !text-[42px] outline-gray-400 !outline-none border-none rounded-lg"
-                placeholder="Enter amount" />
+              <div className="flex items-center gap-2">
+                <Input
+                  value={toAmount}
+                  onChange={(e) => setToAmount(Number(e.target.value))}
+                  type="number"
+                  className="max-w-[150px] w-fit h-fit !text-[42px] outline-gray-400 !outline-none border-none rounded-lg"
+                  placeholder="Enter amount" />
+                  <span className="text-gray-400">wei</span>
+              </div>
               <SelectGroup>
                 <Select value={toToken} onValueChange={setToToken}>
                   <SelectTrigger className="w-fit rounded-[30px] bg-[#00FDFF] data-[state=placeholder]:text-[#000000] text-[#000000]">
-                    <SelectValue placeholder="Select token" className="placeholder:text-[#000000]"/>
+                    <SelectValue placeholder="Select token" className="placeholder:text-[#000000]" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#00FDFF] text-[#000000]">
                     {tokens.map((token) => (
