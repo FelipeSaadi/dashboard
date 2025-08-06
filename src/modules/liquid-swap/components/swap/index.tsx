@@ -175,7 +175,7 @@ export const Swap = () => {
     try {
       const response = await SwapService.swap(token, token1?.chainId, token2?.chainId, token1?.address, token2?.address, fromAmount)
 
-      if (response.status === 200) {
+      if (response) {
         toast('Swap has been successfully executed', {
           duration: 3000,
         })
