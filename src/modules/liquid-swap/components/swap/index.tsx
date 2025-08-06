@@ -120,13 +120,13 @@ const tokens: Token[] = [
 export const Swap = () => {
   const [openCurrency1, setOpenCurrency1] = useState(false)
   const [openCurrency2, setOpenCurrency2] = useState(false)
-  const [fromAmount, setFromAmount] = useState<number>();
-  const [toAmount, setToAmount] = useState<number>();
+  const [fromAmount, setFromAmount] = useState<string>("");
+  const [toAmount, setToAmount] = useState<string>("");
   const [token, setToken] = useState("");
   const [toToken, setToToken] = useState("");
   const [openModal, setOpenModal] = useState(false)
 
-  const handleSwapConvertion = (amount: number | undefined, isFromAmount: boolean) => {
+  const handleSwapConvertion = (amount: string, isFromAmount: boolean) => {
     const token1 = tokens.find((t) => t.address === token)
     const token2 = tokens.find((t) => t.address === toToken)
 
@@ -134,11 +134,13 @@ export const Swap = () => {
       const avaxPrice = 21.66;
       const wethPrice = 3580.17;
 
-      if (amount === undefined || amount === 0) {
-        if (isFromAmount && toAmount !== undefined) {
+      const numericAmount = amount ? parseFloat(amount) : undefined;
+
+      if (numericAmount === undefined || numericAmount === 0) {
+        if (isFromAmount && toAmount !== "") {
           amount = toAmount;
           isFromAmount = false;
-        } else if (!isFromAmount && fromAmount !== undefined) {
+        } else if (!isFromAmount && fromAmount !== "") {
           amount = fromAmount;
           isFromAmount = true;
         } else {
@@ -146,21 +148,23 @@ export const Swap = () => {
         }
       }
 
+      const amountValue = parseFloat(amount);
+
       if (isFromAmount) {
         if (token1?.symbol === "AVAX" && token2?.symbol === "WETH.e") {
-          const convertedAmount = (amount * avaxPrice) / wethPrice;
-          setToAmount(parseFloat(convertedAmount.toFixed(6)));
+          const convertedAmount = (amountValue * avaxPrice) / wethPrice;
+          setToAmount(convertedAmount.toFixed(6));
         } else if (token1?.symbol === "WETH.e" && token2?.symbol === "AVAX") {
-          const convertedAmount = (amount * wethPrice) / avaxPrice;
-          setToAmount(parseFloat(convertedAmount.toFixed(6)));
+          const convertedAmount = (amountValue * wethPrice) / avaxPrice;
+          setToAmount(convertedAmount.toFixed(6));
         }
       } else {
         if (token1?.symbol === "AVAX" && token2?.symbol === "WETH.e") {
-          const convertedAmount = (amount * wethPrice) / avaxPrice;
-          setFromAmount(parseFloat(convertedAmount.toFixed(6)));
+          const convertedAmount = (amountValue * wethPrice) / avaxPrice;
+          setFromAmount(convertedAmount.toFixed(6));
         } else if (token1?.symbol === "WETH.e" && token2?.symbol === "AVAX") {
-          const convertedAmount = (amount * avaxPrice) / wethPrice;
-          setFromAmount(parseFloat(convertedAmount.toFixed(6)));
+          const convertedAmount = (amountValue * avaxPrice) / wethPrice;
+          setFromAmount(convertedAmount.toFixed(6));
         }
       }
     }
@@ -173,7 +177,9 @@ export const Swap = () => {
     const token2 = tokens.find((t) => t.address === toToken)
 
     try {
-      const response = await SwapService.swap(token, token1?.chainId, token2?.chainId, token1?.address, token2?.address, fromAmount)
+      const numericAmount = fromAmount ? parseFloat(fromAmount) : 0;
+
+      const response = await SwapService.swap(token, token1?.chainId, token2?.chainId, token1?.address, token2?.address, numericAmount)
 
       if (response) {
         toast('Swap has been successfully executed', {
@@ -193,14 +199,14 @@ export const Swap = () => {
     }
   }
 
-  const convertToUSD = (token: string, amount: number) => {
+  const convertToUSD = (token: string, amount: string) => {
     const tokenInfo = tokens.find((t) => t.address === token)
 
     if (tokenInfo?.symbol === "AVAX") {
-      return `${(amount * 21.66).toFixed(2)} USD`
+      return `${(parseFloat(amount) * 21.66).toFixed(2)} USD`
     }
     else if (tokenInfo?.symbol === "WETH.e") {
-      return `${(amount * 3580.17).toFixed(2)} USD`
+      return `${(parseFloat(amount) * 3580.17).toFixed(2)} USD`
     }
     else {
       return `USD`
@@ -220,18 +226,20 @@ export const Swap = () => {
                   <Input
                     value={fromAmount}
                     onChange={(e) => {
+                      const regex = /^[0-9]*\.?[0-9]*$/;
+
                       if (e.target.value === "") {
-                        setFromAmount(undefined)
-                      } else {
-                        setFromAmount(Number(e.target.value))
-                        handleSwapConvertion(Number(e.target.value), true)
+                        setFromAmount("")
+                      } else if (regex.test(e.target.value)) {
+                        setFromAmount(e.target.value)
+                        handleSwapConvertion(e.target.value, true)
                       }
                     }}
-                    type="number"
+                    type="text"
                     className="h-fit !text-[42px] outline-gray-400 !outline-none border-none rounded-lg"
-                  />
+                    placeholder="" />
                 </div>
-                <span>{convertToUSD(token, fromAmount || 0)}</span>
+                <span>{convertToUSD(token, fromAmount)}</span>
               </div>
               <Popover open={openCurrency1} onOpenChange={setOpenCurrency1}>
                 <PopoverTrigger asChild>
@@ -305,18 +313,20 @@ export const Swap = () => {
                   <Input
                     value={toAmount}
                     onChange={(e) => {
+                      const regex = /^[0-9]*\.?[0-9]*$/;
+
                       if (e.target.value === "") {
-                        setToAmount(undefined)
-                      } else {
-                        setToAmount(Number(e.target.value))
-                        handleSwapConvertion(Number(e.target.value), false)
+                        setToAmount("")
+                      } else if (regex.test(e.target.value)) {
+                        setToAmount(e.target.value)
+                        handleSwapConvertion(e.target.value, false)
                       }
                     }}
-                    type="number"
+                    type="text"
                     className="h-fit !text-[42px] outline-gray-400 !outline-none border-none rounded-lg"
                     placeholder="" />
                 </div>
-                <span>{convertToUSD(toToken, toAmount || 0)}</span>
+                <span>{convertToUSD(toToken, toAmount)}</span>
               </div>
               <Popover open={openCurrency2} onOpenChange={setOpenCurrency2}>
                 <PopoverTrigger asChild>
