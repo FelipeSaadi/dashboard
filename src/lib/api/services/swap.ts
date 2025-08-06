@@ -9,7 +9,7 @@ const SwapService: any = {
     }
 
     try {
-      const response = await axios.post<any>(`${BASE_URL}/swap`, {
+      const response = await axios.post<any>(`${BASE_URL}/swap/manual`, {
         "fromChainId": Number(fromChainId),
         "toChainId": Number(toChainId),
         "fromToken": fromToken,
@@ -21,7 +21,7 @@ const SwapService: any = {
         }
       })
 
-      return response.data
+      return response
     }
     catch (error) {
       console.log(error)

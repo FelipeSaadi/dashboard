@@ -30,6 +30,7 @@ body {
   background: var(--background-primary);
   color: var(--text-color);
   min-height: 100vh;
+  min-width: 100vw;
   margin: 0;
   font-family: 'SuisseIntl', sans-serif;
 

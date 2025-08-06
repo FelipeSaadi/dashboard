@@ -2,32 +2,210 @@
 
 import { useState } from "react"
 
+import { Check, ChevronsUpDown } from "lucide-react"
+
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Dialog, DialogTitle, DialogContent } from '@mui/material'
 import { Button } from "@/components/ui/button"
 import { IconButton } from "@chakra-ui/react"
-import { FaArrowDown } from "react-icons/fa6";
+import { FaArrowDown } from "react-icons/fa6"
 
-const tokens = [
+import { toast } from "sonner"
+
+import { cn } from "@/lib/utils"
+import SwapService from "@/lib/api/services/swap"
+
+interface Token {
+  chainId: number;
+  symbol: string;
+  address: string;
+  icon: string;
+}
+
+const tokens: Token[] = [
   {
-    name: "AVAX",
-    icon: "/swap/avax.png"
+    chainId: 43114,
+    symbol: "AVAX",
+    address: "0x0000000000000000000000000000000000000000",
+    icon: "/swap/c-chain/avax.png"
   },
   {
-    name: "ETH",
+    chainId: 43114,
+    symbol: "USDC",
+    address: "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
+    icon: "/swap/usdc.png"
+  },
+  {
+    chainId: 43114,
+    symbol: "USDT (AVAX)",
+    address: "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7",
+    icon: "/swap/usdt.svg"
+  },
+  {
+    chainId: 43114,
+    symbol: "WAVAX",
+    address: "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7",
+    icon: "/swap/c-chain/wavax.png"
+  },
+  {
+    chainId: 43114,
+    symbol: "WETH.e",
+    address: "0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB",
     icon: "/swap/eth.png"
   },
   {
-    name: "BTC",
-    icon: "/swap/btc.png"
+    chainId: 43114,
+    symbol: "WBTC.e",
+    address: "0x50b7545627a5162F82A992c33b87aDc75187B218",
+    icon: "/swap/wbtc.png"
+  },
+  {
+    chainId: 43114,
+    symbol: "DAI.e",
+    address: "0xd586E7F844cEa2F87f50152665BCbc2C279D8d70",
+    icon: "/swap/c-chain/dai.png"
+  },
+  {
+    chainId: 43114,
+    symbol: "Joe",
+    address: "0x6e84a6216eA6dACC71eE8E6b0a5B7322EEbC0fDd",
+    icon: "/swap/c-chain/trader-joe.png"
+  },
+  {
+    chainId: 43114,
+    symbol: "PNG",
+    address: "0x60781C2586D68229fde47564546784ab3fACA982",
+    icon: "/swap/c-chain/pangolin.png"
+  },
+  {
+    chainId: 43114,
+    symbol: "Link.e",
+    address: "0x5947BB275c521040051D82396192181b413227A3",
+    icon: "/swap/c-chain/chainlink.png"
+  },
+  {
+    chainId: 43114,
+    symbol: "QI",
+    address: "0x8729438EB15e2C8B576fCc6AeCdA6A148776C0F5",
+    icon: "/swap/c-chain/benqi.png"
+  },
+  {
+    chainId: 43114,
+    symbol: "AAVE.e",
+    address: "0x63a72806098Bd3D9520cC43356dD78afe5D386D9",
+    icon: "/swap/c-chain/aave.png"
+  },
+  {
+    chainId: 43114,
+    symbol: "UNI.e",
+    address: "0x8eBAf22B6F053dFFeaf46f4Dd9eFA95D89ba8580",
+    icon: "/swap/c-chain/uniswap.png"
+  },
+  {
+    chainId: 43114,
+    symbol: "SUSHI.e",
+    address: "0x37B608519F91f70F2EeB0e5Ed9AF4061722e4F76",
+    icon: "/swap/c-chain/sushiswap.png"
+  },
+  {
+    chainId: 43114,
+    symbol: "YAK",
+    address: "0x59414b3089ce2AF0010e7523Dea7E2b35d776ec7",
+    icon: "/swap/c-chain/yieldyak.png"
   }
 ]
 
 export const Swap = () => {
-  const [fromAmount, setFromAmount] = useState(1500);
-  const [toAmount, setToAmount] = useState(1500);
-  const [token, setToken] = useState("ETH");
+  const [openCurrency1, setOpenCurrency1] = useState(false)
+  const [openCurrency2, setOpenCurrency2] = useState(false)
+  const [fromAmount, setFromAmount] = useState<number>();
+  const [toAmount, setToAmount] = useState<number>();
+  const [token, setToken] = useState("");
   const [toToken, setToToken] = useState("");
+  const [openModal, setOpenModal] = useState(false)
+
+  const handleSwapConvertion = (amount: number | undefined, isFromAmount: boolean) => {
+    const token1 = tokens.find((t) => t.address === token)
+    const token2 = tokens.find((t) => t.address === toToken)
+
+    if ((token1?.symbol === "AVAX" && token2?.symbol === "WETH.e") || (token1?.symbol === "WETH.e" && token2?.symbol === "AVAX")) {
+      const avaxPrice = 21.66;
+      const wethPrice = 3580.17;
+
+      if (amount === undefined || amount === 0) {
+        if (isFromAmount && toAmount !== undefined) {
+          amount = toAmount;
+          isFromAmount = false;
+        } else if (!isFromAmount && fromAmount !== undefined) {
+          amount = fromAmount;
+          isFromAmount = true;
+        } else {
+          return;
+        }
+      }
+
+      if (isFromAmount) {
+        if (token1?.symbol === "AVAX" && token2?.symbol === "WETH.e") {
+          const convertedAmount = (amount * avaxPrice) / wethPrice;
+          setToAmount(parseFloat(convertedAmount.toFixed(6)));
+        } else if (token1?.symbol === "WETH.e" && token2?.symbol === "AVAX") {
+          const convertedAmount = (amount * wethPrice) / avaxPrice;
+          setToAmount(parseFloat(convertedAmount.toFixed(6)));
+        }
+      } else {
+        if (token1?.symbol === "AVAX" && token2?.symbol === "WETH.e") {
+          const convertedAmount = (amount * wethPrice) / avaxPrice;
+          setFromAmount(parseFloat(convertedAmount.toFixed(6)));
+        } else if (token1?.symbol === "WETH.e" && token2?.symbol === "AVAX") {
+          const convertedAmount = (amount * avaxPrice) / wethPrice;
+          setFromAmount(parseFloat(convertedAmount.toFixed(6)));
+        }
+      }
+    }
+  }
+
+  const handleSubmit = async () => {
+    setOpenModal(false)
+
+    const token1 = tokens.find((t) => t.address === token)
+    const token2 = tokens.find((t) => t.address === toToken)
+
+    try {
+      const response = await SwapService.swap(token, token1?.chainId, token2?.chainId, token1?.address, token2?.address, fromAmount)
+
+      if (response.status === 200) {
+        toast('Swap has been successfully executed', {
+          duration: 3000,
+        })
+      } else {
+        toast('Swap has been failed', {
+          duration: 3000,
+        })
+      }
+    }
+    catch (error) {
+      console.log(error)
+      toast('Swap has been failed', {
+        duration: 3000,
+      })
+    }
+  }
+
+  const convertToUSD = (token: string, amount: number) => {
+    const tokenInfo = tokens.find((t) => t.address === token)
+
+    if (tokenInfo?.symbol === "AVAX") {
+      return `${(amount * 21.66).toFixed(2)} USD`
+    }
+    else if (tokenInfo?.symbol === "WETH.e") {
+      return `${(amount * 3580.17).toFixed(2)} USD`
+    }
+    else {
+      return `USD`
+    }
+  }
 
   return (
     <div>
@@ -37,37 +215,81 @@ export const Swap = () => {
           <div className="flex flex-col gap-4 border rounded-lg border-[#4C4C4C] p-4">
             <h2 className="text-lg text-gray-400">Sell</h2>
             <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <Input
-                  value={fromAmount}
-                  onChange={(e) => setFromAmount(Number(e.target.value))}
-                  type="number"
-                  className={`max-w-[150px] w-fit h-fit !text-[42px] outline-gray-400 !outline-none border-none rounded-lg`}
-                  placeholder="Enter amount" />
-                <span className="text-gray-400">wei</span>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <Input
+                    value={fromAmount}
+                    onChange={(e) => {
+                      if (e.target.value === "") {
+                        setFromAmount(undefined)
+                      } else {
+                        setFromAmount(Number(e.target.value))
+                        handleSwapConvertion(Number(e.target.value), true)
+                      }
+                    }}
+                    type="number"
+                    className="h-fit !text-[42px] outline-gray-400 !outline-none border-none rounded-lg"
+                  />
+                </div>
+                <span>{convertToUSD(token, fromAmount || 0)}</span>
               </div>
-              <SelectGroup>
-                <Select value={token} onValueChange={setToken}>
-                  <SelectTrigger className="w-fit p-2 rounded-[30px] border-[1px] border-solid border-[#4C4C4C]">
-                    <SelectValue placeholder="Select a currency" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-[#141414] text-white ">
-                    {tokens.map((token) => (
-                      <SelectItem key={token.name} value={token.name}>
-                        <div className="flex items-center gap-2">
-                          <img
-                            src={token.icon}
-                            alt={token.name}
-                            width={24}
-                            height={24}
-                          />
-                          <span>{token.name}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </SelectGroup>
+              <Popover open={openCurrency1} onOpenChange={setOpenCurrency1}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={openCurrency1}
+                    className="w-fit p-2 rounded-[30px] border-[1px] bg-backgroundPrimary border-solid border-[#4C4C4C] hover:bg-backgroundPrimary hover:text-white"
+                  >
+                    {token
+                      ? <>
+                        <img
+                          src={tokens.find((t) => t.address === token)?.icon}
+                          alt={tokens.find((t) => t.address === token)?.symbol}
+                          width={24}
+                          height={24}
+                        />
+                        <span>{tokens.find((t) => t.address === token)?.symbol}</span>
+                      </>
+                      : "Select token"}
+                    <ChevronsUpDown className="opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0 bg-backgroundPrimary text-white border-solid border-[#4C4C4C]">
+                  <Command className="bg-backgroundPrimary border-none outline-none text-white">
+                    <CommandInput placeholder="Search token..." className="h-9" />
+                    <CommandList>
+                      <CommandEmpty>No token found.</CommandEmpty>
+                      <CommandGroup className="text-white">
+                        {tokens.map((t) => (
+                          <CommandItem
+                            key={t.address}
+                            value={t.address}
+                            onSelect={() => {
+                              setToken(t.address)
+                              setOpenCurrency1(false)
+                            }}
+                          >
+                            <img
+                              src={t.icon}
+                              alt={t.symbol}
+                              width={24}
+                              height={24}
+                            />
+                            {t.symbol}
+                            <Check
+                              className={cn(
+                                "ml-auto",
+                                token === t.symbol ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -78,42 +300,121 @@ export const Swap = () => {
           <div className="p-4 flex flex-col gap-4 bg-[#202020] rounded-lg">
             <h2 className="text-lg text-gray-400">Buy</h2>
             <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <Input
-                  value={toAmount}
-                  onChange={(e) => setToAmount(Number(e.target.value))}
-                  type="number"
-                  className="max-w-[150px] w-fit h-fit !text-[42px] outline-gray-400 !outline-none border-none rounded-lg"
-                  placeholder="Enter amount" />
-                  <span className="text-gray-400">wei</span>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <Input
+                    value={toAmount}
+                    onChange={(e) => {
+                      if (e.target.value === "") {
+                        setToAmount(undefined)
+                      } else {
+                        setToAmount(Number(e.target.value))
+                        handleSwapConvertion(Number(e.target.value), false)
+                      }
+                    }}
+                    type="number"
+                    className="h-fit !text-[42px] outline-gray-400 !outline-none border-none rounded-lg"
+                    placeholder="" />
+                </div>
+                <span>{convertToUSD(toToken, toAmount || 0)}</span>
               </div>
-              <SelectGroup>
-                <Select value={toToken} onValueChange={setToToken}>
-                  <SelectTrigger className="w-fit rounded-[30px] bg-[#00FDFF] data-[state=placeholder]:text-[#000000] text-[#000000]">
-                    <SelectValue placeholder="Select token" className="placeholder:text-[#000000]" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-[#00FDFF] text-[#000000]">
-                    {tokens.map((token) => (
-                      <SelectItem key={token.name} value={token.name} className="focus:bg-[#00000025]">
-                        <div className="flex items-center gap-2">
-                          <img
-                            src={token.icon}
-                            alt={token.name}
-                            width={24}
-                            height={24}
-                          />
-                          <span>{token.name}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </SelectGroup>
+              <Popover open={openCurrency2} onOpenChange={setOpenCurrency2}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={openCurrency2}
+                    className="w-fit rounded-[30px] bg-[#00FDFF] data-[state=placeholder]:text-[#000000] text-[#000000] hover:bg-[#00FDFF]"
+                  >
+                    {toToken
+                      ? <>
+                        <img
+                          src={tokens.find((t) => t.address === toToken)?.icon}
+                          alt={tokens.find((t) => t.address === toToken)?.symbol}
+                          width={24}
+                          height={24}
+                        />
+                        <span>{tokens.find((t) => t.address === toToken)?.symbol}</span>
+                      </>
+                      : "Select token"}
+                    <ChevronsUpDown className="opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0 bg-backgroundPrimary text-white border-solid border-[#4C4C4C]">
+                  <Command className="bg-backgroundPrimary border-none outline-none text-white">
+                    <CommandInput placeholder="Search token..." className="h-9" />
+                    <CommandList>
+                      <CommandEmpty>No token found.</CommandEmpty>
+                      <CommandGroup className="text-white">
+                        {tokens.map((t) => (
+                          <CommandItem
+                            key={t.address}
+                            value={t.address}
+                            onSelect={() => {
+                              setToToken(t.address)
+                              setOpenCurrency2(false)
+                            }}
+                          >
+                            <img
+                              src={t.icon}
+                              alt={t.symbol}
+                              width={24}
+                              height={24}
+                            />
+                            {t.symbol}
+                            <Check
+                              className={cn(
+                                "ml-auto",
+                                toToken === t.symbol ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
         </div>
-        <Button className="w-full h-[56px] mt-6 bg-[#5DD2D480] hover:bg-[#5DD2D460] rounded-[30px]">Start</Button>
+        <Button
+          onClick={() => setOpenModal(true)}
+          className="w-full h-[56px] mt-6 bg-[#5DD2D480] hover:bg-[#5DD2D460] rounded-[30px]">Start</Button>
       </div>
+      <Dialog
+        open={openModal}
+        maxWidth="sm"
+        fullWidth
+        onClose={() => setOpenModal(false)}
+      >
+        <DialogTitle className="flex text-white bg-backgroundPrimary justify-between items-center py-6 px-8">
+          SWAP
+        </DialogTitle>
+        <DialogContent className='bg-backgroundPrimary py-8 px-8'>
+          <div className="flex flex-col gap-6 text-white">
+            <p className="text-gray-200 leading-relaxed">
+              You are about to swap. This action is irreversible.
+            </p>
+            <div className="flex justify-end gap-8 mt-4">
+              <Button
+                onClick={() => handleSubmit()}
+                variant="default"
+                className=" bg-[#5DD2D480] hover:bg-[#5DD2D460] text-white font-medium px-8 py-3 rounded-lg text-sm"
+              >
+                Proceed
+              </Button>
+              <Button
+                onClick={() => setOpenModal(false)}
+                variant="default"
+                className="bg-transparent text-white border border-[#4C4C4C] font-medium px-8 py-3 rounded-lg text-sm"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
