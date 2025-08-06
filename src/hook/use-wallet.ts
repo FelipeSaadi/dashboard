@@ -76,16 +76,15 @@ export const useWallet = () => {
       setSignature(signature)
       verifyResponse = await AuthService.verify(authResponse.payload, signature)
       validateResponse = await AuthService.validate(verifyResponse?.token, verifyResponse?.sessionId)
+      setAuthToken(verifyResponse?.token)
     } else {
       verifyResponse = await AuthService.verify(authResponse.payload, signature)
       validateResponse = await AuthService.validate(verifyResponse?.token, verifyResponse?.sessionId)
+      setAuthToken(verifyResponse?.token)
     }
 
     setWallet(address as string)
-    setPayload(authResponse.payload)
-    setAuthToken(verifyResponse?.token)
     setSessionId(verifyResponse?.sessionId)
-    // setToken(authResponse.token)
   }
 
   useEffect(() => {

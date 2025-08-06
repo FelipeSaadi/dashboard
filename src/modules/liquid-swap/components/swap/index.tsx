@@ -16,6 +16,7 @@ import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
 import SwapService from "@/lib/api/services/swap"
+import { useWalletStore } from "@/store/wallet"
 
 interface Token {
   chainId: number;
@@ -33,7 +34,7 @@ const tokens: Token[] = [
   },
   {
     chainId: 43114,
-    symbol: "USDC",
+    symbol: "USDC (AVAX)",
     address: "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
     icon: "/swap/usdc.png"
   },
@@ -54,6 +55,24 @@ const tokens: Token[] = [
     symbol: "WETH.e",
     address: "0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB",
     icon: "/swap/eth.png"
+  },
+  {
+    chainId: 1,
+    symbol: "WETH (ETH)",
+    address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    icon: "/swap/eth.png"
+  },
+  {
+    chainId: 56,
+    symbol: "USDC (BNB)",
+    address: "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
+    icon: "/swap/usdc.png"
+  },
+  {
+    chainId: 1,
+    symbol: "USDC (ETH)",
+    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    icon: "/swap/usdc.png"
   },
   {
     chainId: 43114,
@@ -125,13 +144,21 @@ export const Swap = () => {
   const [token, setToken] = useState("");
   const [toToken, setToToken] = useState("");
   const [openModal, setOpenModal] = useState(false)
+  
+  const authToken = useWalletStore((state) => state.authToken)
 
   const handleSwapConvertion = (amount: string, isFromAmount: boolean) => {
     const token1 = tokens.find((t) => t.address === token)
     const token2 = tokens.find((t) => t.address === toToken)
 
-    if ((token1?.symbol === "AVAX" && token2?.symbol === "WETH.e") || (token1?.symbol === "WETH.e" && token2?.symbol === "AVAX")) {
-      const avaxPrice = 21.66;
+    if ((token1?.symbol === "USDC (AVAX)" && token2?.symbol === "WETH (ETH)") 
+      || (token1?.symbol === "WETH (ETH)" && token2?.symbol === "USDC (AVAX)")
+      || (token1?.symbol === "USDC (AVAX)" && token2?.symbol === "USDC (BNB)")
+      || (token1?.symbol === "USDC (BNB)" && token2?.symbol === "USDC (AVAX)")
+      || (token1?.symbol === "USDC (AVAX)" && token2?.symbol === "USDC (ETH)")
+      || (token1?.symbol === "USDC (ETH)" && token2?.symbol === "USDC (AVAX)")
+    ) {
+      const usdcPrice = 1;
       const wethPrice = 3580.17;
 
       const numericAmount = amount ? parseFloat(amount) : undefined;
@@ -151,20 +178,46 @@ export const Swap = () => {
       const amountValue = parseFloat(amount);
 
       if (isFromAmount) {
-        if (token1?.symbol === "AVAX" && token2?.symbol === "WETH.e") {
-          const convertedAmount = (amountValue * avaxPrice) / wethPrice;
+        if (token1?.symbol === "USDC (AVAX)" && token2?.symbol === "WETH (ETH)") {
+          const convertedAmount = (amountValue * usdcPrice) / wethPrice;
           setToAmount(convertedAmount.toFixed(6));
-        } else if (token1?.symbol === "WETH.e" && token2?.symbol === "AVAX") {
-          const convertedAmount = (amountValue * wethPrice) / avaxPrice;
+        } else if (token1?.symbol === "WETH (ETH)" && token2?.symbol === "USDC (AVAX)") {
+          const convertedAmount = (amountValue * wethPrice) / usdcPrice;
           setToAmount(convertedAmount.toFixed(6));
+        } else if (token1?.symbol === "USDC (AVAX)" && token2?.symbol === "USDC (BNB)") {
+          const convertedAmount = amountValue;
+          setToAmount(convertedAmount.toString());
+        } else if (token1?.symbol === "USDC (BNB)" && token2?.symbol === "USDC (AVAX)") {
+          const convertedAmount = amountValue;
+          setToAmount(convertedAmount.toString());
+        }
+        else if (token1?.symbol === "USDC (AVAX)" && token2?.symbol === "USDC (ETH)") {
+          const convertedAmount = amountValue;
+          setToAmount(convertedAmount.toString());
+        }
+        else if (token1?.symbol === "USDC (ETH)" && token2?.symbol === "USDC (AVAX)") {
+          const convertedAmount = amountValue;
+          setToAmount(convertedAmount.toString());
         }
       } else {
-        if (token1?.symbol === "AVAX" && token2?.symbol === "WETH.e") {
-          const convertedAmount = (amountValue * wethPrice) / avaxPrice;
+        if (token1?.symbol === "USDC (AVAX)" && token2?.symbol === "WETH (ETH)") {
+          const convertedAmount = (amountValue * wethPrice) / usdcPrice;
           setFromAmount(convertedAmount.toFixed(6));
-        } else if (token1?.symbol === "WETH.e" && token2?.symbol === "AVAX") {
-          const convertedAmount = (amountValue * avaxPrice) / wethPrice;
+        } else if (token1?.symbol === "WETH (ETH)" && token2?.symbol === "USDC (AVAX)") {
+          const convertedAmount = (amountValue * usdcPrice) / wethPrice;
           setFromAmount(convertedAmount.toFixed(6));
+        } else if (token1?.symbol === "USDC (AVAX)" && token2?.symbol === "USDC (BNB)") {
+          const convertedAmount = amountValue;
+          setFromAmount(convertedAmount.toString());
+        } else if (token1?.symbol === "USDC (BNB)" && token2?.symbol === "USDC (AVAX)") {
+          const convertedAmount = amountValue;
+          setFromAmount(convertedAmount.toString());
+        } else if (token1?.symbol === "USDC (AVAX)" && token2?.symbol === "USDC (ETH)") {
+          const convertedAmount = amountValue;
+          setFromAmount(convertedAmount.toString());
+        } else if (token1?.symbol === "USDC (ETH)" && token2?.symbol === "USDC (AVAX)") {
+          const convertedAmount = amountValue;
+          setFromAmount(convertedAmount.toString());
         }
       }
     }
@@ -177,9 +230,9 @@ export const Swap = () => {
     const token2 = tokens.find((t) => t.address === toToken)
 
     try {
-      const numericAmount = fromAmount ? parseFloat(fromAmount) : 0;
+      const numericAmount = fromAmount ? parseFloat(fromAmount) : 0
 
-      const response = await SwapService.swap(token, token1?.chainId, token2?.chainId, token1?.address, token2?.address, numericAmount)
+      const response = await SwapService.swap(authToken, token1?.chainId, token2?.chainId, token1?.address, token2?.address, numericAmount)
 
       if (response) {
         toast('Swap has been successfully executed', {
@@ -204,6 +257,12 @@ export const Swap = () => {
 
     if (tokenInfo?.symbol === "AVAX") {
       return `${(parseFloat(amount) * 21.66).toFixed(2)} USD`
+    }
+    else if (tokenInfo?.symbol === "USDC (AVAX)") {
+      return `${parseFloat(amount)} USD`
+    }
+    else if (tokenInfo?.symbol === "USDC (BNB)") {
+      return `${parseFloat(amount)} USD`
     }
     else if (tokenInfo?.symbol === "WETH.e") {
       return `${(parseFloat(amount) * 3580.17).toFixed(2)} USD`
@@ -272,7 +331,7 @@ export const Swap = () => {
                         {tokens.map((t) => (
                           <CommandItem
                             key={t.address}
-                            value={t.address}
+                            value={t.symbol}
                             onSelect={() => {
                               setToken(t.address)
                               setOpenCurrency1(false)
@@ -359,7 +418,7 @@ export const Swap = () => {
                         {tokens.map((t) => (
                           <CommandItem
                             key={t.address}
-                            value={t.address}
+                            value={t.symbol}
                             onSelect={() => {
                               setToToken(t.address)
                               setOpenCurrency2(false)

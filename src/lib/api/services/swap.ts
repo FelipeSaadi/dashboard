@@ -9,12 +9,13 @@ const SwapService: any = {
     }
 
     try {
+      const amountWei = BigInt(parseInt(amount) * 10 ** 6).toString()
       const response = await axios.post<any>(`${BASE_URL}/swap/manual`, {
         "fromChainId": Number(fromChainId),
         "toChainId": Number(toChainId),
         "fromToken": fromToken,
         "toToken": toToken,
-        "amount": amount
+        "amount": amountWei
       }, {
         headers: {
           'Authorization': `Bearer ${token}`
