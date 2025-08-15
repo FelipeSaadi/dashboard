@@ -146,6 +146,8 @@ export const Swap = () => {
   const [openModal, setOpenModal] = useState(false)
   
   const authToken = useWalletStore((state) => state.authToken)
+  const signature = useWalletStore((state) => state.signature)
+  const wallet = useWalletStore((state) => state.wallet)
 
   const handleSwapConvertion = (amount: string, isFromAmount: boolean) => {
     const token1 = tokens.find((t) => t.address === token)
@@ -232,7 +234,7 @@ export const Swap = () => {
     try {
       const numericAmount = fromAmount ? parseFloat(fromAmount) : 0
 
-      const response = await SwapService.swap(authToken, token1?.chainId, token2?.chainId, token1?.address, token2?.address, numericAmount)
+      const response = await SwapService.swap(authToken, token1?.chainId, token2?.chainId, token1?.address, token2?.address, numericAmount, wallet, signature)
 
       if (response) {
         toast('Swap has been successfully executed', {

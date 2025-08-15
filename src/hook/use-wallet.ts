@@ -63,6 +63,8 @@ export const useWallet = () => {
     const account = wallet.getAccount()
     const address = account?.address
     const authResponse = await AuthService.auth(address as string)
+
+    console.log(account)
     
     if (!authResponse) {
       return
