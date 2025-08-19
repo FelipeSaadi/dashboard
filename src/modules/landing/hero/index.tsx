@@ -45,7 +45,7 @@ const Hero = () => {
 
   const handleConnect = async () => {
     if (disconnecting) {
-      router.push('/pano-view/avax')
+      router.push('/ai-agents')
     }
   }
 

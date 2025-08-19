@@ -5,14 +5,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Neuton:wght@400;700&display=swap');
 
 :root {
-  --background-gradient: linear-gradient(
-    125deg,
-    #17707812 15%,
-    #12606750 35%,
-    #0c4b51 100%
-  );
-  --background-primary: #04292c;
-  --background-secondary: #051718;
+  --background-gradient: linear-gradient(125deg,
+      #17707812 15%,
+      #12606750 35%,
+      #0c4b51 100%);
+  --background-primary: #141414;
+  --background-secondary: #1E1E1E;
+  --background-secondary-gradient: linear-gradient(179.83deg, #1E1E1E -19.03%, #000000 148.11%);
+  --background-highlight: 179, 100%, 50%;
   --landing-background: 0 0% 2%;
   --landing-primary: 183 84% 9%;
   --landing-secondary: 180 65% 6%;
@@ -27,21 +27,30 @@
 }
 
 body {
-  background: var(--background-gradient);
-  background-primary: var(--background-primary);
-  background-secondary: var(--background-secondary);
-  landing-background: var(--landing-background);
-  landing-primary: var(--landing-primary);
-  landing-secondary: var(--landing-secondary);
-  landing-tertiary: var(--landing-tertiary);
-  landing-title-color: var(--landing-title-color);
-  landing-text-color: var(--landing-text-color);
-  landing-highlight-color: var(--landing-highlight-color);
-  landing-border-color: var(--landing-border-color);
+  background: var(--background-primary);
   color: var(--text-color);
   min-height: 100vh;
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'SuisseIntl', sans-serif;
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--background-primary);
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--background-secondary);
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--background-secondary-gradient);
+  }
 }
 
 @font-face {
@@ -258,8 +267,7 @@ body {
 
 @layer utilities {
   .filter-cyan {
-    filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(140deg)
-      brightness(119%) contrast(119%);
+    filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(140deg) brightness(119%) contrast(119%);
   }
 
   .filter-white {
@@ -271,6 +279,7 @@ body {
   0% {
     transform: translateX(102%);
   }
+
   100% {
     transform: translateX(-102%);
   }
@@ -280,6 +289,7 @@ body {
   0% {
     transform: translateX(102%);
   }
+
   100% {
     transform: translateX(-102%);
   }
@@ -302,10 +312,12 @@ body {
 }
 
 @keyframes blink {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0;
   }
@@ -315,6 +327,7 @@ body {
   0% {
     stroke-dashoffset: 300;
   }
+
   100% {
     stroke-dashoffset: 0;
   }
@@ -324,6 +337,7 @@ body {
   0% {
     stroke: var(--start-color, #808080);
   }
+
   100% {
     stroke: var(--end-color, #00ccff);
   }
@@ -339,10 +353,12 @@ body {
 }
 
 @keyframes arrowPulse {
+
   0%,
   100% {
     filter: drop-shadow(0 0 2px rgba(0, 204, 255, 0.3));
   }
+
   50% {
     filter: drop-shadow(0 0 5px rgba(0, 204, 255, 0.7));
   }
@@ -361,6 +377,7 @@ body {
   0% {
     stroke-dashoffset: 1000;
   }
+
   100% {
     stroke-dashoffset: 0;
   }
@@ -370,6 +387,7 @@ body {
   0% {
     stroke: var(--start-color, #808080);
   }
+
   100% {
     stroke: var(--end-color, #00ccff);
   }

@@ -1,0 +1,35 @@
+.headerBar {
+  background: var(--background-primary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 0;
+  width: 100%;
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.scrollbarCustom::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scrollbarCustom::-webkit-scrollbar-track {
+  background: var(--background-primary);
+}
+
+.scrollbarCustom::-webkit-scrollbar-thumb {
+  background: var(--background-secondary);
+}
+
+.scrollbarCustom::-webkit-scrollbar-thumb:hover {
+  background: var(--background-secondary-gradient);
+}

@@ -7,9 +7,9 @@ import MenuItems from '../menu-items/menu-items'
 import { Menu, X } from 'lucide-react'
 
 type Props = {
-  actual: string
-  onChange: (coin: string) => void
-  open: (page: string) => void
+  actual?: string
+  onChange?: (coin: string) => void
+  open?: (page: string) => void
   active?: string
 }
 
@@ -48,7 +48,7 @@ const AppSidebar: React.FC<Props> = ({
     {
       title: 'Pano View',
       icon: '/account/dash.png',
-      url: `/pano-view/${actual.toLowerCase()}`,
+      url: `/pano-view/${actual?.toLowerCase()}`,
     },
     {
       title: 'Zico Agent',
@@ -120,7 +120,7 @@ const AppSidebar: React.FC<Props> = ({
 
   const handleClick = (type: string, value: string) => {
     if (type === 'coin') {
-      onChange(value)
+      onChange?.(value)
 
       if (value == 'Bitcoin') {
         router.push(`/pano-view/bitcoin`)
@@ -128,7 +128,7 @@ const AppSidebar: React.FC<Props> = ({
         router.push(`/pano-view/${value.toLowerCase()}`)
       }
     } else {
-      open(value)
+      open?.(value)
     }
   }
 

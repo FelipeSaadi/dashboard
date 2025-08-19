@@ -1,17 +1,21 @@
 import React, { FormEvent, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import styles from './header-styles.module.scss'
 import { Button as Button2, TextField } from '@mui/material'
 import { ConnectButton } from "thirdweb/react"
 import SelectNetwork from '../select-network/select-network'
 import { useWallet } from '@/hook/use-wallet'
 import { wallets, client } from '@/hook/use-wallet'
+import { ChakraProvider, IconButton } from '@chakra-ui/react'
+import { IoHomeOutline } from 'react-icons/io5'
 
 type Props = {
   onSubmit: (type: string, value: string) => void
+  style?: React.CSSProperties
 }
 
-const Header: React.FC<Props> = ({ onSubmit }: Props) => {
+const Header: React.FC<Props> = ({ onSubmit, style }: Props) => {
+  const router = useRouter()
   const { handleConnect, handleDisconnect } = useWallet()
   const currentPath = usePathname()
   const [values, setValues] = useState({
@@ -37,7 +41,7 @@ const Header: React.FC<Props> = ({ onSubmit }: Props) => {
   }
 
   return (
-    <header className={styles.header}>
+    <header className={styles.header} style={style}>
       <div className={styles.content}>
         {currentPath.includes("pano-view/bitcoin") && (
           <div className={styles.forms}>
@@ -70,6 +74,20 @@ const Header: React.FC<Props> = ({ onSubmit }: Props) => {
         )}
 
         <div className={styles.actions}>
+            <IconButton
+              aria-label="Home"
+              onClick={() => router.push('/ai-agents')}
+              variant="outline"
+              bgColor="transparent"
+              borderRadius="full"
+              color="white"
+              _hover={{
+                bgColor: "transparent",
+                color: "grey",
+              }}
+              border="1px solid grey"
+              icon={<IoHomeOutline width="24px" height="24px" />}
+            />
           <SelectNetwork />
           <ConnectButton client={client} wallets={wallets} onConnect={handleConnect} onDisconnect={handleDisconnect} />
         </div>

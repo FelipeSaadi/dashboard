@@ -38,7 +38,7 @@ const TokenDetailsModal: React.FC<TokenDetailsModalProps> = ({
 }) => {
   const formatAmount = (token: Token) => {
     const amount = parseFloat(token.amount.amount) / Math.pow(10, token.amount.decimals)
-    return amount.toFixed(4)
+    return amount.toFixed(2)
   }
 
   const formatValue = (token: Token) => {
@@ -84,9 +84,7 @@ const TokenDetailsModal: React.FC<TokenDetailsModalProps> = ({
           ) : (
             tokens.map((token, index) => (
               <div key={`token-${index}`} className={styles.tokenItem}>
-                <div className={styles.tokenIcon}>
-                  <DollarSignIcon />
-                </div>
+                <img src="/assets/money.svg" alt="Money" width={28} height={28} />
                 <div className={styles.tokenInfo}>
                   <h3>{token.asset.symbol}</h3>
                   <div className={styles.tokenDetails}>

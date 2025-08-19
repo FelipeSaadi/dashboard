@@ -1,14 +1,11 @@
 .home {
+  margin-top: 64px;
+  background: var(--background-primary);
   .infoBox,
   .chartByTime,
   .infoList {
-      background: linear-gradient(
-    125deg,
-    #17707812 15%,
-    #12606750 35%,
-    #0c4b51 100%
-  );
-    border: none;
+    background: var(--background-primary);
+    border: 0.5px solid #baba;
   }
 
   .tab {
@@ -28,7 +25,7 @@
     border-radius: 30px;
     transition: 0.3s;
 
-    background-color: #ffffff25;
+    background: var(--background-secondary);
 
     img {
       width: 30px;

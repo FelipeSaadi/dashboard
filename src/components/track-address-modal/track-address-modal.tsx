@@ -134,8 +134,8 @@ const TrackAddressModal: React.FC<TrackAddressModalProps> = ({
           margin: { xs: '16px', sm: '32px' },
           width: { xs: 'calc(100% - 32px)', sm: '100%' },
           maxWidth: { xs: '100%', sm: '600px' },
-          background: '#051718',
-          border: '1px solid rgba(60, 223, 239, 0.1)',
+          background: 'var(--background-primary)',
+          border: '0.5px solid #FFFFFF8F',
           borderRadius: '16px',
         }
       }}
@@ -168,6 +168,7 @@ const TrackAddressModal: React.FC<TrackAddressModalProps> = ({
               className={styles.formField}
               sx={{
                 color: 'white',
+                borderRadius: '50px',
                 height: '48px',
                 '& .MuiOutlinedInput-notchedOutline': {
                   border: 'none',
@@ -182,7 +183,7 @@ const TrackAddressModal: React.FC<TrackAddressModalProps> = ({
               MenuProps={{
                 PaperProps: {
                   sx: {
-                    background: 'linear-gradient(125deg, #17707835 15%, #12606780 50%, #0c4b51 100%)',
+                    background: 'var(--background-primary)',
                     backdropFilter: 'blur(10px)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '12px',
@@ -219,6 +220,7 @@ const TrackAddressModal: React.FC<TrackAddressModalProps> = ({
             sx={{
               '& .MuiOutlinedInput-root': {
                 color: 'white',
+                borderRadius: '50px',
                 height: '48px',
                 '& fieldset': {
                   border: 'none',
@@ -242,7 +244,7 @@ const TrackAddressModal: React.FC<TrackAddressModalProps> = ({
         <Button
           onClick={handleSubmit}
           disabled={!selectedBlockchain || !newAddress || isLoading}
-          className="mt-4 w-full p-5 bg-gradient-to-r from-[#2cc3ce] via-[#27b8c3] to-[#23a1ab] hover:from-[#31ccd8] hover:via-[#2cc3ce] hover:to-[#27b8c3] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-white font-medium shadow-lg shadow-[#2cc3ce]/20 transition-all duration-200"
+          className="mt-4 w-full text-[18px] text-white font-bold p-5 bg-[#5AD4D5] hover:bg-[#5AD4D5]/80 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl border border-[#4C4C4C]"
         >
           {isLoading ? 'Tracking Address...' : 'Track Address'}
         </Button>

@@ -1,8 +1,5 @@
 .network {
-    background: linear-gradient(
-        125deg,
-        #177078 15%,
-        #126067 35%,
-        #0c4b51 100%
-      );
+    border-radius: 14px;
+    border: 0.5px solid #BABABA;
+    background: var(--background-primary);
   }
