@@ -35,7 +35,7 @@ const CHAIN_MAP: Record<number, Readonly<{ id: number; rpc: string }>> = {
   43114: avalanche,
 };
 
-export function useSwap(jwt?: string) {
+export function useSwap(jwt?: string, input?: PrepareTxInput) {
   const account = useActiveAccount();
   const sendTx = useSendTransaction();
   const switchChain = useSwitchActiveWalletChain();
