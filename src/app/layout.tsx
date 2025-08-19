@@ -4,6 +4,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
 import { ThirdwebProvider } from "thirdweb/react"
 import { ProtectionMobile } from "@/modules/mobile-protection"
 import { ContextProvider } from "@/modules/wagmi-provider"
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   title: "Panorama Block",
@@ -28,6 +29,7 @@ export default function RootLayout({
             <ThirdwebProvider>
               <ProtectionMobile>
                 {children}
+                <Toaster className="bg-backgroundPrimary outline outline-[#4C4C4C]" />
               </ProtectionMobile>
             </ThirdwebProvider>
           </ContextProvider>

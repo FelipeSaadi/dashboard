@@ -118,7 +118,6 @@ export const HeaderBar: FC = () => {
               walletType === "cdp" ? <CDPWallets /> : <ConnectButton label="Connect Wallet" />
             ) : (
               <ConnectButton2 client={client} wallets={wallets} onConnect={handleConnect} onDisconnect={handleDisconnect} />
-
             )
           }
 
