@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = process.env.NEXT_PUBLIC_SWAP_SERVICE_URL || 'http://localhost:3002'
+const BASE_URL = process.env.NEXT_PUBLIC_LIQUID_SWAP_SERVICE_URL || 'http://localhost:3002'
 
 export interface QuoteResponse {
   success: boolean,
