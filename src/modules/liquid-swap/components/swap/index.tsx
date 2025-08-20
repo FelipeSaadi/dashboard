@@ -17,7 +17,7 @@ import { useSwap } from "@/hook/use-swap";
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
-import SwapService from "@/lib/api/services/swap"
+import SwapService, { QuoteResponse } from "@/lib/api/services/swap"
 import { useWalletStore } from "@/store/wallet"
 
 interface Token {
@@ -313,10 +313,12 @@ export const Swap = () => {
   const [openCurrency2, setOpenCurrency2] = useState(false)
   const [fromAmount, setFromAmount] = useState<string>("");
   const [toAmount, setToAmount] = useState<string>("");
+  const [fromWeiAmount, setFromWeiAmount] = useState<string>("");
+  const [toWeiAmount, setToWeiAmount] = useState<string>("");
   const [fromChainId, setFromChainId] = useState<number>(0)
   const [toChainId, setToChainId] = useState<number>(0)
-  const [token, setToken] = useState<{symbol: string, address: string, icon: string}>();
-  const [toToken, setToToken] = useState<{symbol: string, address: string, icon: string}>();
+  const [token, setToken] = useState<{ symbol: string, address: string, icon: string }>();
+  const [toToken, setToToken] = useState<{ symbol: string, address: string, icon: string }>();
   const [openModal, setOpenModal] = useState(false)
   const [activeField, setActiveField] = useState<"from" | "to" | null>(null)
   const [openNetwork1, setOpenNetwork1] = useState(false)
@@ -330,7 +332,7 @@ export const Swap = () => {
 
   const { prepareAndSign } = useSwap(authToken as string)
 
-  const handleSwapConvertion = (amount: string, isFromAmount: boolean) => {
+  const handleSwapConvertion = (amount: string) => {
     const token1 = token?.symbol
     const token2 = toToken?.symbol
 
@@ -340,51 +342,14 @@ export const Swap = () => {
       clearTimeout(conversionTimeoutRef.current)
     }
 
-    conversionTimeoutRef.current = setTimeout(() => {
-      if ((token1.includes("USDC") && token2.includes("WETH"))
-        || (token1.includes("WETH") && token2.includes("USDC"))
-      ) {
-        const usdcPrice = 1;
-        const wethPrice = 3580.17;
+    conversionTimeoutRef.current = setTimeout(async () => {
+      const response: QuoteResponse = await SwapService.getQuote(authToken as string, fromChainId, toChainId, token?.address as string, toToken?.address as string, amount)
 
-        const numericAmount = amount ? parseFloat(amount) : undefined;
-
-        if (numericAmount === undefined || numericAmount === 0) {
-          return;
-        }
-
-        const amountValue = parseFloat(amount);
-
-        if (isFromAmount) {
-          if (token1.includes("USDC") && token2.includes("WETH")) {
-            const convertedAmount = (amountValue * usdcPrice) / wethPrice;
-            setToAmount(convertedAmount.toFixed(6));
-          } else if (token1.includes("WETH") && token2.includes("USDC")) {
-            const convertedAmount = (amountValue * wethPrice) / usdcPrice;
-            setToAmount(convertedAmount.toFixed(6));
-          }
-        } else {
-          if (token1.includes("USDC") && token2.includes("WETH")) {
-            const convertedAmount = (amountValue * wethPrice) / usdcPrice;
-            setFromAmount(convertedAmount.toFixed(6));
-          } else if (token1.includes("WETH") && token2.includes("USDC")) {
-            const convertedAmount = (amountValue * usdcPrice) / wethPrice;
-            setFromAmount(convertedAmount.toFixed(6));
-          }
-        }
-      }
-      else if (token1.includes("USDC") && token2.includes("USDC")) {
-        const numericAmount = amount ? parseFloat(amount) : undefined;
-
-        if (numericAmount === undefined || numericAmount === 0) {
-          return;
-        }
-
-        if (isFromAmount) {
-          setToAmount(amount);
-        } else {
-          setFromAmount(amount);
-        }
+      if (response) {
+        setFromAmount(response.quote.amountUsd);
+        setFromWeiAmount(response.quote.amount);
+        setToAmount(response.quote.estimatedReceiveAmountUsd);
+        setToWeiAmount(response.quote.estimatedReceiveAmount);
       }
     }, 500);
   }
@@ -392,22 +357,18 @@ export const Swap = () => {
   const handleSubmit = async () => {
     if (isLoading) return
 
-    if (!fromAmount || !toAmount || !token || !toToken || !fromChainId || !toChainId) return
+    if (!fromAmount || !toAmount || !fromWeiAmount || !toWeiAmount || !token || !toToken || !fromChainId || !toChainId) return
 
     setOpenModal(false)
     setIsLoading(true)
 
     try {
-      const numericAmount = fromAmount ? parseFloat(fromAmount) : 0
-
-      const amountWei = (numericAmount / 4179.65 * 1e18).toFixed(0).toString()
-
       const response = await prepareAndSign({
         fromChainId: fromChainId,
         toChainId: toChainId,
         fromToken: token?.address as string,
         toToken: toToken?.address as string,
-        amountWei: amountWei,
+        amountWei: fromWeiAmount,
         receiver: wallet as string,
       })
 
@@ -433,18 +394,7 @@ export const Swap = () => {
   }
 
   const convertToUSD = (symbol: string, amount: string) => {
-    if (symbol.includes("AVAX")) {
-      return `${(parseFloat(amount) * 21.66).toFixed(2)} USD`
-    }
-    else if (symbol.includes("USDC")) {
-      return `${parseFloat(amount)} USD`
-    }
-    else if (symbol.includes("WETH")) {
-      return `${(parseFloat(amount) * 3580.17).toFixed(2)} USD`
-    }
-    else {
-      return `USD`
-    }
+    return `${amount} USD`
   }
 
   const handleSwitchChain = () => {
@@ -455,19 +405,9 @@ export const Swap = () => {
     setToChainId(tempChainId)
     setToken(toToken)
     setToToken(tempToken)
+    
+    handleSwapConvertion(fromAmount)
   }
-
-  useEffect(() => {
-    if (fromChainId) {
-      setToken(undefined)
-    }
-  }, [fromChainId])
-
-  useEffect(() => {
-    if (toChainId) {
-      setToToken(undefined)
-    }
-  }, [toChainId])
 
   useEffect(() => {
     return () => {
@@ -495,7 +435,7 @@ export const Swap = () => {
                       if (e.target.value === "" || regex.test(e.target.value)) {
                         setActiveField("from");
                         setFromAmount(e.target.value);
-                        handleSwapConvertion(e.target.value, true);
+                        handleSwapConvertion(e.target.value);
                       }
                     }}
                     onFocus={() => setActiveField("from")}
@@ -534,6 +474,7 @@ export const Swap = () => {
                             onSelect={() => {
                               setFromChainId(n.chainId)
                               setOpenNetwork1(false)
+                              setToken(undefined)
                             }}
                           >
                             {n.name}
@@ -637,7 +578,7 @@ export const Swap = () => {
                       if (e.target.value === "" || regex.test(e.target.value)) {
                         setActiveField("to");
                         setToAmount(e.target.value);
-                        handleSwapConvertion(e.target.value, false);
+                        handleSwapConvertion(e.target.value);
                       }
                     }}
                     onFocus={() => setActiveField("to")}
@@ -676,6 +617,7 @@ export const Swap = () => {
                             onSelect={() => {
                               setToChainId(n.chainId)
                               setOpenNetwork2(false)
+                              setToToken(undefined)
                             }}
                           >
                             {n.name}
