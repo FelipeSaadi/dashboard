@@ -33,6 +33,8 @@ const CHAIN_MAP: Record<number, Readonly<{ id: number; rpc: string }>> = {
   43114: avalanche,
 };
 
+const BASE_URL = process.env.NEXT_PUBLIC_LIQUID_SWAP_SERVICE_URL || 'http://localhost:3002'
+
 export function useSwap(jwt?: string, input?: PrepareTxInput) {
   const account = useActiveAccount();
   const sendTx = useSendTransaction();
@@ -44,7 +46,7 @@ export function useSwap(jwt?: string, input?: PrepareTxInput) {
       if (!account) throw new Error("No active account");
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_LIQUID_SWAP_URL || ""}/swap/tx`,
+        `${BASE_URL}/swap/tx`,
         {
           method: "POST",
           headers: {
