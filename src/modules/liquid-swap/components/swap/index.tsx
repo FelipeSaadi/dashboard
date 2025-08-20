@@ -274,17 +274,17 @@ const networks: Network[] = [
       }
     ]
   },
-  {
-    chainId: 146,
-    name: "Sonic",
-    tokens: [
-      {
-        symbol: "USDC",
-        address: "0x29219dd400f2bf60e5a23d13be72b486d4038894",
-        icon: "/swap/usdc.png"
-      }
-    ]
-  },
+  // {
+  //   chainId: 146,
+  //   name: "Sonic",
+  //   tokens: [
+  //     {
+  //       symbol: "USDC",
+  //       address: "0x29219dd400f2bf60e5a23d13be72b486d4038894",
+  //       icon: "/swap/usdc.png"
+  //     }
+  //   ]
+  // },
   {
     chainId: 10,
     name: "Optimism",
