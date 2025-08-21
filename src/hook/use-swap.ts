@@ -11,7 +11,7 @@ import {
   base,
   optimism,
   arbitrum,
-  avalanche,
+  avalanche
 } from "thirdweb/chains";
 
 type PrepareTxInput = {
