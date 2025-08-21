@@ -313,6 +313,8 @@ export const Swap = () => {
   const [openCurrency2, setOpenCurrency2] = useState(false)
   const [fromAmount, setFromAmount] = useState<string>("");
   const [toAmount, setToAmount] = useState<string>("");
+  const [fromAmountUsd, setFromAmountUsd] = useState<string>("");
+  const [toAmountUsd, setToAmountUsd] = useState<string>("");
   const [fromWeiAmount, setFromWeiAmount] = useState<string>("");
   const [toWeiAmount, setToWeiAmount] = useState<string>("");
   const [fromChainId, setFromChainId] = useState<number>(0)
@@ -338,20 +340,37 @@ export const Swap = () => {
 
     if (!token1 || !token2) return;
 
-    if (conversionTimeoutRef.current) {
-      clearTimeout(conversionTimeoutRef.current)
-    }
+    setIsLoading(true)
 
-    conversionTimeoutRef.current = setTimeout(async () => {
-      const response: QuoteResponse = await SwapService.getQuote(authToken as string, fromChainId, toChainId, token?.address as string, toToken?.address as string, amount)
+    try {
 
-      if (response) {
-        setFromAmount(response.quote.amountUsd);
-        setFromWeiAmount(response.quote.amount);
-        setToAmount(response.quote.estimatedReceiveAmountUsd);
-        setToWeiAmount(response.quote.estimatedReceiveAmount);
+      if (conversionTimeoutRef.current) {
+        clearTimeout(conversionTimeoutRef.current)
       }
-    }, 500);
+
+      conversionTimeoutRef.current = setTimeout(async () => {
+        const response: QuoteResponse = await SwapService.getQuote(authToken as string, fromChainId, toChainId, token?.address as string, toToken?.address as string, amount)
+
+        if (response) {
+          const toAmountConverted = Number(response.quote.estimatedReceiveAmount) / 10 ** 18
+          const toAmountFixed = toAmountConverted > 1 ? toAmountConverted.toFixed(2) : toAmountConverted.toFixed(18)
+
+          setFromAmount(response.quote.amountHuman);
+          setFromWeiAmount(response.quote.amount);
+          setFromAmountUsd(response.quote.amountUsd);
+          setToAmount(toAmountFixed);
+          setToWeiAmount(response.quote.estimatedReceiveAmount);
+          setToAmountUsd(response.quote.estimatedReceiveAmountUsd);
+        }
+      }, 500);
+    }
+    catch (error) {
+      console.log(error)
+      console.error(new Error('Failed to get quote'))
+    }
+    finally {
+      setIsLoading(false)
+    }
   }
 
   const handleSubmit = async () => {
@@ -393,10 +412,6 @@ export const Swap = () => {
     }
   }
 
-  const convertToUSD = (symbol: string, amount: string) => {
-    return `${amount} USD`
-  }
-
   const handleSwitchChain = () => {
     const tempChainId = fromChainId
     const tempToken = token
@@ -405,9 +420,13 @@ export const Swap = () => {
     setToChainId(tempChainId)
     setToken(toToken)
     setToToken(tempToken)
-    
-    handleSwapConvertion(fromAmount)
   }
+
+  useEffect(() => {
+    if (fromChainId && toChainId && token && toToken) {
+      handleSwapConvertion(fromAmount)
+    }
+  }, [fromChainId, toChainId, token, toToken])
 
   useEffect(() => {
     return () => {
@@ -443,7 +462,7 @@ export const Swap = () => {
                     className="h-fit !text-[42px] outline-gray-400 !outline-none border-none rounded-lg"
                     placeholder="" />
                 </div>
-                <span>{convertToUSD(token ? token.symbol : "", fromAmount)}</span>
+                <span>{fromAmountUsd} USD</span>
               </div>
               <Popover open={openNetwork1} onOpenChange={setOpenNetwork1}>
                 <PopoverTrigger asChild>
@@ -560,6 +579,7 @@ export const Swap = () => {
           </div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <IconButton
+              disabled={isLoading}
               onClick={() => handleSwitchChain()}
               className="h-[56px] w-[56px] bg-backgroundSecondary hover:bg-backgroundPrimary hover:opacity-85 border border-[3px] border-backgroundPrimary rounded-[12px]" aria-label="Start">
               <FaArrowDown className="w-6 h-6 text-white" />
@@ -569,137 +589,129 @@ export const Swap = () => {
             <h2 className="text-lg text-gray-400">Buy</h2>
             <div className="flex items-center justify-between gap-2">
               <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <Input
-                    value={toAmount}
-                    onChange={(e) => {
-                      const regex = /^[0-9]*\.?[0-9]*$/;
-
-                      if (e.target.value === "" || regex.test(e.target.value)) {
-                        setActiveField("to");
-                        setToAmount(e.target.value);
-                        handleSwapConvertion(e.target.value);
-                      }
-                    }}
-                    onFocus={() => setActiveField("to")}
-                    type="text"
-                    className="h-fit !text-[42px] outline-gray-400 !outline-none border-none rounded-lg"
-                    placeholder="" />
+                <div className="w-full flex items-center gap-2">
+                  <span
+                    className={`h-fit outline-gray-400 !outline-none border-none rounded-lg ${toAmount.length > 5 ? '!text-[32px]' : '!text-[42px]'}`}
+                  >
+                    {toAmount}
+                  </span>
                 </div>
-                <span>{convertToUSD(toToken ? toToken.symbol : "", toAmount)}</span>
+                <span>{toAmountUsd} USD</span>
               </div>
-              <Popover open={openNetwork2} onOpenChange={setOpenNetwork2}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={openNetwork2}
-                    className="w-fit p-2 rounded-[30px] border-[1px] bg-backgroundPrimary border-solid border-[#4C4C4C] hover:bg-backgroundPrimary hover:text-white"
-                  >
-                    {toChainId
-                      ? <>
-                        <span>{networks.find((n) => n.chainId === toChainId)?.name}</span>
-                      </>
-                      : "Select a network"}
-                    <ChevronsUpDown className="opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0 bg-backgroundPrimary text-white border-solid border-[#4C4C4C]">
-                  <Command className="bg-backgroundPrimary border-none outline-none text-white">
-                    <CommandInput placeholder="Search token..." className="h-9" />
-                    <CommandList>
-                      <CommandEmpty>No network found.</CommandEmpty>
-                      <CommandGroup className="text-white">
-                        {networks.map((n) => (
-                          <CommandItem
-                            key={n.chainId}
-                            value={n.name}
-                            onSelect={() => {
-                              setToChainId(n.chainId)
-                              setOpenNetwork2(false)
-                              setToToken(undefined)
-                            }}
-                          >
-                            {n.name}
-                            <Check
-                              className={cn(
-                                "ml-auto",
-                                toChainId === n.chainId ? "opacity-100" : "opacity-0"
-                              )}
-                            />
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <Popover open={openCurrency2} onOpenChange={setOpenCurrency2}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={openCurrency2}
-                    className="w-fit rounded-[30px] bg-[#00FDFF] data-[state=placeholder]:text-[#000000] text-[#000000] hover:bg-[#00FDFF]"
-                  >
-                    {toToken
-                      ? <>
-                        <img
-                          src={toToken.icon}
-                          alt={toToken.symbol}
-                          width={24}
-                          height={24}
-                          className="rounded-full"
-                        />
-                        <span>{toToken.symbol}</span>
-                      </>
-                      : "Select token"}
-                    <ChevronsUpDown className="opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0 bg-backgroundPrimary text-white border-solid border-[#4C4C4C]">
-                  <Command className="bg-backgroundPrimary border-none outline-none text-white">
-                    <CommandInput placeholder="Search token..." className="h-9" />
-                    <CommandList>
-                      {toChainId ? (
-                        <CommandEmpty>No token found.</CommandEmpty>
-                      ) : (
-                        <CommandEmpty>Select a chain first.</CommandEmpty>
-                      )}
-                      {
-                        toChainId > 0 && (
-                          <CommandGroup className="text-white">
-                            {networks.find((n) => n.chainId === toChainId)?.tokens.map((t) => (
-                              <CommandItem
-                                key={t.address}
-                                value={t.symbol}
-                                onSelect={() => {
-                                  setToToken(t)
-                                  setOpenCurrency2(false)
-                                }}
-                              >
-                                <img
-                                  src={t.icon}
-                                  alt={t.symbol}
-                                  width={24}
-                                  height={24}
-                                />
-                                {t.symbol}
-                                <Check
-                                  className={cn(
-                                    "ml-auto",
-                                    toToken?.address === t.address ? "opacity-100" : "opacity-0"
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        )
-                      }
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+              <div className="flex items-center gap-2">
+                <Popover open={openNetwork2} onOpenChange={setOpenNetwork2}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={openNetwork2}
+                      className="w-fit p-2 rounded-[30px] border-[1px] bg-backgroundPrimary border-solid border-[#4C4C4C] hover:bg-backgroundPrimary hover:text-white"
+                    >
+                      {toChainId
+                        ? <>
+                          <span>{networks.find((n) => n.chainId === toChainId)?.name}</span>
+                        </>
+                        : "Select a network"}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0 bg-backgroundPrimary text-white border-solid border-[#4C4C4C]">
+                    <Command className="bg-backgroundPrimary border-none outline-none text-white">
+                      <CommandInput placeholder="Search token..." className="h-9" />
+                      <CommandList>
+                        <CommandEmpty>No network found.</CommandEmpty>
+                        <CommandGroup className="text-white">
+                          {networks.map((n) => (
+                            <CommandItem
+                              key={n.chainId}
+                              value={n.name}
+                              onSelect={() => {
+                                setToChainId(n.chainId)
+                                setOpenNetwork2(false)
+                                setToToken(undefined)
+                              }}
+                            >
+                              {n.name}
+                              <Check
+                                className={cn(
+                                  "ml-auto",
+                                  toChainId === n.chainId ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <Popover open={openCurrency2} onOpenChange={setOpenCurrency2}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={openCurrency2}
+                      className="w-fit rounded-[30px] bg-[#00FDFF] data-[state=placeholder]:text-[#000000] text-[#000000] hover:bg-[#00FDFF]"
+                    >
+                      {toToken
+                        ? <>
+                          <img
+                            src={toToken.icon}
+                            alt={toToken.symbol}
+                            width={24}
+                            height={24}
+                            className="rounded-full"
+                          />
+                          <span>{toToken.symbol}</span>
+                        </>
+                        : "Select token"}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0 bg-backgroundPrimary text-white border-solid border-[#4C4C4C]">
+                    <Command className="bg-backgroundPrimary border-none outline-none text-white">
+                      <CommandInput placeholder="Search token..." className="h-9" />
+                      <CommandList>
+                        {toChainId ? (
+                          <CommandEmpty>No token found.</CommandEmpty>
+                        ) : (
+                          <CommandEmpty>Select a chain first.</CommandEmpty>
+                        )}
+                        {
+                          toChainId > 0 && (
+                            <CommandGroup className="text-white">
+                              {networks.find((n) => n.chainId === toChainId)?.tokens.map((t) => (
+                                <CommandItem
+                                  key={t.address}
+                                  value={t.symbol}
+                                  onSelect={() => {
+                                    setToToken(t)
+                                    setOpenCurrency2(false)
+                                  }}
+                                >
+                                  <img
+                                    src={t.icon}
+                                    alt={t.symbol}
+                                    width={24}
+                                    height={24}
+                                  />
+                                  {t.symbol}
+                                  <Check
+                                    className={cn(
+                                      "ml-auto",
+                                      toToken?.address === t.address ? "opacity-100" : "opacity-0"
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          )
+                        }
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
             </div>
           </div>
         </div>
