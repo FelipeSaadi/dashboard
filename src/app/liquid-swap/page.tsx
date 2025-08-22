@@ -4,24 +4,18 @@ import styles from './styles.module.scss'
 
 import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
-import { WidgetVariant, widgetEventEmitter, WidgetEvents } from '@rango-dev/widget-embedded'
+// import { WidgetVariant, widgetEventEmitter, WidgetEvents } from '@rango-dev/widget-embedded'
 import { Swap } from '@/modules/liquid-swap/components/swap'
 import { HeaderBar } from '@/components/header-bar'
 import { ChakraProvider } from '@chakra-ui/react'
 import { Dialog, DialogTitle, DialogContent, IconButton, Button } from '@mui/material'
 import { Close } from '@mui/icons-material'
 
-enum WalletEventTypes {
-  CONNECT = "connect",
-  DISCONNECT = "disconnect",
-}
+// enum WalletEventTypes {
+//   CONNECT = "connect",
+//   DISCONNECT = "disconnect",
+// }
 
-const Widget = dynamic(
-  () => import('@rango-dev/widget-embedded').then((module) => module.Widget),
-  {
-    ssr: false,
-  }
-)
 
 const Page = () => {
   const [actual, setActual] = useState('Bitcoin')
@@ -33,33 +27,33 @@ const Page = () => {
   const [disclaimerOpen, setDisclaimerOpen] = useState(false)
   const [walletConnected, setWalletConnected] = useState(false)
 
-  const config = {
-    variant: 'full-expanded' as WidgetVariant,
-    theme: {
-      borderRadius: 30,
-      secondaryBorderRadius: 15,
-      singleTheme: true,
-      colors: {
-        light: {
-          primary: '#1cd5f1',
-          secondary: '#419e9e',
-          neutral: '#abd2d2',
-          background: '#ffffff',
-        },
-      },
-    },
-    apiKey: process.env.NEXT_PUBLIC_API_KEY || '',
-    walletConnectProjectId:
-      process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '',
-    trezorManifest: {
-      appUrl: 'https://widget.rango.exchange/',
-      email: 'hi+trezorwidget@rango.exchange',
-    },
-    tonConnect: {
-      manifestUrl:
-        'https://raw.githubusercontent.com/rango-exchange/assets/refs/heads/main/manifests/tonconnect/manifest.json',
-    },
-  }
+  // const config = {
+  //   variant: 'full-expanded' as WidgetVariant,
+  //   theme: {
+  //     borderRadius: 30,
+  //     secondaryBorderRadius: 15,
+  //     singleTheme: true,
+  //     colors: {
+  //       light: {
+  //         primary: '#1cd5f1',
+  //         secondary: '#419e9e',
+  //         neutral: '#abd2d2',
+  //         background: '#ffffff',
+  //       },
+  //     },
+  //   },
+  //   apiKey: process.env.NEXT_PUBLIC_API_KEY || '',
+  //   walletConnectProjectId:
+  //     process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '',
+  //   trezorManifest: {
+  //     appUrl: 'https://widget.rango.exchange/',
+  //     email: 'hi+trezorwidget@rango.exchange',
+  //   },
+  //   tonConnect: {
+  //     manifestUrl:
+  //       'https://raw.githubusercontent.com/rango-exchange/assets/refs/heads/main/manifests/tonconnect/manifest.json',
+  //   },
+  // }
 
   useEffect(() => {
     const hasAcceptedDisclaimer = localStorage.getItem('liquidSwapDisclaimerAccepted')
@@ -73,17 +67,17 @@ const Page = () => {
     setDisclaimerOpen(false)
   }
 
-  useEffect(() => {
-    widgetEventEmitter.on(WidgetEvents.WalletEvent, (walletEvent) => {
-      const { type, payload } = walletEvent;
-      if (type === WalletEventTypes.CONNECT) {
-        setWalletConnected(true)
-      } else if (type === WalletEventTypes.DISCONNECT) {
-        setWalletConnected(false)
-      }
-    });
-    return () => widgetEventEmitter.off(WidgetEvents.WalletEvent);
-  }, [widgetEventEmitter]);
+  // useEffect(() => {
+  //   widgetEventEmitter.on(WidgetEvents.WalletEvent, (walletEvent) => {
+  //     const { type, payload } = walletEvent;
+  //     if (type === WalletEventTypes.CONNECT) {
+  //       setWalletConnected(true)
+  //     } else if (type === WalletEventTypes.DISCONNECT) {
+  //       setWalletConnected(false)
+  //     }
+  //   });
+  //   return () => widgetEventEmitter.off(WidgetEvents.WalletEvent);
+  // }, [widgetEventEmitter]);
 
   return (
     <>
