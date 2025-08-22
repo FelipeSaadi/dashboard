@@ -387,6 +387,14 @@ export const Swap = () => {
     setIsLoading(true)
 
     try {
+      console.log('prepareAndSign', {
+        fromChainId: fromChainId,
+        toChainId: toChainId,
+        fromToken: token?.address as string,
+        toToken: toToken?.address as string,
+        amountWei: fromWeiAmount,
+        receiver: wallet as string,
+      })
       const response = await prepareAndSign({
         fromChainId: fromChainId,
         toChainId: toChainId,
