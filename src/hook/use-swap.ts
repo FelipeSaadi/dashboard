@@ -67,8 +67,6 @@ export function useSwap(jwt?: string) {
       //   }
       // );
 
-      console.log('test', test)
-
       // if (!res.ok) {
       //   const err = await res.json().catch(() => ({}));
       //   throw new Error(err?.message || "Failed to prepare swap");
@@ -84,7 +82,6 @@ export function useSwap(jwt?: string) {
             transaction,
             account,
           });
-          console.log("Transaction sent:", result.transactionHash);
 
           const hash = (result as any)?.transactionHash ?? (result as any) ?? "";
           if (typeof hash !== "string" || hash.length === 0) {
