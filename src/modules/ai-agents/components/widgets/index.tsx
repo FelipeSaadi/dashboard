@@ -11,6 +11,7 @@ import DCAWidget from "./DCAWidget";
 import BaseSwapWidget from "./BaseSwapWidget";
 import BaseTransferWidget from "./BaseTransferWidget";
 import OneInchSwapWidget from "./OneInchSwapWidget";
+import LiquidSwapWidget from "./LiquidSwapWidget";
 export const WIDGET_COMPATIBLE_AGENTS = [
   "imagen",
   "crypto data",
@@ -20,6 +21,7 @@ export const WIDGET_COMPATIBLE_AGENTS = [
 ];
 
 export const shouldOpenWidget = (message: ChatMessage) => {
+  console.log("message", message);
   if (!message.agentName) return false;
 
   if (message.agentName === "base") {
@@ -137,6 +139,11 @@ export const Widgets: FC<WidgetsProps> = ({ activeWidget, onClose }) => {
         </Box>
       );
     }
+    console.log("activeWidget?.role === assistant", activeWidget?.role === "assistant");
+    console.log("activeWidget?.agentName === token swap", activeWidget?.agentName === "token swap");
+    console.log("activeWidget?.requires_action", activeWidget?.requires_action);
+    console.log("activeWidget?.action_type === swap", activeWidget?.action_type === "swap");
+    console.log("activeWidget?.metadata", activeWidget?.metadata);
 
     if (
       activeWidget?.role === "assistant" &&
@@ -145,6 +152,7 @@ export const Widgets: FC<WidgetsProps> = ({ activeWidget, onClose }) => {
       activeWidget.action_type === "swap" &&
       activeWidget.metadata
     ) {
+      console.log("OneInchSwapWidget metadata:", activeWidget.metadata);
       return (
         <Box
           h="full"
@@ -153,7 +161,7 @@ export const Widgets: FC<WidgetsProps> = ({ activeWidget, onClose }) => {
           flexDirection="column"
           flexGrow={1}
         >
-          <OneInchSwapWidget metadata={activeWidget.metadata} />
+          <LiquidSwapWidget />
         </Box>
       );
     }
