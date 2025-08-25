@@ -61,7 +61,7 @@ export const HeaderBar: FC = () => {
             onClick={handleBack}
           /> */}
         </Box>
-        <Box className={classes.logo} flexShrink={0} display="flex" alignItems="center">
+        <Box className={classes.logo} flexShrink={0} display="flex" alignItems="center" onClick={handleHome}>
           <a>
             <img src="/assets/logo.png" alt="logo" width={40} height={40} />
           </a>
