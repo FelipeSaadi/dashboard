@@ -3,9 +3,10 @@ import {
   useActiveAccount,
   useSwitchActiveWalletChain,
 } from "thirdweb/react";
-import { sendAndConfirmTransaction, Bridge } from "thirdweb";
+import { sendAndConfirmTransaction, Bridge, getContract, prepareContractCall, readContract, prepareTransaction } from "thirdweb";
 import * as chains from "thirdweb/chains";
 import { client } from "./use-wallet";
+import type { Abi } from "viem";
 
 type PrepareTxInput = {
   fromChainId: number;
@@ -118,4 +119,125 @@ export function useSwap(jwt?: string) {
   );
 
   return { prepareAndSign };
+}
+
+type AvaxSwapContractInput = {
+  pair: "AVAX/USD" | "BTC/USD" | "ETH/USD" | "USDC/USD" | "USDT/USD" | "DAI/USD" | "LINK/USD" | string;
+  tokenA: `0x${string}`;         // taken from your UI; contract also derives internally
+  amountInWei: bigint;
+  // If false, skip the 1-wei ping to set lastSender (only safe if user already sent AVAX previously)
+  ensureLastSender?: boolean;
+  // If false, skip approve (only safe if allowance is already sufficient)
+  autoApprove?: boolean;
+};
+
+const ERC20_SIGS = {
+  allowance: "function allowance(address owner, address spender) view returns (uint256)",
+  approve:   "function approve(address spender, uint256 amount) returns (bool)",
+};
+
+// Minimal ERC-20 ABI for allowance/approve
+const ERC20_ABI = [
+  { type: "function", name: "allowance", stateMutability: "view",
+    inputs: [{ name: "owner", type: "address" }, { name: "spender", type: "address" }],
+    outputs: [{ type: "uint256" }] },
+  { type: "function", name: "approve", stateMutability: "nonpayable",
+    inputs: [{ name: "spender", type: "address" }, { name: "amount", type: "uint256" }],
+    outputs: [{ type: "bool" }] },
+] as const;
+
+// Minimal ABI for your Swap contract
+const SWAP_ABI = [
+  {
+    type: "function",
+    name: "makeSwap",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "_pair", type: "string" },
+      { name: "amountIn", type: "uint256" },
+    ],
+    outputs: [{ type: "string" }, { type: "uint256" }],
+  },
+] as const satisfies Abi;
+
+export function useAvaxSwapContract(contractAddress: `0x${string}`) {
+  const account = useActiveAccount();
+  const switchChain = useSwitchActiveWalletChain();
+
+  const swap = useCallback(
+    async (input: AvaxSwapContractInput) => {
+      if (!account) throw new Error("No active account");
+      await switchChain(chains.avalanche);
+
+      const user = account.address as `0x${string}`;
+
+      // (A) optional 1-wei ping to set lastSender
+      let touchTxHash: string | undefined;
+      if (input.ensureLastSender !== false) {
+        const touchTx = prepareTransaction({
+          to: contractAddress,
+          value: BigInt(1),
+          chain: chains.avalanche,
+          client,
+        });
+        const sent = await sendAndConfirmTransaction({ transaction: touchTx, account });
+        touchTxHash = (sent as any)?.transactionHash ?? (sent as any);
+        if (!touchTxHash || typeof touchTxHash !== "string") {
+          throw new Error("Failed to set lastSender (touch tx)");
+        }
+      }
+
+      // (B) approve tokenA -> spender = your contract
+      if (input.autoApprove !== false) {
+        const tokenA = getContract({
+          client,
+          chain: chains.avalanche,
+          address: input.tokenA,
+          abi: ERC20_ABI,
+        });
+
+        const current = (await readContract({
+          contract: tokenA,
+          method: "allowance", // ✅ use `method` (not functionName)
+          params: [user, contractAddress],
+        })) as bigint;
+
+        if (current < input.amountInWei) {
+          const approveTx = prepareContractCall({
+            contract: tokenA,
+            method: "approve", // ✅ use `method`
+            params: [contractAddress, input.amountInWei],
+          });
+          const approveRes = await sendAndConfirmTransaction({ transaction: approveTx, account });
+          const approveHash = (approveRes as any)?.transactionHash ?? (approveRes as any);
+          if (!approveHash || typeof approveHash !== "string") {
+            throw new Error("Approve failed (no tx hash)");
+          }
+        }
+      }
+
+      // (C) call makeSwap(pair, amountIn)
+      const swapContract = getContract({
+        client,
+        chain: chains.avalanche,
+        address: contractAddress,
+        abi: SWAP_ABI,
+      });
+
+      const swapTx = prepareContractCall({
+        contract: swapContract,
+        method: "makeSwap", // ✅ use `method`
+        params: [input.pair, input.amountInWei],
+      });
+
+      const result = await sendAndConfirmTransaction({ transaction: swapTx, account });
+      const hash = (result as any)?.transactionHash ?? (result as any);
+      if (!hash || typeof hash !== "string") throw new Error("Swap failed (no tx hash)");
+
+      return { hash, touchTxHash };
+    },
+    [account, contractAddress, switchChain]
+  );
+
+  return { swap };
 }

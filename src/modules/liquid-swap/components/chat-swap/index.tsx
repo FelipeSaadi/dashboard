@@ -21,6 +21,8 @@ import { useActiveWallet } from "thirdweb/react"
 import { getContract, prepareContractCall, sendAndConfirmTransaction } from "thirdweb"
 import type { Abi } from "viem"
 
+import { useAvaxSwapContract } from "@/hook/use-swap"
+
 interface Token {
   chainId: number;
   symbol: string;
@@ -153,6 +155,9 @@ export const ChatSwap = () => {
   console.log("activeWallet", activeWallet)
   console.log("authToken", authToken)
 
+  const CONTRACT_ADDRESS = '0xcAeFEc77F848504C2559801180d8284B5dBcD86E'
+  const { swap } = useAvaxSwapContract(CONTRACT_ADDRESS)
+
   const handleSwapConvertion = (amount: string, isFromAmount: boolean) => {
     const token1 = tokens.find((t) => t.address === token)
     const token2 = tokens.find((t) => t.address === toToken)
@@ -234,6 +239,7 @@ export const ChatSwap = () => {
 
     const token1 = tokens.find((t) => t.address === token)
     const token2 = tokens.find((t) => t.address === toToken)
+    console.log("token1, token2", token1, token2)
 
     if (!authToken) {
       toast('You need to be authenticated to perform a swap', { duration: 3000 })
@@ -259,14 +265,28 @@ export const ChatSwap = () => {
     try {
       const account = activeWallet.getAccount()
       const walletAddress = account?.address
+      console.log("account", account)
+      console.log("walletAddress", walletAddress)
 
       if (!walletAddress) {
         toast('You need to be connected to a wallet to perform a swap', { duration: 3000 })
         return
       }
-
-      await executeContractSwap(token1, token2, amountStr, walletAddress)
-
+      const pair = getPairString(token1, token2)
+      if (!pair) {
+        toast('This token pair is not supported for swapping', { duration: 3000 })
+        return
+      }
+      const swapInput = {
+        pair,
+        tokenA: token1.address as `0x${string}`,
+        amountInWei: BigInt(Math.floor(parseFloat(amountStr) * 1e6)), // assuming 6 decimals for USDC
+        ensureLastSender: true,
+        autoApprove: true
+      }
+      console.log("swapInput", swapInput)
+      await swap(swapInput)
+      toast('Swap executed successfully', { duration: 3000 })
     }
     catch (error) {
       console.log(error)
