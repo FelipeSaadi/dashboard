@@ -16,6 +16,7 @@ import styles from "./index.module.css";
 import { CopyIcon } from "lucide-react";
 
 import { MessageOptions } from "./message-options";
+import { Swap } from "@/modules/liquid-swap/components/swap";
 
 type MessageItemProps = {
   message: ChatMessage;
@@ -44,6 +45,15 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
       if (message.agentName === "Zico AI") {
         return <Text fontSize="xl" fontWeight="normal" color="white/50"></Text>
       }
+    
+      const swapMessage = message.content.toLowerCase().includes("swap")
+
+      if (!isUser && swapMessage) {
+        return (
+          <Swap />
+        )
+      }
+
       return (
         <>
           <ReactMarkdown className={`${styles.messageText} ${isUser ? styles.user : styles.assistant}`}>{content}</ReactMarkdown>
