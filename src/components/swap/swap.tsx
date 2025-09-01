@@ -7,11 +7,12 @@ import { Check, ChevronsUpDown } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Dialog, DialogTitle, DialogContent } from '@mui/material'
 import { Button } from "@/components/ui/button"
-import { IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@chakra-ui/react"
+import { IconButton } from "@chakra-ui/react"
 import { FaArrowDown } from "react-icons/fa6"
 
-import { useAvaxSwapContract, useSwap } from "@/hook/use-swap";
+import { useSwap } from "@/hook/use-swap";
 
 import { toast } from "sonner"
 
@@ -160,7 +161,7 @@ const networks: Network[] = [
       },
       {
         symbol: "DOGE",
-        address: "0xba2ae424d960c8cC2239327C5EDb3A432268e5831",
+        address: "0xba2ae424d960c26247dd6c32edc70b295c744c43",
         icon: "/swap/doge.png"
       },
       {
@@ -325,7 +326,7 @@ export const Swap = () => {
   const [toChainId, setToChainId] = useState<number>(0)
   const [token, setToken] = useState<{ symbol: string, address: string, icon: string }>();
   const [toToken, setToToken] = useState<{ symbol: string, address: string, icon: string }>();
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [openModal, setOpenModal] = useState(false)
   const [activeField, setActiveField] = useState<"from" | "to" | null>(null)
   const [openNetwork1, setOpenNetwork1] = useState(false)
   const [openNetwork2, setOpenNetwork2] = useState(false)
@@ -337,9 +338,6 @@ export const Swap = () => {
   const wallet = useWalletStore((state) => state.wallet)
 
   const { prepareAndSign } = useSwap(authToken as string)
-
-  const CONTRACT_ADDRESS = '0xcAeFEc77F848504C2559801180d8284B5dBcD86E'
-  const { swap } = useAvaxSwapContract(CONTRACT_ADDRESS)
 
   const handleSwapConvertion = (amount: string) => {
     const token1 = token?.symbol
@@ -385,39 +383,8 @@ export const Swap = () => {
 
     if (!fromAmount || !toAmount || !fromWeiAmount || !toWeiAmount || !token || !toToken || !fromChainId || !toChainId) return
 
-    onClose()
+    setOpenModal(false)
     setIsLoading(true)
-
-    if (fromChainId === toChainId) {
-      try {
-        const walletAddress = wallet
-        console.log("walletAddress", walletAddress)
-
-        if (!walletAddress) {
-          toast('You need to be connected to a wallet to perform a swap', { duration: 3000 })
-          return
-        }
-        const pair = getPairString(token, toToken)
-        if (!pair) {
-          toast('This token pair is not supported for swapping', { duration: 3000 })
-          return
-        }
-        const swapInput = {
-          pair,
-          tokenA: token.address as `0x${string}`,
-          amountInWei: BigInt(Math.floor(parseFloat(fromAmount) * 1e6)),
-          ensureLastSender: true,
-          autoApprove: true
-        }
-        console.log("swapInput", swapInput)
-        await swap(swapInput)
-        toast('Swap executed successfully', { duration: 3000 })
-      }
-      catch (error) {
-        console.log(error)
-        toast('Swap has been failed', { duration: 3000 })
-      }
-    }
 
     try {
       const response = await prepareAndSign({
@@ -448,28 +415,6 @@ export const Swap = () => {
     finally {
       setIsLoading(false)
     }
-  }
-
-  const getPairString = (token1: Token, token2: Token): string | null => {
-    // Map your tokens to the supported pairs in your contract
-    const supportedPairs = {
-      "AVAX/USD": ["AVAX", "USDC (AVAX)"],
-      "BTC/USD": ["WBTC.e", "USDC (AVAX)"],
-      "ETH/USD": ["WETH.e", "USDC (AVAX)"],
-      "USDC/USD": ["USDC (AVAX)", "USDC (AVAX)"],
-      "USDT/USD": ["USDT (AVAX)", "USDC (AVAX)"],
-      "DAI/USD": ["DAI.e", "USDC (AVAX)"],
-      "LINK/USD": ["Link.e", "USDC (AVAX)"]
-    }
-
-    for (const [pair, [t1, t2]] of Object.entries(supportedPairs)) {
-      if ((token1.symbol === t1 && token2.symbol === t2) ||
-        (token1.symbol === t2 && token2.symbol === t1)) {
-        return pair
-      }
-    }
-
-    return null
   }
 
   const handleSwitchChain = () => {
@@ -776,41 +721,43 @@ export const Swap = () => {
           </div>
         </div>
         <Button
-          onClick={onOpen}
+          onClick={() => setOpenModal(true)}
           className="w-full h-[56px] mt-6 bg-[#5DD2D480] hover:bg-[#5DD2D460] rounded-[30px]">Start</Button>
       </div>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay bg="blackAlpha.800" />
-        <ModalContent bg="#111111" mx={4}>
-          <ModalHeader borderBottom="1px solid #2D2D2D" className="text-white py-6 px-8">
-            SWAP
-          </ModalHeader>
-          <ModalBody className='py-8 px-8'>
-            <div className="flex flex-col gap-6 text-white">
-              <p className="text-gray-200 leading-relaxed">
-                You are about to swap. This action is irreversible.
-              </p>
-              <div className="flex justify-end gap-8 mt-4">
-                <Button
-                  disabled={isLoading}
-                  onClick={handleSubmit}
-                  variant="default"
-                  className="bg-[#5DD2D480] hover:bg-[#5DD2D460] text-white font-medium px-8 py-3 rounded-lg text-sm"
-                >
-                  Proceed
-                </Button>
-                <Button
-                  onClick={onClose}
-                  variant="default"
-                  className="bg-transparent text-white border border-[#4C4C4C] font-medium px-8 py-3 rounded-lg text-sm"
-                >
-                  Cancel
-                </Button>
-              </div>
+      <Dialog
+        open={openModal}
+        maxWidth="sm"
+        fullWidth
+        onClose={() => setOpenModal(false)}
+      >
+        <DialogTitle className="flex text-white bg-backgroundPrimary justify-between items-center py-6 px-8">
+          SWAP
+        </DialogTitle>
+        <DialogContent className='bg-backgroundPrimary py-8 px-8'>
+          <div className="flex flex-col gap-6 text-white">
+            <p className="text-gray-200 leading-relaxed">
+              You are about to swap. This action is irreversible.
+            </p>
+            <div className="flex justify-end gap-8 mt-4">
+              <Button
+                disabled={isLoading}
+                onClick={() => handleSubmit()}
+                variant="default"
+                className=" bg-[#5DD2D480] hover:bg-[#5DD2D460] text-white font-medium px-8 py-3 rounded-lg text-sm"
+              >
+                Proceed
+              </Button>
+              <Button
+                onClick={() => setOpenModal(false)}
+                variant="default"
+                className="bg-transparent text-white border border-[#4C4C4C] font-medium px-8 py-3 rounded-lg text-sm"
+              >
+                Cancel
+              </Button>
             </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
