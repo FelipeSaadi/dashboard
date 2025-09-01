@@ -128,11 +128,13 @@ export const getMessagesHistory = async (
     },
   });
 
+  console.log("responseBody", responseBody.data.messages);
+
   return responseBody.data.messages.map((message: any) => {
     return {
       role: message.role,
       content: message.content,
-      agentName: message.agentName,
+      agentName: message.agent_name,
       error_message: message.error_message,
       metadata: message.metadata,
       requires_action: message.requires_action,
@@ -178,7 +180,7 @@ export const writeMessage = async (
   let resp;
   try {
     resp = await backendClient.post("/chat", {
-      prompt: {
+      message: {
         role: "user",
         content: message,
       },
@@ -187,6 +189,7 @@ export const writeMessage = async (
       conversation_id: conversationId,
       user_id: userId,
     });
+    console.log("resp", resp);
   } catch (e) {
     console.error(e);
   }
