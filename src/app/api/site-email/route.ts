@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       from: emailFrom,
       to: [emailTo],
       subject: 'New email received',
-      react: SiteEmailTemplate({ title: 'A new email has been received', description: `Name: ${name}, Company: ${company}, Email: ${email}, Phone: ${phone}, Service Type: ${service_type}, Message: ${message}` }),
+      react: SiteEmailTemplate({ name, company, email, phone, service_type, message }),
     })
 
     return NextResponse.json({ message: 'Email registered successfully', data })
