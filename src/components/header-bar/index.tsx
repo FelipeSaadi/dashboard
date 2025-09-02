@@ -83,7 +83,7 @@ export const HeaderBar: FC = () => {
             <ul className={showMenu ? "absolute flex flex-col gap-4 w-40 text-center top-10 text-muted-foreground bg-backgroundPrimary border border-[0.5px] border-[#FFFFFF8F] rounded-[19px] p-4 z-10" : "hidden"}>
               <li className="cursor-pointer hover:text-white" onClick={() => handleNavigate('/ai-agents')}>AI Agents</li>
               <li className="cursor-pointer hover:text-white" onClick={() => handleNavigate('/wallet-tracking')}>Wallet Tracking</li>
-              <li className="cursor-pointer hover:text-white" onClick={() => handleNavigate('/liquid-swap')}>Liquid Swap</li>
+              {/* <li className="cursor-pointer hover:text-white" onClick={() => handleNavigate('/liquid-swap')}>Liquid Swap</li> */}
               <li className="cursor-pointer hover:text-white" onClick={() => handleNavigate('/x-ai-agents')}>X AI Agents</li>
               <li className="cursor-pointer hover:text-white" onClick={() => handleNavigate('/pano-view/avax')}>Pano-View</li>
             </ul>

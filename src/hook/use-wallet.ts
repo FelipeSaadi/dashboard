@@ -48,6 +48,9 @@ export const useWallet = () => {
 
   const wallet = useWalletStore((s) => s.wallet);
   const signature = useWalletStore((s) => s.signature);
+  const sessionId = useWalletStore((s) => s.sessionId);
+  const authToken = useWalletStore((s) => s.authToken);
+  const loading = useWalletStore((s) => s.loading);
   const setLoading = useWalletStore((s) => s.setLoading);
   const setWallet = useWalletStore((s) => s.setWallet);
   const setToken = useWalletStore((s) => s.setToken);
@@ -60,6 +63,21 @@ export const useWallet = () => {
     const addr = account?.address;
     if (!addr) return;
 
+    if (authToken && addr === wallet && sessionId) {
+      try {
+        const isValid = await AuthService.validate(authToken, sessionId);
+        if (isValid) {
+          return;
+        }
+      } catch (e) {
+        setToken(null);
+        setSessionId(null);
+        setSignature(null);
+      }
+    }
+    
+    let sign = null;
+
     // 1) pede payload para o MESMO endereço que irá assinar
     let authResp = await AuthService.auth(addr);
     if (!authResp) return;
@@ -70,21 +88,24 @@ export const useWallet = () => {
       if (!authResp) return;
     }
 
-    // 3) assina com signLoginPayload (thirdweb v5)
-    const sig = await AuthService.signature(authResp.payload, account);
-    if (!sig) return;
+    if (addr !== wallet || !signature) {
+      // 3) assina com signLoginPayload (thirdweb v5)
+      sign = await AuthService.signature(authResp.payload, account);
+      if (!sign) return;
+      
+      setSignature(sign);
 
-    // 4) verifica e valida
-    const verify = await AuthService.verify(authResp.payload, sig);
-    if (!verify?.token) return;
+      // 4) verifica e valida
+      const verify = await AuthService.verify(authResp.payload, sign);
+      if (!verify?.token) return;
+      setAuthToken(verify.token);
 
-    const valid = await AuthService.validate(verify.token, verify.sessionId);
-    if (!valid) return;
+      const valid = await AuthService.validate(verify.token, verify.sessionId);
+      if (!valid) return;
+      setSessionId(verify.sessionId);
+    }
 
     // 5) atualiza store
-    setSignature(sig);
-    setAuthToken(verify.token);
-    setSessionId(verify.sessionId);
     setWallet(addr);
   };
 
@@ -95,8 +116,7 @@ export const useWallet = () => {
   }, [connectionStatus, setLoading]);
 
   useEffect(() => {
-    if (connectionStatus === "connected" && activeWallet) {
-      // conecta e autentica
+    if (connectionStatus === "connected" && activeWallet && !loading) {
       handleConnect(activeWallet);
     }
   }, [connectionStatus, activeWallet]);
