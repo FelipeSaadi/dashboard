@@ -46,13 +46,13 @@ export const MessageItem: FC<MessageItemProps> = ({ message }) => {
         return <Text fontSize="xl" fontWeight="normal" color="white/50"></Text>
       }
     
-      const swapMessage = message.content.toLowerCase().includes("swap")
+      // const swapMessage = message.content.toLowerCase().includes("swap")
 
-      if (!isUser && swapMessage) {
-        return (
-          <Swap />
-        )
-      }
+      // if (!isUser && swapMessage) {
+      //   return (
+      //     <Swap />
+      //   )
+      // }
 
       return (
         <>

@@ -44,6 +44,20 @@ const XService = {
     catch (error) {
       return error
     }
+  },
+  getHederaTweets: async (page: number = 1, limit: number = 20) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/tweets/hedera`, {
+        params: {
+          page,
+          limit
+        }
+      })
+      return response.data
+    }
+    catch (error) {
+      return error
+    }
   }
 }
 

@@ -26,14 +26,17 @@ const XAiAgents: React.FC = () => {
   const [tweets, setTweets] = useState<Tweet[]>([])
   const [zicoTweets, setZicoTweets] = useState<Tweet[]>([])
   const [avaxTweets, setAvaxTweets] = useState<Tweet[]>([])
+  const [hederaTweets, setHederaTweets] = useState<Tweet[]>([])
 
   const [currentPage, setCurrentPage] = useState(1)
   const [zicoCurrentPage, setZicoCurrentPage] = useState(1)
   const [avaxCurrentPage, setAvaxCurrentPage] = useState(1)
+  const [hederaCurrentPage, setHederaCurrentPage] = useState(1)
 
   const [hasMore, setHasMore] = useState(true)
   const [zicoHasMore, setZicoHasMore] = useState(true)
   const [avaxHasMore, setAvaxHasMore] = useState(true)
+  const [hederaHasMore, setHederaHasMore] = useState(true)
 
   const [isLoading, setIsLoading] = useState(false)
   const [activeTab, setActiveTab] = useState(0)
@@ -70,9 +73,20 @@ const XAiAgents: React.FC = () => {
       setIsLoading(false)
     }
 
+    const getHederaTweets = async () => {
+      setIsLoading(true)
+      const response = await XService.getHederaTweets(1)
+      if (response?.tweets) {
+        setHederaTweets(response.tweets)
+        setHederaHasMore(hederaCurrentPage < response.pagination.totalPages)
+      }
+      setIsLoading(false)
+    }
+
     getTweets()
     getZicoTweets()
     getAvaxTweets()
+    getHederaTweets()
   }, [])
 
   const loadMoreTweets = async () => {
@@ -116,6 +130,21 @@ const XAiAgents: React.FC = () => {
       setAvaxTweets((prev) => [...prev, ...response.tweets])
       setAvaxCurrentPage(nextPage)
       setAvaxHasMore(nextPage < response.pagination.totalPages)
+    }
+    setIsLoading(false)
+  }
+
+  const loadMoreHederaTweets = async () => {
+    if (isLoading || !hederaHasMore) return
+
+    setIsLoading(true)
+    const nextPage = hederaCurrentPage + 1
+    const response = await XService.getHederaTweets(nextPage)
+
+    if (response?.tweets) {
+      setHederaTweets((prev) => [...prev, ...response.tweets])
+      setHederaCurrentPage(nextPage)
+      setHederaHasMore(nextPage < response.pagination.totalPages)
     }
     setIsLoading(false)
   }
@@ -233,6 +262,7 @@ const XAiAgents: React.FC = () => {
                   <Tab className={styles.tab} label="All Tweets" />
                   <Tab className={styles.tab} label="Zico's Tweets" />
                   <Tab className={styles.tab} label="AVAX's Tweets" />
+                  <Tab className={styles.tab} label="HEDERA's Tweets" />
                 </Tabs>
               </Box>
 
@@ -277,6 +307,23 @@ const XAiAgents: React.FC = () => {
                     <div className="flex justify-center my-5">
                       <button
                         onClick={loadMoreAvaxTweets}
+                        disabled={isLoading}
+                        className="px-5 py-2.5 bg-[#1DA1F2] text-white font-semibold rounded-full hover:bg-[#1a91da] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                      >
+                        {isLoading ? 'Loading...' : 'Load more'}
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {activeTab === 3 && (
+                <>
+                  <TweetList tweets={hederaTweets} />
+                  {hederaHasMore && (
+                    <div className="flex justify-center my-5">
+                      <button
+                        onClick={loadMoreHederaTweets}
                         disabled={isLoading}
                         className="px-5 py-2.5 bg-[#1DA1F2] text-white font-semibold rounded-full hover:bg-[#1a91da] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
                       >
