@@ -1,6 +1,8 @@
 import styles from "./index.module.css";
 import { useRouter } from "next/navigation";
 import { Box, Text } from "@chakra-ui/react";
+import { LockIcon } from "@chakra-ui/icons";
+import { useState } from "react";
 
 interface Feature {
   title: string;
@@ -11,6 +13,7 @@ interface Feature {
 
 export const Features = ({ features }: { features: Feature[] }) => {
   const router = useRouter();
+  const [featureHover, setFeatureHover] = useState<number | null>(null);
 
   return (
     <div>
@@ -22,21 +25,37 @@ export const Features = ({ features }: { features: Feature[] }) => {
       <div className={styles.featureGrid}>
         {
           features.map((feature, index) => (
-            <div key={index} className={styles.featureBox}>
+            <div key={index} className={styles.featureBox} onMouseEnter={() => setFeatureHover(index)} onMouseLeave={() => setFeatureHover(null)}>
               <div className={styles.featureIcon}>
                 {feature.icon}
               </div>
-              <div className={styles.featureTitle}>
-                {feature.title}
-              </div>
-              <div className={styles.featureDescription}>
-                {feature.description}
-              </div>
+              {
+                !feature.url ? (
+                  <div>
+                      <div className={styles.featureTitle}>
+                        <LockIcon marginRight={"2"}/>
+                        <span>{feature.title}</span>
+                      </div>
+                      <div className={styles.featureDescription}>
+                        {feature.description}
+                      </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className={styles.featureTitle}>
+                      {feature.title}
+                    </div>
+                    <div className={styles.featureDescription}>
+                      {feature.description}
+                    </div>
+                  </>
+                )
+              }
               <button
-                className={styles.continueButton}
+                className={`${styles.continueButton} ${feature.url ? '' : styles.continueButtonDisabled}`}
                 onClick={() => feature.url && router.push(feature.url)}
               >
-                Continue
+                {!feature.url && featureHover === index ? "Coming Soon" : "Continue"}
               </button>
             </div>
           ))
