@@ -70,6 +70,10 @@
   background-color: rgba(255, 255, 255, 0.5);
 }
 
+.continueButtonDisabled {
+  cursor: not-allowed;
+}
+
 /* For smaller screens */
 @media (max-width: 768px) {
   .featureGrid {
