@@ -58,7 +58,8 @@ const features = [
     title: "Liquid Swap",
     icon: <img src="ai-agents/swap.svg" alt="" />,
     description: "Swap your assets",
-    url: "/liquid-swap"
+    // url: "/liquid-swap",
+    url: null
   },
   {
     title: "Pano View",

@@ -89,7 +89,7 @@ const networks: Network[] = [
     tokens: [
       {
         symbol: "ETH",
-        address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        address: "0x0000000000000000000000000000000000000000",
         icon: "/swap/eth.png"
       },
       {
