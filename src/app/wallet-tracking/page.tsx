@@ -39,7 +39,7 @@ interface WalletData {
 
 const Page: React.FC = () => {
   const loading = useWalletStore((state) => state.loading)
-  const token = useWalletStore((state) => state.token)
+  const token = useWalletStore((state) => state.authToken)
   const wallet = useWalletStore((state) => state.wallet)
   const [actual, setActual] = useState('Bitcoin')
   const [searchQuery, setSearchQuery] = useState('')
