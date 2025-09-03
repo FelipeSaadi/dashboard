@@ -13,6 +13,15 @@ export const EmailTemplate = ({
   </div>
 );
 
+interface SiteEmailTemplateProps {
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+  service_type: string;
+  message: string;
+}
+
 export const SiteEmailTemplate = ({
   name,
   company,
@@ -22,9 +31,6 @@ export const SiteEmailTemplate = ({
   message,
 }: SiteEmailTemplateProps) => (
   <div>
-    <h1>{title}</h1>
-    <p>{description}</p>
-
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
       <p>Name: {name}</p>
       <p>Company: {company}</p>
