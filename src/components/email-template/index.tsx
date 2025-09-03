@@ -12,3 +12,26 @@ export const EmailTemplate = ({
     <p>{description}</p>
   </div>
 );
+
+export const SiteEmailTemplate = ({
+  name,
+  company,
+  email,
+  phone,
+  service_type,
+  message,
+}: SiteEmailTemplateProps) => (
+  <div>
+    <h1>{title}</h1>
+    <p>{description}</p>
+
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      <p>Name: {name}</p>
+      <p>Company: {company}</p>
+      <p>Email: {email}</p>
+      <p>Phone: {phone}</p>
+      <p>Service Type: {service_type}</p>
+      <p style={{ marginTop: '2rem' }}>Message: {message}</p>
+    </div>
+  </div>
+);
