@@ -8,10 +8,10 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
-  const { name, company, email, phone, service_type, message } = body
+  const { name, company, email, phone, eventType, message } = body
 
-  if (!email) {
-    return NextResponse.json({ error: 'Email is required' }, { status: 400 })
+  if (!email || !name || !company || !phone || !eventType || !message) {
+    return NextResponse.json({ error: 'All fields are required' }, { status: 400 })
   }
 
   try {
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       from: emailFrom,
       to: [emailTo],
       subject: 'New lead received',
-      react: SiteEmailTemplate({ name, company, email, phone, service_type, message }),
+      react: SiteEmailTemplate({ name, company, email, phone, eventType, message }),
     })
 
     return NextResponse.json({ message: 'Lead registered successfully', data })

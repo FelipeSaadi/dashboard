@@ -18,7 +18,7 @@ interface SiteEmailTemplateProps {
   company: string;
   email: string;
   phone: string;
-  service_type: string;
+  eventType: string;
   message: string;
 }
 
@@ -47,7 +47,7 @@ export const SiteEmailTemplate = ({
   company,
   email,
   phone,
-  service_type,
+  eventType,
   message,
 }: SiteEmailTemplateProps) => (
   <div style={{ 
@@ -76,7 +76,7 @@ export const SiteEmailTemplate = ({
       <Field label="Company" value={company} />
       <Field label="Email" value={email} />
       <Field label="Phone" value={phone} />
-      <Field label="Service Type" value={service_type} />
+      <Field label="Event Type" value={eventType} />
       
       <div style={{ marginTop: '25px' }}>
         <p style={{ 
