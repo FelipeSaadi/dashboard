@@ -38,11 +38,12 @@ const Hero = () => {
       </span>
 
       <div className="flex mx-auto w-fit mt-8 z-50">
-        <Button className="min-w-[180px] h-14 rounded-[30px] hover:bg-gray-100">Launch App</Button>
+        <a href="https://t.me/PanoramaBlockBot" target="_blank" rel="noopener noreferrer">
+          <Button className="min-w-[180px] h-14 rounded-[30px] hover:bg-gray-100">Launch App</Button>
+        </a>
       </div>
     </div>
   )
 }
 
 export default Hero
-

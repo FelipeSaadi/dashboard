@@ -73,10 +73,10 @@ const Connector = () => {
             <stop offset="100%" stopColor="#4C4C4C" stopOpacity="0" />
           </linearGradient>
         </defs>
-        {/* Snake path: Phase 1 -> 2 (top row) -> 4 (bottom-right) -> 3 (bottom-left) */}
-        <path d="M 140 140 L 720 140 L 980 500 L 260 500" stroke="url(#rm-base)" strokeWidth="1" fill="none" className="flow-base" />
+        {/* Orthogonal path: horizontal + vertical only */}
+        <path d="M 140 140 L 720 140 L 720 500 L 980 500 L 260 500" stroke="url(#rm-base)" strokeWidth="1" fill="none" className="flow-base" />
         {/* Glow overlay */}
-        <path d="M 140 140 L 720 140 L 980 500 L 260 500" stroke="#00FFFF" strokeWidth="1" fill="none" className="flow-glow flow-dash" />
+        <path d="M 140 140 L 720 140 L 720 500 L 980 500 L 260 500" stroke="#00FFFF" strokeWidth="1" fill="none" className="flow-glow flow-dash" />
       </svg>
     </div>
   )
